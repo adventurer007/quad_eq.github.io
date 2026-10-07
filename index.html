@@ -146,6 +146,12 @@ sub,sup{font-size:.7em;line-height:0}
 .labout{font-size:.98rem;min-height:5.6em}
 .labout p{margin:0 0 6px}
 .verdict{font-weight:700}
+.plot .solid{stroke:var(--accent);stroke-width:7;stroke-linecap:round;opacity:.4}
+.plot .dotc{fill:var(--accent);stroke:var(--card);stroke-width:1.5}
+.plot .doto{fill:var(--paper);stroke:var(--accent);stroke-width:2}
+.plot .curve2{stroke:var(--ink-soft);stroke-width:2;fill:none;stroke-dasharray:5 4}
+.plot .asym{stroke:var(--red);stroke-width:1.2;stroke-dasharray:4 4}
+.labsel{width:100%;font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);min-width:0}
 
 /* примеры */
 .exh{font-family:var(--f-display);font-size:1.35rem;margin:0 0 4px;color:var(--ink)}
@@ -363,6 +369,9 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
           <div class="type"><div class="m big" data-m>|f(x)| = |g(x)|</div><div>Равносильно <span class="m" data-m>f(x) = g(x)</span> или <span class="m" data-m>f(x) = −g(x)</span>.</div></div>
         </div>
         <p class="rule"><b>Метод интервалов для модулей.</b> Отметьте на прямой точки, где подмодульные выражения обращаются в ноль, раскройте модули по знаку на каждом промежутке и проверьте корни на своём промежутке.</p>
+        <h3>Лаборатория: |2x − 1| = x + c</h3>
+        <p class="small">Двигайте ползунок c. Смотрите, сколько точек пересечения даёт прямая y = x + c с графиком модуля.</p>
+        <div id="lab-12"></div>
         <h2>Разбор типовых задач</h2>
         <div class="card ex" id="ex-12-1"></div>
         <div class="card ex" id="ex-12-2"></div>
@@ -377,6 +386,9 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
           <div class="type"><div class="m big" data-m>x + y = s,  xy = p</div><div><b>Симметричные системы.</b> Не меняются при замене <span class="m" data-m>x</span> на <span class="m" data-m>y</span>. Вводят <span class="m" data-m>s</span> и <span class="m" data-m>p</span> и решают по теореме Виета.</div></div>
         </div>
         <p class="rule"><b>Проверка.</b> Каждую найденную пару подставьте в оба уравнения системы. Если в системе есть дроби, проверьте, что знаменатели не обращаются в ноль.</p>
+        <h3>Лаборатория: пересечение прямых</h3>
+        <p class="small">Меняйте коэффициенты двух прямых. Точка их пересечения — решение системы.</p>
+        <div id="lab-13"></div>
         <h2>Разбор типовых задач</h2>
         <div class="card ex" id="ex-13-1"></div>
         <div class="card ex" id="ex-13-2"></div>
@@ -390,6 +402,9 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
           <div class="type"><div class="m big" data-m>kx + c ≥ 0,  kx + c ≤ 0</div><div>Нестрогие неравенства: точка входит в ответ.</div></div>
           <div class="type"><div class="m big" data-m>(a; b),  [a; b),  [a; b]</div><div><b>Запись ответа.</b> Круглая скобка — конец не входит, квадратная — входит. <span class="m" data-m>+∞</span> и <span class="m" data-m>−∞</span> всегда в круглых скобках.</div></div>
         </div>
+        <h3>Лаборатория: линейное неравенство</h3>
+        <p class="small">Меняйте k, c и знак. Жирный отрезок на оси — множество решений, закрашенная точка входит в ответ, выколотая — нет.</p>
+        <div id="lab-14"></div>
         <h2>Разбор типовых задач</h2>
         <div class="card ex" id="ex-14-1"></div>
         <div class="card ex" id="ex-14-2"></div>
@@ -404,6 +419,9 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
           <div class="type"><div class="m big" data-m>(x − a)^3</div><div><b>Нечётная кратность.</b> При переходе через корень знак <b>меняется</b>.</div></div>
           <div class="type"><div class="m big" data-m>D &lt; 0</div><div>Если дискриминант отрицателен, трёхчлен сохраняет знак старшего коэффициента <span class="m" data-m>a</span> при всех <span class="m" data-m>x</span>.</div></div>
         </div>
+        <h3>Лаборатория: квадратное неравенство</h3>
+        <p class="small">Меняйте a, b, c и знак. Жирный отрезок на оси — множество решений. Ветви вверх при a &gt; 0, вниз при a &lt; 0.</p>
+        <div id="lab-15"></div>
         <h2>Разбор типовых задач</h2>
         <div class="card ex" id="ex-15-1"></div>
         <div class="card ex" id="ex-15-2"></div>
@@ -418,6 +436,9 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
           <div class="type"><div class="m big" data-m>P(x) = 0</div><div>Корни числителя закрашены для <span class="m" data-m>≥</span> и <span class="m" data-m>≤</span>, выколоты для <span class="m" data-m>&gt;</span> и <span class="m" data-m>&lt;</span>.</div></div>
         </div>
         <p class="rule"><b>Не умножайте обе части на выражение с x.</b> Знак такого выражения неизвестен, поэтому сначала переносите всё в одну сторону и приводите к дроби.</p>
+        <h3>Лаборатория: дробно-рациональное неравенство</h3>
+        <p class="small">Меняйте p и q. Нуль знаменателя q всегда выколот, нуль числителя p зависит от знака неравенства.</p>
+        <div id="lab-17"></div>
         <h2>Разбор типовых задач</h2>
         <div class="card ex" id="ex-17-1"></div>
         <div class="card ex" id="ex-17-2"></div>
@@ -1573,6 +1594,259 @@ function init(){
     out.innerHTML=h;
   }
 
+  /* ---------- Лаборатории тем 12–17 ---------- */
+  var LINF=Infinity, LALL={lo:-Infinity,hi:Infinity,lc:false,hc:false};
+  function lnc(v){return nf(v).replace('.',',');}
+  function lmap(W,H,xr,yr){
+    return {W:W,H:H,xr:xr,yr:yr,
+      X:function(x){return (x-xr[0])/(xr[1]-xr[0])*W;},
+      Y:function(y){return H-(y-yr[0])/(yr[1]-yr[0])*H;}};
+  }
+  function lframe(M){
+    var s='',k,px,py,tx,ox=Math.min(Math.max(M.X(0),0),M.W),oy=Math.min(Math.max(M.Y(0),0),M.H);
+    for(k=Math.ceil(M.xr[0]);k<=Math.floor(M.xr[1]);k++){ if(k!==0){ px=M.X(k).toFixed(1); s+='<line class="gr" x1="'+px+'" y1="0" x2="'+px+'" y2="'+M.H+'"/>'; } }
+    for(k=Math.ceil(M.yr[0]);k<=Math.floor(M.yr[1]);k++){ if(k!==0){ py=M.Y(k).toFixed(1); s+='<line class="gr" x1="0" y1="'+py+'" x2="'+M.W+'" y2="'+py+'"/>'; } }
+    s+='<line class="ax" x1="0" y1="'+oy.toFixed(1)+'" x2="'+M.W+'" y2="'+oy.toFixed(1)+'"/><line class="ax" x1="'+ox.toFixed(1)+'" y1="0" x2="'+ox.toFixed(1)+'" y2="'+M.H+'"/>';
+    for(k=Math.ceil(M.xr[0]);k<=Math.floor(M.xr[1]);k++){ if(k!==0){ s+='<text x="'+M.X(k).toFixed(1)+'" y="'+Math.min(oy+13,M.H-3).toFixed(1)+'" text-anchor="middle">'+String(k).replace('-','−')+'</text>'; } }
+    for(k=Math.ceil(M.yr[0]);k<=Math.floor(M.yr[1]);k++){ if(k!==0){ tx=ox<20?ox+4:ox-6; s+='<text x="'+tx.toFixed(1)+'" y="'+(M.Y(k)+3).toFixed(1)+'" text-anchor="'+(ox<20?'start':'end')+'">'+String(k).replace('-','−')+'</text>'; } }
+    return s;
+  }
+  function lcurve(M,f,cls){
+    var N=300, segs=[], cur=[], i, x, y, lim=(M.yr[1]-M.yr[0])*2, s='';
+    for(i=0;i<=N;i++){
+      x=M.xr[0]+(M.xr[1]-M.xr[0])*i/N; y=f(x);
+      if(!isFinite(y)||Math.abs(y)>lim){ if(cur.length>1) segs.push(cur); cur=[]; continue; }
+      cur.push(M.X(x).toFixed(1)+','+M.Y(y).toFixed(1));
+    }
+    if(cur.length>1) segs.push(cur);
+    segs.forEach(function(sg){ s+='<polyline class="'+cls+'" points="'+sg.join(' ')+'"/>'; });
+    return s;
+  }
+  function ldot(M,x,closed){
+    if(!isFinite(x)||x<M.xr[0]||x>M.xr[1]) return '';
+    var oy=Math.min(Math.max(M.Y(0),0),M.H).toFixed(1);
+    return '<circle class="'+(closed?'dotc':'doto')+'" cx="'+M.X(x).toFixed(1)+'" cy="'+oy+'" r="5.5"/>';
+  }
+  function lsolid(M,p){
+    var a=Math.max(p.lo,M.xr[0]), b=Math.min(p.hi,M.xr[1]);
+    if(!(b>a)) return '';
+    var oy=Math.min(Math.max(M.Y(0),0),M.H).toFixed(1);
+    return '<line class="solid" x1="'+M.X(a).toFixed(1)+'" y1="'+oy+'" x2="'+M.X(b).toFixed(1)+'" y2="'+oy+'"/>';
+  }
+  function ldraw(M,ps){
+    var s='';
+    ps.forEach(function(p){
+      if(p.lo===p.hi){ s+=ldot(M,p.lo,true); return; }
+      s+=lsolid(M,p);
+      s+=ldot(M,p.lo,p.lc);
+      s+=ldot(M,p.hi,p.hc);
+    });
+    return s;
+  }
+  function lnorm(ps){
+    ps.sort(function(a,b){return a.lo<b.lo?-1:a.lo>b.lo?1:(a.hi<b.hi?-1:a.hi>b.hi?1:0);});
+    var out=[];
+    ps.forEach(function(p){
+      var last=out[out.length-1];
+      if(last && last.hi===p.lo && (last.hc||p.lc)){ last.hi=p.hi; last.hc=p.hc; }
+      else out.push({lo:p.lo,hi:p.hi,lc:p.lc,hc:p.hc});
+    });
+    return out;
+  }
+  function livt(p){
+    if(p.lo===p.hi) return '{'+lnc(p.lo)+'}';
+    var l=isFinite(p.lo)?(p.lc?'[':'(')+lnc(p.lo):'(−∞';
+    var h=isFinite(p.hi)?lnc(p.hi)+(p.hc?']':')'):'+∞)';
+    return l+'; '+h;
+  }
+  function lset(ps){ return ps.length?'x ∈ '+ps.map(livt).join(' ∪ '):'∅'; }
+  function llin(k,b){
+    var t='';
+    if(k!==0) t=(k===1?'':k===-1?'−':lnc(k))+'x';
+    if(b!==0){ if(t) t+=(b<0?' − ':' + ')+lnc(Math.abs(b)); else t=lnc(b); }
+    else if(!t) t='0';
+    return 'y = '+t;
+  }
+  function lxm(v){ return v===0?'x':'x'+(v<0?' + '+lnc(-v):' − '+lnc(v)); }
+  function lquad(a,b,c){
+    var s=(a===1?'':a===-1?'−':lnc(a))+'x^2';
+    if(b!==0) s+=(b<0?' − ':' + ')+(Math.abs(b)===1?'':lnc(Math.abs(b)))+'x';
+    if(c!==0) s+=(c<0?' − ':' + ')+lnc(Math.abs(c));
+    return 'f(x) = '+s;
+  }
+  function lflip(op){ return {'>':'<','<':'>','≥':'≤','≤':'≥'}[op]; }
+
+  function labMount(id,cfg){
+    var host=document.getElementById(id); if(!host) return;
+    var W=cfg.W, H=cfg.H, M=lmap(W,H,cfg.x,cfg.y), ctl='';
+    cfg.controls.forEach(function(c){
+      var cid=id+'-'+c.k;
+      if(c.type==='sel'){
+        ctl+='<div class="sl"><label for="'+cid+'">'+c.name+'</label><select id="'+cid+'" class="labsel">'+
+          c.options.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===c.value?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></div>';
+      } else {
+        ctl+='<div class="sl"><label for="'+cid+'" id="'+cid+'-l"></label><input type="range" id="'+cid+'" min="'+c.min+'" max="'+c.max+'" step="'+c.step+'" value="'+c.value+'"></div>';
+      }
+    });
+    host.innerHTML='<div class="card lab"><div><div>'+ctl+'</div><div class="labout" id="'+id+'-out" aria-live="polite"></div></div>'+
+      '<svg class="plot" id="'+id+'-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+cfg.alt+'"></svg></div>';
+    function read(){
+      var v={};
+      cfg.controls.forEach(function(c){ var el=document.getElementById(id+'-'+c.k); v[c.k]=c.type==='sel'?el.value:+el.value; });
+      return v;
+    }
+    function update(){
+      var v=read();
+      cfg.controls.forEach(function(c){ if(c.type!=='sel') document.getElementById(id+'-'+c.k+'-l').innerHTML=fmt(c.name+' = '+lnc(v[c.k])); });
+      var r=cfg.compute(v,M);
+      document.getElementById(id+'-svg').innerHTML=lframe(M)+r.svg;
+      document.getElementById(id+'-out').innerHTML=r.text;
+    }
+    host.addEventListener('input',update);
+    host.addEventListener('change',update);
+    update();
+  }
+
+  function labInitAll(){
+    var SIGN=[['>','f(x) > 0'],['≥','f(x) ≥ 0'],['<','f(x) < 0'],['≤','f(x) ≤ 0']];
+
+    /* 12: |2x − 1| = x + c */
+    labMount('lab-12',{W:400,H:280,x:[-3,5],y:[-2,6],alt:'График |2x − 1| и прямая y = x + c',
+      controls:[{k:'c',type:'range',name:'c',min:-2,max:4,step:0.25,value:1}],
+      compute:function(v,M){
+        var c=v.c, roots=[], svg, h;
+        if(Math.abs(c+0.5)<1e-9) roots=[0.5];
+        else if(c>-0.5) roots=[(1-c)/3,1+c];
+        svg=lcurve(M,function(x){return Math.abs(2*x-1);},'curve')+lcurve(M,function(x){return x+c;},'curve2');
+        roots.forEach(function(r){ svg+='<circle class="rt" cx="'+M.X(r).toFixed(1)+'" cy="'+M.Y(r+c).toFixed(1)+'" r="5"/>'; });
+        h='<p class="m">'+fmt('|2x − 1| = x'+(c===0?'':(c<0?' − ':' + ')+lnc(Math.abs(c))))+'</p>';
+        if(!roots.length) h+='<p class="verdict">Корней нет</p><p>Прямая лежит ниже графика модуля, пересечений нет.</p>';
+        else if(roots.length===1) h+='<p class="verdict">Один корень: прямая касается вершины модуля</p><p class="m">'+fmt('x = '+lnc(roots[0]))+'</p>';
+        else h+='<p class="verdict">Два корня</p><p class="m">'+fmt('x_1 = '+lnc(roots[0])+',   x_2 = '+lnc(roots[1]))+'</p><p>Для обоих корней выполняется условие g(x) = x + c ≥ 0.</p>';
+        return {svg:svg,text:h};
+      }});
+
+    /* 13: пересечение двух прямых */
+    labMount('lab-13',{W:400,H:280,x:[-6,6],y:[-6,6],alt:'Две прямые и точка их пересечения',
+      controls:[
+        {k:'k1',type:'range',name:'k_1',min:-2,max:2,step:0.5,value:1},
+        {k:'b1',type:'range',name:'b_1',min:-4,max:4,step:1,value:-2},
+        {k:'k2',type:'range',name:'k_2',min:-2,max:2,step:0.5,value:-1},
+        {k:'b2',type:'range',name:'b_2',min:-4,max:4,step:1,value:3}],
+      compute:function(v,M){
+        var svg=lcurve(M,function(x){return v.k1*x+v.b1;},'curve')+lcurve(M,function(x){return v.k2*x+v.b2;},'curve2');
+        var h='<p class="m">'+fmt('⟨'+llin(v.k1,v.b1)+' ‖ '+llin(v.k2,v.b2)+'⟩')+'</p>';
+        if(v.k1!==v.k2){
+          var x=(v.b2-v.b1)/(v.k1-v.k2), y=v.k1*x+v.b1;
+          svg+='<circle class="rt" cx="'+M.X(x).toFixed(1)+'" cy="'+M.Y(y).toFixed(1)+'" r="5"/>';
+          h+='<p class="verdict">Одно решение</p><p class="m">'+fmt('(x; y) = ('+lnc(x)+'; '+lnc(y)+')')+'</p><p>Проверка: подставьте пару в оба уравнения.</p>';
+        } else if(v.b1===v.b2) h+='<p class="verdict">Бесконечно много решений: прямые совпадают</p>';
+        else h+='<p class="verdict">Решений нет: прямые параллельны</p>';
+        return {svg:svg,text:h};
+      }});
+
+    /* 14: линейное неравенство */
+    labMount('lab-14',{W:400,H:280,x:[-6,6],y:[-6,6],alt:'Линейная функция и множество решений на оси x',
+      controls:[
+        {k:'k',type:'range',name:'k',min:-3,max:3,step:0.5,value:2},
+        {k:'c',type:'range',name:'c',min:-6,max:6,step:1,value:-4},
+        {k:'op',type:'sel',name:'Неравенство',value:'>',options:[['>','kx + c > 0'],['≥','kx + c ≥ 0'],['<','kx + c < 0'],['≤','kx + c ≤ 0']]}],
+      compute:function(v,M){
+        var k=v.k, c=v.c, op=v.op, strict=(op==='>'||op==='<'), greater=(op==='>'||op==='≥'), ps, r=0, h;
+        var svg=lcurve(M,function(x){return k*x+c;},'curve');
+        if(k===0){
+          var hold=op==='>'?c>0:op==='≥'?c>=0:op==='<'?c<0:c<=0;
+          ps=hold?[LALL]:[];
+        } else {
+          r=-c/k;
+          var g=(k>0)?greater:!greater;
+          ps=g?[{lo:r,hi:LINF,lc:!strict,hc:false}]:[{lo:-LINF,hi:r,lc:false,hc:!strict}];
+        }
+        svg+=ldraw(M,ps);
+        h='<p class="m">'+fmt(llin(k,c))+'</p>';
+        if(k!==0){
+          h+='<p class="m">'+fmt('x = '+lnc(r))+'</p>';
+          if(k<0) h+='<p>k &lt; 0, поэтому знак неравенства при делении на k меняется.</p>';
+        } else h+='<p>k = 0: значение не зависит от x и равно c = '+lnc(c)+'.</p>';
+        h+='<p class="verdict">Ответ: '+lset(ps)+'</p>';
+        return {svg:svg,text:h};
+      }});
+
+    /* 15–16: квадратное неравенство */
+    labMount('lab-15',{W:400,H:280,x:[-6,6],y:[-6,6],alt:'Парабола и множество решений на оси x',
+      controls:[
+        {k:'a',type:'range',name:'a',min:-3,max:3,step:1,value:1},
+        {k:'b',type:'range',name:'b',min:-6,max:6,step:1,value:-2},
+        {k:'c',type:'range',name:'c',min:-8,max:8,step:1,value:-3},
+        {k:'op',type:'sel',name:'Неравенство',value:'≤',options:SIGN}],
+      compute:function(v,M){
+        var a=v.a, b=v.b, c=v.c, op=v.op;
+        if(a===0) return {svg:'',text:'<p class="verdict">a не может быть равно 0</p><p>Тогда уравнение перестаёт быть квадратным.</p>'};
+        var svg=lcurve(M,function(x){return a*x*x+b*x+c;},'curve');
+        var opp=a>0?op:lflip(op), strict=(op==='>'||op==='<'), neg=(opp==='<'||opp==='≤');
+        var D=b*b-4*a*c, ps=[], x1=0, x2=0, x0=0;
+        if(D>0){
+          var sq=Math.sqrt(D);
+          x1=(-b-sq)/(2*a); x2=(-b+sq)/(2*a);
+          if(x1>x2){ var t=x1; x1=x2; x2=t; }
+          if(neg) ps=[{lo:x1,hi:x2,lc:!strict,hc:!strict}];
+          else ps=[{lo:-LINF,hi:x1,lc:false,hc:!strict},{lo:x2,hi:LINF,lc:!strict,hc:false}];
+        } else if(D===0){
+          x0=-b/(2*a);
+          if(neg) ps=strict?[]:[{lo:x0,hi:x0,lc:true,hc:true}];
+          else ps=strict?[{lo:-LINF,hi:x0,lc:false,hc:false},{lo:x0,hi:LINF,lc:false,hc:false}]:[LALL];
+        } else {
+          ps=neg?[]:[LALL];
+        }
+        ps=lnorm(ps);
+        svg+=ldraw(M,ps);
+        var h='<p class="m">'+fmt(lquad(a,b,c))+'</p>'+
+          '<p class="m">'+fmt('D = b^2 − 4ac = ('+lnc(b)+')^2 − 4·('+lnc(a)+')·('+lnc(c)+') = '+lnc(D))+'</p>';
+        if(D>0) h+='<p class="verdict">D &gt; 0: два корня</p><p class="m">'+fmt('x_1 = '+lnc(x1)+',   x_2 = '+lnc(x2))+'</p>';
+        else if(D===0) h+='<p class="verdict">D = 0: один корень</p><p class="m">'+fmt('x = '+lnc(x0))+'</p>';
+        else h+='<p class="verdict">D &lt; 0: корней нет, трёхчлен сохраняет знак a</p>';
+        if(a<0) h+='<p>a &lt; 0: ветви направлены вниз, поэтому знаки на интервалах обратные.</p>';
+        h+='<p class="verdict">Ответ: '+lset(ps)+'</p>';
+        return {svg:svg,text:h};
+      }});
+
+    /* 17: дробно-рациональное неравенство */
+    labMount('lab-17',{W:400,H:280,x:[-6,6],y:[-6,6],alt:'График дроби (x − p)/(x − q) и множество решений на оси x',
+      controls:[
+        {k:'p',type:'range',name:'p',min:-4,max:4,step:1,value:4},
+        {k:'q',type:'range',name:'q',min:-4,max:4,step:1,value:2},
+        {k:'op',type:'sel',name:'Неравенство',value:'≤',options:SIGN}],
+      compute:function(v,M){
+        var p=v.p, q=v.q, op=v.op, strict=(op==='>'||op==='<'), pos=(op==='>'||op==='≥'), ps=[], svg, h;
+        var f=function(x){return (x-p)/(x-q);};
+        svg=(q>=M.xr[0]&&q<=M.xr[1]?'<line class="asym" x1="'+M.X(q).toFixed(1)+'" y1="0" x2="'+M.X(q).toFixed(1)+'" y2="'+M.H+'"/>':'')+lcurve(M,f,'curve');
+        if(p===q){
+          ps=pos?[{lo:-LINF,hi:p,lc:false,hc:false},{lo:p,hi:LINF,lc:false,hc:false}]:[];
+          svg+=ldraw(M,ps)+ldot(M,p,false);
+        } else {
+          var e=[p,q].sort(function(a,b){return a-b;});
+          var mids=[e[0]-1,(e[0]+e[1])/2,e[1]+1];
+          var ints=[{lo:-LINF,hi:e[0]},{lo:e[0],hi:e[1]},{lo:e[1],hi:LINF}];
+          ints.forEach(function(I,i){
+            var sg=Math.sign(f(mids[i]));
+            if(pos?sg>0:sg<0) ps.push({lo:I.lo,hi:I.hi,lc:false,hc:false});
+          });
+          if(!strict) ps.push({lo:p,hi:p,lc:true,hc:true});
+          ps=lnorm(ps);
+          svg+=ldraw(M,ps);
+          [p,q].forEach(function(b){
+            var closed=ps.some(function(pc){return (pc.lo===b&&pc.lc)||(pc.hi===b&&pc.hc);});
+            if(!closed) svg+=ldot(M,b,false);
+          });
+        }
+        h='<p class="m">'+fmt('{'+lxm(p)+'|'+lxm(q)+'} '+op+' 0')+'</p>';
+        if(p===q) h+='<p>Числитель и знаменатель совпадают: f(x) = 1 при x ≠ p. Точка p выколота.</p>';
+        else h+='<p>Нуль числителя x = '+lnc(p)+(strict?' выколот (строгое неравенство).':' закрашен.')+' Нуль знаменателя x = '+lnc(q)+' всегда выколот.</p>';
+        h+='<p class="verdict">Ответ: '+lset(ps)+'</p>';
+        return {svg:svg,text:h};
+      }});
+  }
+
   /* примеры */
   function stepper(el,title,task,steps){
     el.innerHTML='<p class="exh">'+title+'</p><p class="m" style="margin-bottom:6px">'+fmt(task)+'</p>'+
@@ -1733,7 +2007,7 @@ function init(){
   });
 
   /* старт */
-  initLab(); renderHeader(); renderStatus(); renderAnswers();
+  initLab(); labInitAll(); renderHeader(); renderStatus(); renderAnswers();
   var first=P.filter(function(p){return (ST.p[p.n]||{}).st!=='ok';})[0];
   cur=first?first.n:1;
   showProblem(); renderTest();
