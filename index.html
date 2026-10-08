@@ -2925,7 +2925,7 @@ if(typeof document!=='undefined') init();
 // ----------------my own add-ons---------------------
             
 <script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz87CQZ7HeijYv78Hjntj9cD-m9sU_NsVteALMHjceBJDhY-TaJKNMgJ3oY1kvBLB0mcQ/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyCLTjfASTaF7e8tC8Vb0b0g4KNLaMXzASjCEssdElPG-W-pmf0DLrecmfB_H_3eCwNPw/exec';
   const SECRET_KEY = 'matematika-2026';
 
   // Получаем или создаем постоянный ID ученика в браузере
@@ -2968,27 +2968,27 @@ if(typeof document!=='undefined') init();
           12: { ok: 1, n: 40, bad: 0 }
         }
       };
+      
 
       // Отправка в Google Таблицу
       fetch(SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       })
-      .then(() => {
-        if (msgBox) {
-          msgBox.textContent = 'Имя сохранено. Прогресс отправлен учителю!';
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          if (msgBox) msgBox.textContent = 'Имя сохранено. Прогресс отправлен учителю!';
+        } else {
+          console.error('Ошибка скрипта:', data.message);
+          if (msgBox) msgBox.textContent = 'Ошибка: ' + data.message;
         }
       })
       .catch(error => {
-        console.error('Ошибка отправки:', error);
-        if (msgBox) {
-          msgBox.textContent = 'Ошибка при отправке данных.';
-        }
+        console.error('Ошибка сети:', error);
+        if (msgBox) msgBox.textContent = 'Ошибка при отправке данных.';
       });
-    });
-  }
 </script>
             
 </body>
