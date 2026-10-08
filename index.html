@@ -2922,27 +2922,50 @@ if(typeof document!=='undefined') init();
 })();
 </script>
 
+// ----------------my own add-ons---------------------
+            
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwFnXBERo92RDiscnfcNtWcr2MTvsAwXcT4YLymA5fiaQJ4rg33VFc36zKfIP7x9_clIA/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwFnXBERo92RDiscnfcNtWcr2MTvsAwXcT4YLymA5fiaQJ4rg33VFc36zKfIP7x9_clIA/exec';
 
-    function sendData(data) {
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'text/plain'
-        },
-        body: JSON.stringify(data)
-      })
-      .then(() => {
-        console.log('Запрос отправлен!');
-      })
-      .catch(error => {
-        console.error('Ошибка отправки:', error);
-      });
+  function sendProgressToGoogle() {
+    // 1. Находим поле с именем
+    const nameInput = document.querySelector('input[type="text"]') || document.querySelector('input');
+    const userName = nameInput ? nameInput.value.trim() : '';
+
+    if (!userName) {
+      alert('Пожалуйста, введите ваше имя!');
+      return;
     }
-  </script>
 
+    // 2. Собираем данные с вашей страницы
+    const data = {
+      user: userName,
+      date: new Date().toLocaleString('ru-RU'),
+      progress: "Тема 8: 2/60 (ошибок: 1), Тема 10: 1/60, Тема 12: 1/40"
+    };
+
+    // 3. Отправляем в Google Таблицу
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(data)
+    })
+    .then(() => {
+      console.log('Данные успешно отправлены');
+      alert('Прогресс сохранен и отправлен учителю!');
+    })
+    .catch(error => {
+      console.error('Ошибка при отправке:', error);
+    });
+  }
+
+  // 4. Находим кнопку (если у кнопки "Сохранить" есть id, укажите его вместо button)
+  const saveBtn = document.querySelector('button'); 
+  if (saveBtn) {
+    saveBtn.addEventListener('click', sendProgressToGoogle);
+  }
+</script>
             
 </body>
 </html>
