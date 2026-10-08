@@ -2838,7 +2838,7 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbyX32TKTThB-LIHwSimyDxiibRU9MhfCdXQXb3yIcndqgFG1mZeVdCuNuuBY9ygqCfe4A/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbwFnXBERo92RDiscnfcNtWcr2MTvsAwXcT4YLymA5fiaQJ4rg33VFc36zKfIP7x9_clIA/exec', SHEET_SECRET='matematika-2026';
   var lastSent='', syncT=null;
   function totalXp(){
     var x=0; Object.keys(S.topics).forEach(function(t){ var p=(S.topics[t]||{}).p||{}; Object.keys(p).forEach(function(k){ x+=(p[k]&&p[k].xp)||0; }); });
