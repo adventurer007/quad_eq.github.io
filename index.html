@@ -154,6 +154,12 @@ sub,sup{font-size:.7em;line-height:0}
 .plot .bar{fill:var(--accent);opacity:.55}
 .plot .barneg{fill:var(--red);opacity:.55}
 .plot .arc{stroke:var(--ink-soft);stroke-width:1.4;fill:none}
+.plot .zone1{fill:var(--accent);opacity:.22}
+.plot .zone2{fill:var(--warn);opacity:.22}
+.plot .zone3{fill:var(--ok);opacity:.5}
+.plot .hdl{fill:var(--card);stroke:var(--accent);stroke-width:2.5;cursor:ew-resize}
+.plot .hdl.on{fill:var(--accent)}
+.plot .rectout{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:5 4}
 .labsel{width:100%;font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);min-width:0}
 
 /* примеры */
@@ -235,6 +241,7 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
 
 <div class="sheet">
   <header>
+    <button class="btn" id="backbtn" data-nav="home" hidden>← Все темы</button>
     <p class="eyebrow" id="eyebrow">Тема 8 · Алгебра</p>
     <h1 id="h1">Квадратные уравнения</h1>
     <div class="topics" id="topics" role="group" aria-label="Выбор темы"></div>
@@ -456,7 +463,7 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
         </div>
         <p class="rule"><b>Алгоритм.</b> Решите каждое неравенство отдельно, отметьте решения на одной числовой прямой и выберите общий промежуток.</p>
         <h3>Лаборатория: две линейные неравенства</h3>
-        <p class="small">Меняйте коэффициенты и знаки двух неравенств. Нижняя полоса — пересечение, то есть решение системы.</p>
+        <p class="small">У каждого неравенства своя ось. Перетаскивайте точку на оси: подсвечена часть оси, где неравенство выполняется. Зелёная область соединяет оси там, где их решения пересекаются.</p>
         <div id="lab-18"></div>
         <h2>Разбор типовых задач</h2>
         <div class="card ex" id="ex-18-1"></div>
@@ -509,9 +516,12 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
           <div class="type"><div class="m big" data-m>S_<n> = {2a_1 + (n − 1)d|2} · n</div><div>Сумма через первый член и разность.</div></div>
         </div>
         <p class="rule"><b>Равноотстоящие члены.</b> Если n + k = m + p, то a_<n> + a_<k> = a_<m> + a_<p>. Поэтому пары членов с одинаковой суммой номеров дают одинаковую сумму.</p>
-        <h3>Лаборатория: прогрессия и сумма Гаусса</h3>
-        <p class="small">Двигайте ползунки. Пары членов, стоящие на равных расстояниях от концов, дают одинаковую сумму — это и есть формула суммы.</p>
+        <h3>Лаборатория 1: прямоугольник из пар</h3>
+        <p class="small">Синие столбики — члены прогрессии, жёлтые — те же члены в обратном порядке, поставленные сверху. Каждый столбик в сумме даёт a_1 + a_n, поэтому весь набор — прямоугольник, и сумма — его половина.</p>
         <div id="lab-21"></div>
+        <h3>Лаборатория 2: шаг прогрессии</h3>
+        <p class="small">Члены — точки на прямой. Выберите a_1, d и номер k: видно, как каждый шаг добавляет d, и как по a_1 получить a_k.</p>
+        <div id="lab-21b"></div>
         <h2>Разбор типовых задач</h2>
         <div class="card ex" id="ex-21-1"></div>
         <div class="card ex" id="ex-21-2"></div>
@@ -527,11 +537,11 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
           <div class="type"><div class="m big" data-m>S = {b_1|1 − q}</div><div>Сумма бесконечно убывающей прогрессии, <span class="m" data-m>|q| &lt; 1</span>.</div></div>
         </div>
         <p class="rule"><b>Сходимость.</b> Бесконечная сумма имеет конечное значение только при |q| &lt; 1. При |q| ≥ 1 частичные суммы не стремятся к пределу.</p>
-        <h3>Лаборатория: рост, сумма и предел</h3>
-        <p class="small">Меняйте первый член и знаменатель. Точки — частичные суммы S_<n>, пунктир — предел S при |q| &lt; 1.</p>
+        <h3>Лаборатория 1: квадраты из сторон прогрессии</h3>
+        <p class="small">Стороны квадратов — члены прогрессии b_1, b_1q, b_1q², … Ряд квадратов выстраивается в линию. При |q| &lt; 1 его длина стремится к пределу, он отмечен красной линией.</p>
         <div id="lab-22"></div>
-        <h3>Лаборатория 2: шахматная доска</h3>
-        <p class="small">Зёрна удваиваются на каждой клетке. Двигайте ползунок: на доске закрашены клетки до n, красная рамка — текущая клетка.</p>
+        <h3>Лаборатория 2: мяч, который отскакивает</h3>
+        <p class="small">Каждый отскок в q раз ниже предыдущего. Путь мяча — сумма падений и подъёмов, и при |q| &lt; 1 он конечен.</p>
         <div id="lab-22b"></div>
         <h2>Разбор типовых задач</h2>
         <div class="card ex" id="ex-22-1"></div>
@@ -559,6 +569,13 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
     </section>
 
     <!-- ТЕСТ -->
+    <section id="home-journal" hidden>
+      <h2>Журнал</h2>
+      <div class="card" style="margin-bottom:14px"><h3>Ваше имя</h3><p class="small">Имя нужно, чтобы учитель видел ваш прогресс.</p>
+        <div class="inrow"><input id="jname" maxlength="40" placeholder="Имя и фамилия" aria-label="Имя"><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
+      <div id="jbody"></div>
+    </section>
+
     <section id="tab-test" role="tabpanel" aria-labelledby="t-test" hidden>
       <h2>Тест</h2>
       <div id="tbox"></div>
@@ -1650,10 +1667,10 @@ function init(){
   var S={topics:{},last:8,bestStreak:0};
   try{
     var raw=localStorage.getItem(LS);
-    if(raw){var o=JSON.parse(raw); if(o&&typeof o==='object'){ if(o.topics&&typeof o.topics==='object') S.topics=o.topics; if(o.last) S.last=o.last; if(o.bestStreak) S.bestStreak=o.bestStreak; }}
+    if(raw){var o=JSON.parse(raw); if(o&&typeof o==='object'){ if(o.topics&&typeof o.topics==='object') S.topics=o.topics; if(o.last) S.last=o.last; if(o.bestStreak) S.bestStreak=o.bestStreak; if(typeof o.name==='string') S.name=o.name; if(typeof o.uid==='string') S.uid=o.uid; }}
     else{var oldr=localStorage.getItem(LS_OLD); if(oldr){var oo=JSON.parse(oldr); if(oo&&oo.p) S.topics[8]={p:oo.p,bestTest:oo.bestTest||0,tests:oo.tests||0};}}
   }catch(e){}
-  function save(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
+  function save(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){} syncSoon();}
   function tst(t){var x=S.topics[t]; if(!x||typeof x!=='object') x=S.topics[t]={}; if(!x.p) x.p={}; if(!x.bestTest) x.bestTest=0; if(!x.tests) x.tests=0; return x;}
   var TOPICS=[8,9,10,11,12,13,14,15,17,18,19,20,21,22];
   var TOPIC=TP[S.last]?S.last:8, P=TP[TOPIC], BL=TB[TOPIC], ST=tst(TOPIC);
@@ -2566,10 +2583,11 @@ function init(){
 
   /* события */
   document.addEventListener('click',function(e){
-    var t=e.target.closest('[data-tab],[data-topic],[data-act],[data-ins],[data-tins],[data-n],[data-chip]');
+    var t=e.target.closest('[data-tab],[data-topic],[data-nav],[data-act],[data-ins],[data-tins],[data-n],[data-chip]');
     if(!t) return;
     if(t.dataset.tab){showTab(t.dataset.tab); return;}
-    if(t.dataset.topic){setTopic(+t.dataset.topic); return;}
+    if(t.dataset.topic){location.hash='#/t/'+t.dataset.topic; return;}
+    if(t.dataset.nav){location.hash='#/'; return;}
     if(t.dataset.ins!==undefined){insertAt('ans',t.dataset.ins); return;}
     if(t.dataset.tins!==undefined){insertAt('tans',t.dataset.tins); return;}
     if(t.dataset.n){cur=+t.dataset.n; showProblem(); return;}
@@ -2602,7 +2620,300 @@ function init(){
   });
 
   /* старт */
-  initLab(); labInitAll(); labInitAll2(); renderHeader(); renderStatus(); renderAnswers();
+  /* ---------- Лаборатории 18, 21, 22 (версия 2) ---------- */
+  function lFresh(id){
+    var h=document.getElementById(id); if(!h) return null;
+    var n=h.cloneNode(false); h.parentNode.replaceChild(n,h); return n;
+  }
+  function lRnd(x){ return Math.round(x*1000)/1000; }
+  function labInitAll3(){
+    labZone18();
+    labRect21();
+    labStep21();
+    labSquares22();
+    labBall22();
+  }
+
+  /* 18: две оси, у каждой своя граница; зелёная область — пересечение решений между осями */
+  function labZone18(){
+    var host=lFresh('lab-18'); if(!host) return;
+    var W=400,H=250,X0=-6,X1=6,YI=70,YII=180;
+    var st={a:-2,ac:true,ad:1,b:3,bc:true,bd:-1};
+    var X=function(x){return (x-X0)/(X1-X0)*W;};
+    var XV=function(p){return X0+p/W*(X1-X0);};
+    host.innerHTML='<div class="card lab"><div><div class="labout" id="lab-18-out" aria-live="polite"></div>'+
+      '<div class="actions"><button class="btn" id="lab-18-dA"></button><button class="btn" id="lab-18-dB"></button></div>'+
+      '<p class="small">Перетаскивайте точку на каждой оси. Нажатие на точку открывает или закрывает её. Зелёная область — пересечение решений.</p></div>'+
+      '<svg class="plot" id="lab-18-svg" viewBox="0 0 400 250" role="img" aria-label="Две числовые оси с решениями неравенств и зелёной зоной пересечения" style="touch-action:none"></svg></div>';
+    function sets(){
+      var A=st.ad>0?[{lo:st.a,hi:LINF,lc:st.ac,hc:false}]:[{lo:-LINF,hi:st.a,lc:false,hc:st.ac}];
+      var B=st.bd>0?[{lo:st.b,hi:LINF,lc:st.bc,hc:false}]:[{lo:-LINF,hi:st.b,lc:false,hc:st.bc}];
+      return {A:A,B:B,I:lInter(A,B)};
+    }
+    function sym(d,c){ return d>0?(c?'≥':'>'):(c?'≤':'<'); }
+    function axis(y,label){
+      var s='<line class="ax" x1="0" y1="'+y+'" x2="'+W+'" y2="'+y+'"/>', k;
+      for(k=X0;k<=X1;k++){
+        s+='<line class="gr" x1="'+X(k).toFixed(1)+'" y1="'+(y-5)+'" x2="'+X(k).toFixed(1)+'" y2="'+(y+5)+'"/>';
+        if(k!==0) s+='<text x="'+X(k).toFixed(1)+'" y="'+(y+17)+'" text-anchor="middle">'+String(k).replace('-','−')+'</text>';
+      }
+      s+='<text x="4" y="'+(y-10)+'" text-anchor="start">'+label+'</text>';
+      return s;
+    }
+    function solid(ps,y,color){
+      var s='';
+      ps.forEach(function(p){
+        var a=Math.max(p.lo,X0), b=Math.min(p.hi,X1);
+        if(b>a) s+='<line x1="'+X(a).toFixed(1)+'" y1="'+y+'" x2="'+X(b).toFixed(1)+'" y2="'+y+'" stroke="'+color+'" stroke-width="7" stroke-linecap="round" opacity=".55"/>';
+        if(isFinite(p.lo)&&p.lo>=X0&&p.lo<=X1) s+='<circle cx="'+X(p.lo).toFixed(1)+'" cy="'+y+'" r="5" class="'+(p.lc?'dotc':'doto')+'"/>';
+        if(isFinite(p.hi)&&p.hi>=X0&&p.hi<=X1&&p.hi!==p.lo) s+='<circle cx="'+X(p.hi).toFixed(1)+'" cy="'+y+'" r="5" class="'+(p.hc?'dotc':'doto')+'"/>';
+      });
+      return s;
+    }
+    function handle(h,x,y,closed){
+      return '<circle class="hdl'+(closed?' on':'')+'" data-h="'+h+'" cx="'+X(x).toFixed(1)+'" cy="'+y+'" r="9"/>';
+    }
+    function render(){
+      var S=sets(), s='', i;
+      S.I.forEach(function(p){
+        var a=Math.max(p.lo,X0), b=Math.min(p.hi,X1);
+        if(b>=a) s+='<rect class="zone3" x="'+X(a).toFixed(1)+'" y="'+YI+'" width="'+Math.max(X(b)-X(a),1.5).toFixed(1)+'" height="'+(YII-YI)+'"/>';
+      });
+      s+=axis(YI,'I')+solid(S.A,YI,'var(--accent)')+handle('A',st.a,YI,st.ac);
+      s+=axis(YII,'II')+solid(S.B,YII,'var(--warn)')+handle('B',st.b,YII,st.bc);
+      document.getElementById('lab-18-svg').innerHTML=s;
+      document.getElementById('lab-18-out').innerHTML=
+        '<p class="m">'+fmt('I:  x '+sym(st.ad,st.ac)+' '+lnc(st.a))+'</p>'+
+        '<p class="m">'+fmt('II:  x '+sym(st.bd,st.bc)+' '+lnc(st.b))+'</p>'+
+        '<p class="verdict">Решение системы: '+lset(S.I)+'</p>'+
+        (S.I.length?'':'<p>Решений у системы нет: зелёной области нет.</p>');
+    }
+    document.getElementById('lab-18-dA').textContent='I: сменить знак (> и <)';
+    document.getElementById('lab-18-dB').textContent='II: сменить знак (> и <)';
+    document.getElementById('lab-18-dA').onclick=function(){ st.ad=-st.ad; render(); };
+    document.getElementById('lab-18-dB').onclick=function(){ st.bd=-st.bd; render(); };
+    var svg=document.getElementById('lab-18-svg'), drag=null, moved=false;
+    svg.addEventListener('pointerdown',function(e){
+      var t=e.target; if(!t.getAttribute||!t.getAttribute('data-h')) return;
+      drag=t.getAttribute('data-h'); moved=false;
+      svg.setPointerCapture(e.pointerId); e.preventDefault();
+    });
+    svg.addEventListener('pointermove',function(e){
+      if(!drag) return;
+      var r=svg.getBoundingClientRect(), px=(e.clientX-r.left)*W/r.width;
+      var x=Math.max(X0,Math.min(X1,Math.round(XV(px)*2)/2));
+      if(drag==='A'&&x!==st.a){ st.a=x; moved=true; render(); }
+      if(drag==='B'&&x!==st.b){ st.b=x; moved=true; render(); }
+    });
+    function up(){
+      if(drag&&!moved){ if(drag==='A') st.ac=!st.ac; else st.bc=!st.bc; render(); }
+      drag=null;
+    }
+    svg.addEventListener('pointerup',up);
+    svg.addEventListener('pointercancel',function(){ drag=null; });
+    render();
+  }
+
+  /* 21: прямоугольник из пар a_k + a_(n+1−k) = a_1 + a_n */
+  function labRect21(){
+    labMount('lab-21',{W:400,H:280,x:[0,11],y:[0,70],frame:false,alt:'Пары членов прогрессии складываются в прямоугольник',
+      controls:[
+        {k:'a1',type:'range',name:'a_1',min:1,max:10,step:1,value:2},
+        {k:'d',type:'range',name:'d',min:1,max:5,step:1,value:3},
+        {k:'n',type:'range',name:'n',min:2,max:10,step:1,value:6}],
+      compute:function(v,M){
+        var n=v.n, a=v.a1, d=v.d, k, s='', w=M.X(1)-M.X(0), y0=M.Y(0), sumB=0;
+        var al=function(j){ return a+(j-1)*d; };
+        var T=al(1)+al(n);
+        for(k=1;k<=n;k++){
+          var lo=al(k), hi=al(n+1-k), x=M.X(k-1)+w*0.1, bw=w*0.8;
+          sumB+=lo;
+          s+='<rect fill="var(--accent)" opacity=".8" x="'+x.toFixed(1)+'" y="'+M.Y(lo).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(y0-M.Y(lo)).toFixed(1)+'"/>';
+          s+='<rect fill="var(--warn)" opacity=".6" x="'+x.toFixed(1)+'" y="'+M.Y(T).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(M.Y(lo)-M.Y(T)).toFixed(1)+'"/>';
+          if(hi<0||lo<0) s+='';
+        }
+        s+='<rect class="rectout" x="'+M.X(0).toFixed(1)+'" y="'+M.Y(T).toFixed(1)+'" width="'+(n*w).toFixed(1)+'" height="'+(y0-M.Y(T)).toFixed(1)+'"/>';
+        s+='<line class="ax" x1="0" y1="'+y0.toFixed(1)+'" x2="'+M.W+'" y2="'+y0.toFixed(1)+'"/>';
+        s+='<text x="'+(M.X(n)+4).toFixed(1)+'" y="'+(M.Y(T)+4).toFixed(1)+'">'+String(lRnd(T)).replace('.',',').replace('-','−')+'</text>';
+        var S=n*T/2;
+        var h='<p class="m">'+fmt('a_<n> = a_1 + (n − 1)d = '+lnc(al(n)))+'</p>';
+        h+='<p>'+fmt('В каждом столбце синий и жёлтый блоки в сумме дают одно и то же: a_k + a_<n+1−k> = a_1 + a_<n> = '+lnc(T)+'.')+'</p>';
+        h+='<p class="m">'+fmt('Прямоугольник: n · (a_1 + a_<n>) = '+n+' · '+lnc(T)+' = '+lnc(n*T))+'</p>';
+        h+='<p class="verdict">'+fmt('Синие блоки — ровно половина: S_<n> = {a_1 + a_<n>|2} · n = '+lnc(S))+'</p>';
+        h+='<p class="small">Проверка: сумма синих блоков = '+lnc(sumB)+'.</p>';
+        return {svg:s,text:h};
+      }});
+  }
+
+  /* 21б: член прогрессии как точка на прямой; шаг d и поиск a_k по a_1 */
+  function labStep21(){
+    labMount('lab-21b',{W:400,H:280,x:[0,13],y:[-50,60],alt:'Члены прогрессии как точки на прямой, шаг d между соседними',
+      controls:[
+        {k:'a1',type:'range',name:'a_1',min:-5,max:10,step:1,value:2},
+        {k:'d',type:'range',name:'d',min:-4,max:4,step:1,value:3},
+        {k:'k',type:'range',name:'k',min:1,max:12,step:1,value:5}],
+      compute:function(v,M){
+        var a=v.a1, d=v.d, K=v.k, j, s='';
+        var al=function(j){ return a+(j-1)*d; };
+        s+=lcurve(M,function(x){ return a+(x-1)*d; },'curve2');
+        for(j=1;j<12;j++){
+          if(j<K) s+='<line class="curve" x1="'+M.X(j).toFixed(1)+'" y1="'+M.Y(al(j)).toFixed(1)+'" x2="'+M.X(j+1).toFixed(1)+'" y2="'+M.Y(al(j+1)).toFixed(1)+'"/>';
+        }
+        for(j=1;j<=12;j++){
+          var cx=M.X(j).toFixed(1), cy=M.Y(al(j)).toFixed(1);
+          if(j===K) s+='<circle class="rt" cx="'+cx+'" cy="'+cy+'" r="6.5"/>';
+          else if(j<K) s+='<circle class="dotc" cx="'+cx+'" cy="'+cy+'" r="5"/>';
+          else s+='<circle class="doto" cx="'+cx+'" cy="'+cy+'" r="4" opacity=".5"/>';
+        }
+        if(K>=2) s+='<text x="'+((M.X(1)+M.X(2))/2).toFixed(1)+'" y="'+(M.Y((al(1)+al(2))/2)-8).toFixed(1)+'" text-anchor="middle">+d</text>';
+        var h='<p class="m">'+fmt('a_<1> = '+lnc(a))+'</p>';
+        for(j=2;j<=K;j++) h+='<p class="m">'+fmt('a_<'+j+'> = a_<'+(j-1)+'> + d = '+lnc(al(j)))+'</p>';
+        h+='<p class="verdict">'+fmt(K===1?'Это и есть a_1.':'Чтобы найти a_<'+K+'> по a_1, нужно '+(K-1)+' шага: a_<'+K+'> = a_1 + '+(K-1)+'d = '+lnc(al(K)))+'</p>';
+        h+='<p class="small">Точки лежат на одной прямой с наклоном d. Пунктир — прямая y = a_1 + (x − 1)d.</p>';
+        return {svg:s,text:h};
+      }});
+  }
+
+  /* 22а: квадраты, стороны которых — члены прогрессии */
+  function labSquares22(){
+    labMount('lab-22',{W:400,H:260,x:[0,1],y:[0,1],frame:false,alt:'Квадраты, стороны которых образуют геометрическую прогрессию',
+      controls:[
+        {k:'b1',type:'range',name:'b_1',min:1,max:6,step:1,value:4},
+        {k:'q',type:'range',name:'q',min:0.1,max:1.2,step:0.1,value:0.5},
+        {k:'n',type:'range',name:'n',min:1,max:8,step:1,value:4}],
+      compute:function(v,M){
+        var b1=v.b1, q=Math.round(v.q*10)/10, n=v.n, k, s='', sides=[], Sn=0, L=Math.abs(q)<1?b1/(1-q):null;
+        for(k=1;k<=n;k++){ sides.push(b1*Math.pow(q,k-1)); Sn+=sides[k-1]; }
+        var mx=Math.max(Sn,L||0,b1)*1.08, ppu=Math.min((M.W-30)/mx,(M.H-60)/b1), base=M.H-30, x=12;
+        for(k=0;k<n;k++){
+          var sd=sides[k]*ppu;
+          s+='<rect class="bar" x="'+x.toFixed(1)+'" y="'+(base-sd).toFixed(1)+'" width="'+sd.toFixed(1)+'" height="'+sd.toFixed(1)+'" fill="var(--accent)" opacity="'+(0.35+0.5*(k+1)/n).toFixed(2)+'" stroke="var(--paper)" stroke-width="1.5"/>';
+          x+=sd;
+        }
+        s+='<line class="ax" x1="0" y1="'+base+'" x2="'+M.W+'" y2="'+base+'"/>';
+        if(L){
+          var xl=12+L*ppu;
+          s+='<line class="asym" x1="'+xl.toFixed(1)+'" y1="20" x2="'+xl.toFixed(1)+'" y2="'+base+'"/>';
+          s+='<text x="'+(xl-4).toFixed(1)+'" y="16" text-anchor="end">предел S</text>';
+        }
+        var h='<p>'+fmt('Стороны квадратов: b_1 = '+lnc(b1)+', b_<2> = b_1 q, … — это прогрессия.')+'</p>';
+        h+='<p class="m">'+fmt('S_<n> = b_1 + b_1q + … + b_1q^<n−1> = '+lnc(lRnd(Sn)))+'</p>';
+        if(L) h+='<p class="verdict">|q| &lt; 1: сумма сходится к <span class="m">'+fmt('{b_1|1 − q} = '+lnc(lRnd(L)))+'</span></p>';
+        else h+='<p class="verdict">|q| ≥ 1: сумма не имеет предела — отрезок растёт без конца.</p>';
+        h+='<p class="small">Длина ряда из квадратов приближается к пределу, когда |q| &lt; 1.</p>';
+        return {svg:s,text:h};
+      }});
+  }
+
+  /* 22б: мяч отскакивает; высота каждого отскока в q раз меньше предыдущей */
+  function labBall22(){
+    labMount('lab-22b',{W:400,H:260,x:[0,1],y:[0,1],frame:false,alt:'Мяч, который отскакивает, и путь, который он проходит',
+      controls:[
+        {k:'h',type:'range',name:'h_0',min:1,max:8,step:1,value:4},
+        {k:'q',type:'range',name:'q',min:0.1,max:1.2,step:0.1,value:0.6},
+        {k:'n',type:'range',name:'n',min:1,max:10,step:1,value:5}],
+      compute:function(v,M){
+        var h0=v.h, q=Math.round(v.q*10)/10, n=v.n, s='', ground=M.H-24, ppu=(ground-24)/h0;
+        var step=(M.W-40)/10, x=20, i, len=0, pts=[];
+        var p=function(i){ return h0*Math.pow(q,i); };
+        pts.push([x,ground-p(0)*ppu]);
+        for(i=0;i<n;i++){
+          len+=p(i)+p(i+1);
+          pts.push([x+step/2,ground]);
+          x+=step;
+          pts.push([x,ground-p(i+1)*ppu]);
+        }
+        s+='<line class="ax" x1="0" y1="'+ground+'" x2="'+M.W+'" y2="'+ground+'"/>';
+        s+='<polyline class="curve" points="'+pts.map(function(z){return z[0].toFixed(1)+','+z[1].toFixed(1);}).join(' ')+'"/>';
+        for(i=0;i<pts.length;i+=2) s+='<circle class="dotc" cx="'+pts[i][0].toFixed(1)+'" cy="'+pts[i][1].toFixed(1)+'" r="4.5"/>';
+        var last=pts[pts.length-1];
+        s+='<circle class="rt" cx="'+last[0].toFixed(1)+'" cy="'+last[1].toFixed(1)+'" r="6"/>';
+        var h='<p class="m">'+fmt('h_<k> = h_0 q^<k>, h_0 = '+lnc(h0)+', h_<n> = '+lnc(lRnd(p(n))))+'</p>';
+        h+='<p>Путь за '+n+' отскоков (вниз и вверх): '+lnc(lRnd(len))+'</p>';
+        if(Math.abs(q)<1) h+='<p class="verdict">Весь путь при бесконечном числе отскоков: <span class="m">'+fmt('{h_0(1 + q)|1 − q} = '+lnc(lRnd(h0*(1+q)/(1-q))))+'</span></p>';
+        else h+='<p class="verdict">|q| ≥ 1: мяч не теряет высоту, путь бесконечен.</p>';
+        h+='<p class="small">Каждый отскок — это член геометрической прогрессии. Весь путь складывается из падений и подъёмов.</p>';
+        return {svg:s,text:h};
+      }});
+  }
+
+  /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbyX32TKTThB-LIHwSimyDxiibRU9MhfCdXQXb3yIcndqgFG1mZeVdCuNuuBY9ygqCfe4A/exec', SHEET_SECRET='matematika-2026';
+  var lastSent='', syncT=null;
+  function totalXp(){
+    var x=0; Object.keys(S.topics).forEach(function(t){ var p=(S.topics[t]||{}).p||{}; Object.keys(p).forEach(function(k){ x+=(p[k]&&p[k].xp)||0; }); });
+    return x;
+  }
+  function summary(){
+    var out={};
+    TOPICS.forEach(function(t){
+      var x=S.topics[t]; if(!x||!x.p) return;
+      var list=TP[t]||[], ok=0, bad=0, rev=0;
+      list.forEach(function(p){ var st=x.p[p.n]||{}; if(st.st==='ok') ok++; else if(st.st==='rev') rev++; else if(st.st==='bad') bad++; });
+      if(ok||rev||bad) out[t]={ok:ok,rev:rev,bad:bad,n:list.length};
+    });
+    return out;
+  }
+  function ensureUid(){
+    if(!S.uid) S.uid=Math.random().toString(36).slice(2,12)+Date.now().toString(36);
+    return S.uid;
+  }
+  function syncSoon(){ if(!SHEET_URL||!S.name) return; clearTimeout(syncT); syncT=setTimeout(syncNow,1500); }
+  function syncNow(){
+    if(!SHEET_URL||!S.name) return;
+    var sum=summary(), xp=totalXp(), key=JSON.stringify([S.name,sum,xp]);
+    if(key===lastSent) return;
+    lastSent=key;
+    var body={secret:SHEET_SECRET,id:ensureUid(),name:S.name,xp:xp,topics:sum,updated:new Date().toISOString()};
+    try{
+      fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)})
+        .catch(function(){ lastSent=''; });
+    }catch(e){ lastSent=''; }
+  }
+  function renderJournal(){
+    var b=$('#jbody'); if(!b) return;
+    if(!SHEET_URL){ b.innerHTML='<div class="card"><p class="small">Журнал пока не подключён к таблице. Прогресс сохраняется на этом устройстве.</p></div>'; return; }
+    var own=summary(), line='';
+    TOPICS.forEach(function(t){ if(own[t]) line+='<li>Тема '+t+': решено '+own[t].ok+' из '+own[t].n+(own[t].bad?', ошибок '+own[t].bad:'')+'</li>'; });
+    b.innerHTML='<div class="card"><p>Прогресс отправляется учителю, когда указано имя.</p>'+
+      (line?'<ul class="plain">'+line+'</ul>':'<p class="small">Пока нет решённых задач.</p>')+'</div>';
+  }
+  function initJournalUI(){
+    var inp=$('#jname'); if(!inp) return;
+    inp.value=S.name||'';
+    $('#jsave').onclick=function(){
+      S.name=inp.value.trim().slice(0,40); ensureUid(); save(); lastSent='';
+      $('#jmsg').textContent=S.name?'Имя сохранено.':'Укажите имя.';
+      syncNow();
+    };
+    renderJournal();
+  }
+
+  /* ---------- Две страницы: главная (темы + журнал) и страница темы ---------- */
+  function applyView(v){
+    var home=v==='home';
+    $('#home-journal').hidden=!home;
+    $('#topics').hidden=!home;
+    $('#status').hidden=home;
+    $('#backbtn').hidden=home;
+    $('.tabs').hidden=home;
+    if(home){
+      ['lecture','practice','answers','test'].forEach(function(t){ $('#tab-'+t).hidden=true; });
+      $('#eyebrow').textContent='Уроки';
+      $('#h1').textContent='Уроки по уравнениям';
+      renderTopics(); renderJournal();
+    } else {
+      showTab('lecture');
+    }
+    window.scrollTo(0,0);
+  }
+  function route(){
+    var m=/^#\/t\/(\d+)$/.exec(location.hash||'');
+    if(m&&TP[+m[1]]){ setTopic(+m[1]); applyView('topic'); }
+    else applyView('home');
+  }
+  window.addEventListener('hashchange',route);
+  initLab(); labInitAll(); labInitAll2(); labInitAll3(); renderHeader(); renderStatus(); renderAnswers(); initJournalUI(); route();
   var first=P.filter(function(p){return (ST.p[p.n]||{}).st!=='ok';})[0];
   cur=first?first.n:1;
   showProblem(); renderTest();
