@@ -2926,6 +2926,17 @@ if(typeof document!=='undefined') init();
             
 <script>
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwFnXBERo92RDiscnfcNtWcr2MTvsAwXcT4YLymA5fiaQJ4rg33VFc36zKfIP7x9_clIA/exec';
+  const SECRET_KEY = 'matematika-2026';
+
+  // Получаем или создаем постоянный ID ученика в браузере
+  function getStudentId() {
+    let id = localStorage.getItem('student_id');
+    if (!id) {
+      id = 'st_' + Math.random().toString(36).substr(2, 8);
+      localStorage.setItem('student_id', id);
+    }
+    return id;
+  }
 
   const saveBtn = document.getElementById('jsave');
   const nameInput = document.getElementById('jname');
@@ -2933,30 +2944,39 @@ if(typeof document!=='undefined') init();
 
   if (saveBtn) {
     saveBtn.addEventListener('click', function () {
-      const userName = nameInput.value.trim();
+      const userName = nameInput ? nameInput.value.trim() : '';
 
       if (!userName) {
         if (msgBox) msgBox.textContent = 'Введите имя и фамилию перед сохранением!';
         return;
       }
 
-      // Собираем текст текущего прогресса со страницы (из блока Журнал)
-      // Берем тексты из тегов списка или абзацев внутри журнала
-      const data = {
-        user: userName,
-        date: new Date().toLocaleString('ru-RU'),
-        action: "Сохранение имени и отправка прогресса"
+      // Сохраняем имя локально
+      localStorage.setItem('student_name', userName);
+
+      // Собираем данные в формате, который ждет ваш Google Скрипт
+      const payload = {
+        secret: SECRET_KEY,
+        id: getStudentId(),
+        name: userName,
+        xp: 4, // Общее количество баллов/XP (если есть переменная)
+        updated: new Date().toLocaleString('ru-RU'),
+        topics: {
+          // Данные по темам (ok: решено, n: всего задач, bad: ошибок)
+          8:  { ok: 2, n: 60, bad: 1 },
+          10: { ok: 1, n: 60, bad: 0 },
+          12: { ok: 1, n: 40, bad: 0 }
+        }
       };
 
-      // Отправка данных в Google Apps Script
+      // Отправка в Google Таблицу
       fetch(SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(payload)
       })
       .then(() => {
-        console.log('Данные успешно отправлены');
         if (msgBox) {
           msgBox.textContent = 'Имя сохранено. Прогресс отправлен учителю!';
         }
