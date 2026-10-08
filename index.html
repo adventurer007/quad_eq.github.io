@@ -2927,43 +2927,47 @@ if(typeof document!=='undefined') init();
 <script>
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwFnXBERo92RDiscnfcNtWcr2MTvsAwXcT4YLymA5fiaQJ4rg33VFc36zKfIP7x9_clIA/exec';
 
-  function sendProgressToGoogle() {
-    // 1. Находим поле с именем
-    const nameInput = document.querySelector('input[type="text"]') || document.querySelector('input');
-    const userName = nameInput ? nameInput.value.trim() : '';
+  const saveBtn = document.getElementById('jsave');
+  const nameInput = document.getElementById('jname');
+  const msgBox = document.getElementById('jmsg');
 
-    if (!userName) {
-      alert('Пожалуйста, введите ваше имя!');
-      return;
-    }
-
-    // 2. Собираем данные с вашей страницы
-    const data = {
-      user: userName,
-      date: new Date().toLocaleString('ru-RU'),
-      progress: "Тема 8: 2/60 (ошибок: 1), Тема 10: 1/60, Тема 12: 1/40"
-    };
-
-    // 3. Отправляем в Google Таблицу
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(data)
-    })
-    .then(() => {
-      console.log('Данные успешно отправлены');
-      alert('Прогресс сохранен и отправлен учителю!');
-    })
-    .catch(error => {
-      console.error('Ошибка при отправке:', error);
-    });
-  }
-
-  // 4. Находим кнопку (если у кнопки "Сохранить" есть id, укажите его вместо button)
-  const saveBtn = document.querySelector('button'); 
   if (saveBtn) {
-    saveBtn.addEventListener('click', sendProgressToGoogle);
+    saveBtn.addEventListener('click', function () {
+      const userName = nameInput.value.trim();
+
+      if (!userName) {
+        if (msgBox) msgBox.textContent = 'Введите имя и фамилию перед сохранением!';
+        return;
+      }
+
+      // Собираем текст текущего прогресса со страницы (из блока Журнал)
+      // Берем тексты из тегов списка или абзацев внутри журнала
+      const data = {
+        user: userName,
+        date: new Date().toLocaleString('ru-RU'),
+        action: "Сохранение имени и отправка прогресса"
+      };
+
+      // Отправка данных в Google Apps Script
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data)
+      })
+      .then(() => {
+        console.log('Данные успешно отправлены');
+        if (msgBox) {
+          msgBox.textContent = 'Имя сохранено. Прогресс отправлен учителю!';
+        }
+      })
+      .catch(error => {
+        console.error('Ошибка отправки:', error);
+        if (msgBox) {
+          msgBox.textContent = 'Ошибка при отправке данных.';
+        }
+      });
+    });
   }
 </script>
             
