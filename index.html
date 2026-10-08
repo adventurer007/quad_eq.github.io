@@ -2924,17 +2924,38 @@ if(typeof document!=='undefined') init();
 
 <!-- ----------------my own add-ons--------------------- -->
 <script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1ejH0DI2WYv_rODu4kiHP4HumL7RtN8AD-JfOVtc4bKx5Z22dJOnK3QZSUxz7nu7zOQ/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzd2mQWv_UEfOERwRJBsn_bCTNOL2y4udbz5JqXf9i-XyZjwmEKl53diUpUiajUy_VqSQ/exec';
   const SECRET_KEY = 'matematika-2026';
 
-  // Получаем или создаем постоянный ID ученика в браузере
   function getStudentId() {
     let id = localStorage.getItem('student_id');
     if (!id) {
-      id = 'st_' + Math.random().toString(36).substr(2, 8);
+      id = 'st_' + Math.random().toString(36).substr(2, 9);
       localStorage.setItem('student_id', id);
     }
     return id;
+  }
+
+  function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    if (/mobile/i.test(ua)) return 'Мобильный';
+    if (/tablet/i.test(ua)) return 'Планшет';
+    return 'Компьютер';
+  }
+
+  // Автоматически собираем весь текст прогресса, который виден на экране
+  function getVisibleProgress() {
+    const items = document.querySelectorAll('.card li, #journal li, ul li');
+    const results = [];
+    
+    items.forEach(li => {
+      const text = li.textContent.trim();
+      if (text.includes('Тема') || text.includes('решено')) {
+        results.push(text);
+      }
+    });
+
+    return results.length > 0 ? results.join('; ') : 'Прогресс не найден на странице';
   }
 
   const saveBtn = document.getElementById('jsave');
@@ -2950,24 +2971,19 @@ if(typeof document!=='undefined') init();
         return;
       }
 
-      // Сохраняем имя локально
       localStorage.setItem('student_name', userName);
 
-      // Собираем данные
+      // Собираем данные без использования сложных переменных
       const payload = {
         secret: SECRET_KEY,
         id: getStudentId(),
         name: userName,
-        xp: 4,
+        xp: '—', // если нет общих баллов
         updated: new Date().toLocaleString('ru-RU'),
-        topics: {
-          8:  { ok: 2, n: 60, bad: 1 },
-          10: { ok: 1, n: 60, bad: 0 },
-          12: { ok: 1, n: 40, bad: 0 }
-        }
+        device: getDeviceInfo(),
+        topics: getVisibleProgress() // Автоматически соберет текст из списка "Тема 8: решено 2..."
       };
 
-      // Отправка в Google Таблицу
       fetch(SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -2977,17 +2993,15 @@ if(typeof document!=='undefined') init();
       .then(data => {
         if (msgBox) {
           if (data.status === 'success') {
-            msgBox.textContent = 'Имя сохранено. Прогресс отправлен учителю!';
+            msgBox.textContent = 'Данные сохранены!';
           } else {
-            msgBox.textContent = 'Ошибка: ' + (data.message || 'неизвестная ошибка');
+            msgBox.textContent = 'Ошибка: ' + data.message;
           }
         }
       })
       .catch(error => {
         console.error('Ошибка отправки:', error);
-        if (msgBox) {
-          msgBox.textContent = 'Ошибка при отправке данных.';
-        }
+        if (msgBox) msgBox.textContent = 'Ошибка при отправке.';
       });
     });
   }
