@@ -571,8 +571,8 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
     <!-- ТЕСТ -->
     <section id="home-journal" hidden>
       <h2>Журнал</h2>
-      <div class="card" style="margin-bottom:14px"><h3>Ваше имя</h3><p class="small">Имя нужно, чтобы учитель видел ваш прогресс.</p>
-        <div class="inrow"><input id="jname" maxlength="40" placeholder="Имя и фамилия" aria-label="Имя"><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
+      <div class="card" style="margin-bottom:14px"><h3>Ваше имя и группа</h3><p class="small">Имя и группа нужны, чтобы учитель видел ваш прогресс.</p>
+        <div class="inrow"><input id="jname" maxlength="40" placeholder="Имя и фамилия" aria-label="Имя"><select id="jgroup" aria-label="Группа"><option value="">Группа</option><option>A3</option><option>A5</option><option>I3</option></select><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
       <div id="jbody"></div>
     </section>
 
@@ -1667,7 +1667,7 @@ function init(){
   var S={topics:{},last:8,bestStreak:0};
   try{
     var raw=localStorage.getItem(LS);
-    if(raw){var o=JSON.parse(raw); if(o&&typeof o==='object'){ if(o.topics&&typeof o.topics==='object') S.topics=o.topics; if(o.last) S.last=o.last; if(o.bestStreak) S.bestStreak=o.bestStreak; if(typeof o.name==='string') S.name=o.name; if(typeof o.uid==='string') S.uid=o.uid; }}
+    if(raw){var o=JSON.parse(raw); if(o&&typeof o==='object'){ if(o.topics&&typeof o.topics==='object') S.topics=o.topics; if(o.last) S.last=o.last; if(o.bestStreak) S.bestStreak=o.bestStreak; if(typeof o.name==='string') S.name=o.name; if(typeof o.uid==='string') S.uid=o.uid; if(typeof o.group==='string') S.group=o.group; }}
     else{var oldr=localStorage.getItem(LS_OLD); if(oldr){var oo=JSON.parse(oldr); if(oo&&oo.p) S.topics[8]={p:oo.p,bestTest:oo.bestTest||0,tests:oo.tests||0};}}
   }catch(e){}
   function save(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){} syncSoon();}
@@ -2838,12 +2838,8 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbwFnXBERo92RDiscnfcNtWcr2MTvsAwXcT4YLymA5fiaQJ4rg33VFc36zKfIP7x9_clIA/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbxoIfe5RVp3hqrovOqk3kUrMVLmIWbLDPGEUTYfnDWf4TqQB2Galu7r_viud7cvKbziug/exec', SHEET_SECRET='matematika-2026';
   var lastSent='', syncT=null;
-  function totalXp(){
-    var x=0; Object.keys(S.topics).forEach(function(t){ var p=(S.topics[t]||{}).p||{}; Object.keys(p).forEach(function(k){ x+=(p[k]&&p[k].xp)||0; }); });
-    return x;
-  }
   function summary(){
     var out={};
     TOPICS.forEach(function(t){
@@ -2854,38 +2850,61 @@ function init(){
     });
     return out;
   }
+  function testSummary(){
+    var out={};
+    TOPICS.forEach(function(t){ var x=S.topics[t]; if(x&&x.tests) out[t]={best:x.bestTest||0,runs:x.tests}; });
+    return out;
+  }
   function ensureUid(){
     if(!S.uid) S.uid=Math.random().toString(36).slice(2,12)+Date.now().toString(36);
     return S.uid;
   }
-  function syncSoon(){ if(!SHEET_URL||!S.name) return; clearTimeout(syncT); syncT=setTimeout(syncNow,1500); }
+  function setMsg(t){ var m=$('#jmsg'); if(m) m.textContent=t; }
+  function canSend(){ return !!(SHEET_URL&&S.name&&S.group); }
+  function payload(){
+    var ua=navigator.userAgent;
+    return {
+      secret:SHEET_SECRET, id:ensureUid(), name:S.name, group:S.group, xp:xpTotal(),
+      device:/tablet|ipad/i.test(ua)?'Планшет':(/mobi|android|iphone/i.test(ua)?'Телефон':'Компьютер'),
+      updated:new Date().toLocaleString('ru-RU'),
+      topics:summary(), tests:testSummary()
+    };
+  }
+  function syncSoon(){ if(!canSend()) return; clearTimeout(syncT); syncT=setTimeout(syncNow,1500); }
   function syncNow(){
-    if(!SHEET_URL||!S.name) return;
-    var sum=summary(), xp=totalXp(), key=JSON.stringify([S.name,sum,xp]);
+    if(!canSend()) return;
+    var body=payload();
+    var key=JSON.stringify([body.name,body.group,body.xp,body.topics,body.tests]);
     if(key===lastSent) return;
     lastSent=key;
-    var body={secret:SHEET_SECRET,id:ensureUid(),name:S.name,xp:xp,topics:sum,updated:new Date().toISOString()};
-    try{
-      fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)})
-        .catch(function(){ lastSent=''; });
-    }catch(e){ lastSent=''; }
+    fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),keepalive:true})
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(d.status!=='success') throw new Error(d.message||'ошибка'); setMsg('Прогресс отправлен учителю.'); })
+      .catch(function(err){ lastSent=''; setMsg('Не отправлено: '+err.message); });
   }
   function renderJournal(){
     var b=$('#jbody'); if(!b) return;
     if(!SHEET_URL){ b.innerHTML='<div class="card"><p class="small">Журнал пока не подключён к таблице. Прогресс сохраняется на этом устройстве.</p></div>'; return; }
-    var own=summary(), line='';
-    TOPICS.forEach(function(t){ if(own[t]) line+='<li>Тема '+t+': решено '+own[t].ok+' из '+own[t].n+(own[t].bad?', ошибок '+own[t].bad:'')+'</li>'; });
-    b.innerHTML='<div class="card"><p>Прогресс отправляется учителю, когда указано имя.</p>'+
+    var own=summary(), tests=testSummary(), line='';
+    TOPICS.forEach(function(t){
+      if(own[t]) line+='<li>Тема '+t+': решено '+own[t].ok+' из '+own[t].n+(own[t].bad?', ошибок '+own[t].bad:'')+'</li>';
+      if(tests[t]) line+='<li>Тест, тема '+t+': лучший '+tests[t].best+' из 10 (попыток: '+tests[t].runs+')</li>';
+    });
+    b.innerHTML='<div class="card"><p>Учитель видит ваш прогресс, когда указаны имя и группа.</p>'+
       (line?'<ul class="plain">'+line+'</ul>':'<p class="small">Пока нет решённых задач.</p>')+'</div>';
   }
   function initJournalUI(){
-    var inp=$('#jname'); if(!inp) return;
-    inp.value=S.name||'';
+    var inp=$('#jname'), sel=$('#jgroup'); if(!inp||!sel) return;
+    inp.value=S.name||''; sel.value=S.group||'';
     $('#jsave').onclick=function(){
-      S.name=inp.value.trim().slice(0,40); ensureUid(); save(); lastSent='';
-      $('#jmsg').textContent=S.name?'Имя сохранено.':'Укажите имя.';
+      var n=inp.value.trim().slice(0,40), g=sel.value;
+      if(!n){ setMsg('Укажите имя.'); return; }
+      if(!g){ setMsg('Выберите группу.'); return; }
+      S.name=n; S.group=g; ensureUid(); save(); lastSent='';
+      setMsg('Сохранено. Группа: '+g+'.');
       syncNow();
     };
+    window.addEventListener('pagehide',syncNow);
     renderJournal();
   }
 
@@ -2921,146 +2940,5 @@ function init(){
 if(typeof document!=='undefined') init();
 })();
 </script>
-
-<!-- ----------------my own add-ons--------------------- -->
-<script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoIfe5RVp3hqrovOqk3kUrMVLmIWbLDPGEUTYfnDWf4TqQB2Galu7r_viud7cvKbziug/exec';
-  const SECRET_KEY = 'matematika-2026';
-
-  function getStudentId() {
-    let id = localStorage.getItem('student_id');
-    if (!id) {
-      id = 'st_' + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('student_id', id);
-    }
-    return id;
-  }
-
-  function getDeviceInfo() {
-    const ua = navigator.userAgent;
-    if (/mobile/i.test(ua)) return 'Мобильный';
-    if (/tablet/i.test(ua)) return 'Планшет';
-    return 'Компьютер';
-  }
-
-  // Сбор списка тем с переносом на новую строку
-  function getTopicsProgress() {
-    const items = document.querySelectorAll('.card li, #journal li, ul li');
-    const results = [];
-    
-    items.forEach(li => {
-      const text = li.textContent.trim();
-      if (text.includes('Тема') || text.includes('решено')) {
-        results.push('• ' + text);
-      }
-    });
-
-    return results.length > 0 ? results.join('\n') : 'Нет активности по темам';
-  }
-
-  // Сбор результатов тестов с вашей страницы
-  function getTestResults() {
-    // 1. Проверяем глобальную переменную (если она есть на сайте)
-    if (window.testScore !== undefined) {
-      return `Результат: ${window.testScore}`;
-    }
-
-    // 2. Ищем элемент на странице, где пишется результат теста
-    const testElem = document.querySelector('#test-result, .test-result, #testScore, .test-score');
-    if (testElem && testElem.textContent.trim()) {
-      return testElem.textContent.trim();
-    }
-
-    // 3. Ищем строки, содержащие слово "Тест"
-    const allItems = document.querySelectorAll('p, div, li');
-    const testOutputs = [];
-    allItems.forEach(el => {
-      if (el.children.length === 0 && el.textContent.includes('Тест:')) {
-        testOutputs.push(el.textContent.trim());
-      }
-    });
-
-    return testOutputs.length > 0 ? testOutputs.join('\n') : 'Тест еще не пройден';
-  }
-
-  // Главная функция отправки данных
-  function sendDataToGoogle(isSilent = false) {
-    const userName = localStorage.getItem('student_name') || (document.getElementById('jname') ? document.getElementById('jname').value.trim() : '');
-    const msgBox = document.getElementById('jmsg');
-
-    if (!userName) {
-      if (!isSilent && msgBox) msgBox.textContent = 'Введите имя и фамилию перед сохранением!';
-      return;
-    }
-
-    if (!isSilent && msgBox) msgBox.textContent = 'Сохранение...';
-
-    const payload = {
-      secret: SECRET_KEY,
-      id: getStudentId(),
-      name: userName,
-      xp: window.userXP || '—',
-      updated: new Date().toLocaleString('ru-RU'),
-      device: getDeviceInfo(),
-      topics: getTopicsProgress(),
-      testResult: getTestResults()
-    };
-
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (msgBox && !isSilent) {
-        if (data.status === 'success') {
-          msgBox.textContent = 'Данные успешно сохранены!';
-        } else {
-          msgBox.textContent = 'Ошибка: ' + data.message;
-        }
-      }
-    })
-    .catch(error => {
-      console.error('Ошибка отправки:', error);
-      if (msgBox && !isSilent) msgBox.textContent = 'Ошибка сети при отправке.';
-    });
-  }
-
-  // Обработчик кнопки "Сохранить"
-  const saveBtn = document.getElementById('jsave');
-  const nameInput = document.getElementById('jname');
-
-  // Восстанавливаем сохраненное имя в инпут при загрузке
-  if (nameInput && localStorage.getItem('student_name')) {
-    nameInput.value = localStorage.getItem('student_name');
-  }
-
-  if (saveBtn) {
-    saveBtn.addEventListener('click', function () {
-      if (nameInput) {
-        const val = nameInput.value.trim();
-        if (val) localStorage.setItem('student_name', val);
-      }
-      sendDataToGoogle(false);
-    });
-  }
-
-  // --- АВТООТПРАВКА ---
-  // 1. Автоматически отправляем каждые 30 секунд (в фоновом режиме)
-  setInterval(() => {
-    if (localStorage.getItem('student_name')) {
-      sendDataToGoogle(true);
-    }
-  }, 30000);
-
-  // 2. Отправляем при закрытии или уходе со страницы
-  window.addEventListener('beforeunload', () => {
-    if (localStorage.getItem('student_name')) {
-      sendDataToGoogle(true);
-    }
-  });
-</script>
-            
 </body>
 </html>
