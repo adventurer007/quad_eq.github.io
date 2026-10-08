@@ -2924,7 +2924,7 @@ if(typeof document!=='undefined') init();
 
 <!-- ----------------my own add-ons--------------------- -->
 <script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzd2mQWv_UEfOERwRJBsn_bCTNOL2y4udbz5JqXf9i-XyZjwmEKl53diUpUiajUy_VqSQ/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2t6BwLunCWLxez5nZIOgP-rj14THozvKG6oqsGJdSWFfD_J1WbaD1Ll0_nDUR2ZnkSw/exec';
   const SECRET_KEY = 'matematika-2026';
 
   function getStudentId() {
@@ -2943,68 +2943,123 @@ if(typeof document!=='undefined') init();
     return 'Компьютер';
   }
 
-  // Автоматически собираем весь текст прогресса, который виден на экране
-  function getVisibleProgress() {
+  // Сбор списка тем с переносом на новую строку
+  function getTopicsProgress() {
     const items = document.querySelectorAll('.card li, #journal li, ul li');
     const results = [];
     
     items.forEach(li => {
       const text = li.textContent.trim();
       if (text.includes('Тема') || text.includes('решено')) {
-        results.push(text);
+        results.push('• ' + text);
       }
     });
 
-    return results.length > 0 ? results.join('; ') : 'Прогресс не найден на странице';
+    return results.length > 0 ? results.join('\n') : 'Нет активности по темам';
   }
 
+  // Сбор результатов тестов с вашей страницы
+  function getTestResults() {
+    // 1. Проверяем глобальную переменную (если она есть на сайте)
+    if (window.testScore !== undefined) {
+      return `Результат: ${window.testScore}`;
+    }
+
+    // 2. Ищем элемент на странице, где пишется результат теста
+    const testElem = document.querySelector('#test-result, .test-result, #testScore, .test-score');
+    if (testElem && testElem.textContent.trim()) {
+      return testElem.textContent.trim();
+    }
+
+    // 3. Ищем строки, содержащие слово "Тест"
+    const allItems = document.querySelectorAll('p, div, li');
+    const testOutputs = [];
+    allItems.forEach(el => {
+      if (el.children.length === 0 && el.textContent.includes('Тест:')) {
+        testOutputs.push(el.textContent.trim());
+      }
+    });
+
+    return testOutputs.length > 0 ? testOutputs.join('\n') : 'Тест еще не пройден';
+  }
+
+  // Главная функция отправки данных
+  function sendDataToGoogle(isSilent = false) {
+    const userName = localStorage.getItem('student_name') || (document.getElementById('jname') ? document.getElementById('jname').value.trim() : '');
+    const msgBox = document.getElementById('jmsg');
+
+    if (!userName) {
+      if (!isSilent && msgBox) msgBox.textContent = 'Введите имя и фамилию перед сохранением!';
+      return;
+    }
+
+    if (!isSilent && msgBox) msgBox.textContent = 'Сохранение...';
+
+    const payload = {
+      secret: SECRET_KEY,
+      id: getStudentId(),
+      name: userName,
+      xp: window.userXP || '—',
+      updated: new Date().toLocaleString('ru-RU'),
+      device: getDeviceInfo(),
+      topics: getTopicsProgress(),
+      testResult: getTestResults()
+    };
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (msgBox && !isSilent) {
+        if (data.status === 'success') {
+          msgBox.textContent = 'Данные успешно сохранены!';
+        } else {
+          msgBox.textContent = 'Ошибка: ' + data.message;
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка отправки:', error);
+      if (msgBox && !isSilent) msgBox.textContent = 'Ошибка сети при отправке.';
+    });
+  }
+
+  // Обработчик кнопки "Сохранить"
   const saveBtn = document.getElementById('jsave');
   const nameInput = document.getElementById('jname');
-  const msgBox = document.getElementById('jmsg');
+
+  // Восстанавливаем сохраненное имя в инпут при загрузке
+  if (nameInput && localStorage.getItem('student_name')) {
+    nameInput.value = localStorage.getItem('student_name');
+  }
 
   if (saveBtn) {
     saveBtn.addEventListener('click', function () {
-      const userName = nameInput ? nameInput.value.trim() : '';
-
-      if (!userName) {
-        if (msgBox) msgBox.textContent = 'Введите имя и фамилию перед сохранением!';
-        return;
+      if (nameInput) {
+        const val = nameInput.value.trim();
+        if (val) localStorage.setItem('student_name', val);
       }
-
-      localStorage.setItem('student_name', userName);
-
-      // Собираем данные без использования сложных переменных
-      const payload = {
-        secret: SECRET_KEY,
-        id: getStudentId(),
-        name: userName,
-        xp: '—', // если нет общих баллов
-        updated: new Date().toLocaleString('ru-RU'),
-        device: getDeviceInfo(),
-        topics: getVisibleProgress() // Автоматически соберет текст из списка "Тема 8: решено 2..."
-      };
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (msgBox) {
-          if (data.status === 'success') {
-            msgBox.textContent = 'Данные сохранены!';
-          } else {
-            msgBox.textContent = 'Ошибка: ' + data.message;
-          }
-        }
-      })
-      .catch(error => {
-        console.error('Ошибка отправки:', error);
-        if (msgBox) msgBox.textContent = 'Ошибка при отправке.';
-      });
+      sendDataToGoogle(false);
     });
   }
+
+  // --- АВТООТПРАВКА ---
+  // 1. Автоматически отправляем каждые 30 секунд (в фоновом режиме)
+  setInterval(() => {
+    if (localStorage.getItem('student_name')) {
+      sendDataToGoogle(true);
+    }
+  }, 30000);
+
+  // 2. Отправляем при закрытии или уходе со страницы
+  window.addEventListener('beforeunload', () => {
+    if (localStorage.getItem('student_name')) {
+      sendDataToGoogle(true);
+    }
+  });
 </script>
             
 </body>
