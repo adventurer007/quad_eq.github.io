@@ -2921,5 +2921,28 @@ function init(){
 if(typeof document!=='undefined') init();
 })();
 </script>
+
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwFnXBERo92RDiscnfcNtWcr2MTvsAwXcT4YLymA5fiaQJ4rg33VFc36zKfIP7x9_clIA/exec';
+
+    function sendData(data) {
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(() => {
+        console.log('Запрос отправлен!');
+      })
+      .catch(error => {
+        console.error('Ошибка отправки:', error);
+      });
+    }
+  </script>
+
+            
 </body>
 </html>
