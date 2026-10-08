@@ -2922,10 +2922,9 @@ if(typeof document!=='undefined') init();
 })();
 </script>
 
-// ----------------my own add-ons---------------------
-            
+<!-- ----------------my own add-ons--------------------- -->
 <script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyCLTjfASTaF7e8tC8Vb0b0g4KNLaMXzASjCEssdElPG-W-pmf0DLrecmfB_H_3eCwNPw/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1ejH0DI2WYv_rODu4kiHP4HumL7RtN8AD-JfOVtc4bKx5Z22dJOnK3QZSUxz7nu7zOQ/exec';
   const SECRET_KEY = 'matematika-2026';
 
   // Получаем или создаем постоянный ID ученика в браузере
@@ -2954,21 +2953,19 @@ if(typeof document!=='undefined') init();
       // Сохраняем имя локально
       localStorage.setItem('student_name', userName);
 
-      // Собираем данные в формате, который ждет ваш Google Скрипт
+      // Собираем данные
       const payload = {
         secret: SECRET_KEY,
         id: getStudentId(),
         name: userName,
-        xp: 4, // Общее количество баллов/XP (если есть переменная)
+        xp: 4,
         updated: new Date().toLocaleString('ru-RU'),
         topics: {
-          // Данные по темам (ok: решено, n: всего задач, bad: ошибок)
           8:  { ok: 2, n: 60, bad: 1 },
           10: { ok: 1, n: 60, bad: 0 },
           12: { ok: 1, n: 40, bad: 0 }
         }
       };
-      
 
       // Отправка в Google Таблицу
       fetch(SCRIPT_URL, {
@@ -2978,17 +2975,22 @@ if(typeof document!=='undefined') init();
       })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 'success') {
-          if (msgBox) msgBox.textContent = 'Имя сохранено. Прогресс отправлен учителю!';
-        } else {
-          console.error('Ошибка скрипта:', data.message);
-          if (msgBox) msgBox.textContent = 'Ошибка: ' + data.message;
+        if (msgBox) {
+          if (data.status === 'success') {
+            msgBox.textContent = 'Имя сохранено. Прогресс отправлен учителю!';
+          } else {
+            msgBox.textContent = 'Ошибка: ' + (data.message || 'неизвестная ошибка');
+          }
         }
       })
       .catch(error => {
-        console.error('Ошибка сети:', error);
-        if (msgBox) msgBox.textContent = 'Ошибка при отправке данных.';
+        console.error('Ошибка отправки:', error);
+        if (msgBox) {
+          msgBox.textContent = 'Ошибка при отправке данных.';
+        }
       });
+    });
+  }
 </script>
             
 </body>
