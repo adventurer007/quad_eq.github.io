@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Уроки по уравнениям</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marck+Script&family=PT+Sans:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Comfortaa:wght@400..700&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Marck+Script&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400..700&family=Open+Sans:wght@400..700&family=PT+Sans:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Roboto:wght@400..700&display=swap">
 <style>
 :root{
   /* Страница школьной тетради в клетку с красными полями. Сверху шапка с прогрессом, ниже четыре вкладки. Красная ручка учителя: поля, оценка, ошибки. */
@@ -49,16 +49,16 @@ button,input{font:inherit;color:inherit}
 
 .sheet{
   position:relative;max-width:820px;margin:0 auto;min-height:100vh;
-  padding-block:22px 56px;padding-inline:34px 16px;
+  padding-block:22px 56px;padding-inline:16px;
   background-color:var(--paper);
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:24px 24px;
   border-inline:1px solid var(--line);
 }
-.sheet::before{content:"";position:absolute;inset-block:0;left:18px;width:2px;background:var(--red);opacity:.6}
+.sheet::before{content:"";position:absolute;inset-block:0;left:6px;width:2px;background:var(--red);opacity:.6}
 @media (min-width:700px){
-  .sheet{padding-inline:64px 36px}
-  .sheet::before{left:42px}
+  .sheet{padding-inline:56px}
+  .sheet::before{left:28px}
 }
 
 /* шапка */
@@ -308,7 +308,7 @@ html[data-font="sans"]{--f-display:system-ui,-apple-system,"Segoe UI",Roboto,Int
 :root{--ruled:rgba(50,85,175,.34)}
 :root[data-theme="oled"]{--bg:#000;--paper:#000;--card:#0C0C0F;--grid:rgba(255,255,255,.07);--ruled:rgba(255,255,255,.16);--line:#26262C;--ink:#F2F2F5;--ink-soft:#A3A3AD;--accent:#8AA8FF;--on-accent:#000;--accent-wash:#1A2238;--red:#FF7B76;--ok:#5CCB93;--on-ok:#000;--warn:#E3B45A;color-scheme:dark}
 :root[data-theme="gray"]{--bg:#1B1C20;--paper:#23252B;--card:#2C2F37;--grid:rgba(255,255,255,.06);--ruled:rgba(255,255,255,.17);--line:#3B404B;--ink:#EDEEF2;--ink-soft:#A8AEBC;--accent:#9DB4FF;--on-accent:#111;--accent-wash:#303851;--red:#FF8A84;--ok:#6BD6A0;--on-ok:#111;--warn:#E8BE6C;color-scheme:dark}
-:root[data-theme="navy"]{--bg:#0D1526;--paper:#121D33;--card:#1A2841;--grid:rgba(120,160,255,.08);--ruled:rgba(130,170,255,.22);--line:#2B3D60;--ink:#E4EBFA;--ink-soft:#9AAAC8;--accent:#7FA6FF;--on-accent:#0A1020;--accent-wash:#23365C;--red:#FF8A84;--ok:#6BD6A0;--on-ok:#0A1020;--warn:#E8BE6C;color-scheme:dark}
+:root[data-theme="navy"]{--bg:#0F172A;--paper:#111B30;--card:#1E293B;--grid:rgba(148,163,184,.07);--ruled:rgba(148,163,184,.2);--line:#334155;--ink:#E2E8F0;--ink-soft:#94A3B8;--accent:#A5B4FC;--on-accent:#1E1B4B;--accent-wash:#2B3459;--red:#FCA5A5;--ok:#6EE7B7;--on-ok:#0F172A;--warn:#FCD34D;color-scheme:dark}
 html[data-mode="dark"][data-bg="cream"]{--bg:#1C1913;--paper:#2A251C;--card:#342E23}
 html[data-bg="lined"] .sheet{background-image:repeating-linear-gradient(to bottom,transparent 0 31px,var(--ruled) 31px 32px)}
 html[data-font="arial"]{--f-display:Arial,Helvetica,sans-serif;--f-body:Arial,Helvetica,sans-serif}
@@ -330,6 +330,66 @@ html[data-font="comic"]{--f-display:"Comic Sans MS","Comic Sans",cursive;--f-bod
 .big-score{display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;width:132px;height:132px;margin:6px auto 14px;border-radius:50%;background:var(--accent-wash);color:var(--accent);font-size:2.6rem;font-weight:800;box-shadow:0 6px 20px rgba(60,90,170,.18)}
 .big-score small{font-size:.95rem;font-weight:700;margin-top:4px;opacity:.9}
 
+
+/* ===== раунд 4: центровка, плавность карусели, схемы, аккордеон, свайпы в тесте ===== */
+.sn-ind{transition:none;will-change:transform}
+.screen{contain:layout}
+.deck{will-change:scroll-position}
+.jform{display:grid;gap:10px;margin-top:8px}
+.jform input,.jform select,.jform .btn{width:100%;min-height:50px}
+.jform input,.jform select{padding:10px 14px;font:inherit;font-size:1.05rem;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:14px;-webkit-appearance:none;appearance:none}
+.jform select{padding-right:38px;background-image:linear-gradient(45deg,transparent 50%,var(--ink-soft) 50%),linear-gradient(135deg,var(--ink-soft) 50%,transparent 50%);background-position:calc(100% - 20px) 55%,calc(100% - 14px) 55%;background-size:6px 6px;background-repeat:no-repeat}
+.jform input:focus,.jform select:focus{outline:none;border-color:var(--accent)}
+.fgroup{margin:14px 0 6px;font-size:.8rem;font-weight:700;letter-spacing:.04em;color:var(--ink-soft)}
+.fgroup:first-of-type{margin-top:6px}
+.howdet{margin:10px 0 4px}
+.howdet>summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;color:var(--accent);min-height:40px;padding:6px 2px;user-select:none}
+.howdet>summary::-webkit-details-marker{display:none}
+.howdet>summary::after{content:"▼";font-size:.72rem;line-height:1;transition:transform .25s ease}
+.howdet[open]>summary::after{transform:rotate(180deg)}
+.howdet[open] .howdet-body{animation:hd-in .28s ease both}
+.howdet-body{padding:4px 2px 8px;font-size:.95rem}
+@keyframes hd-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+html[data-font="marck"]{--f-display:'Marck Script','Segoe Script',cursive;--f-body:'Marck Script','Segoe Script',cursive}
+[data-pref="font"][data-val="marck"]{font-family:'Marck Script','Segoe Script',cursive}
+.screen [data-pref="font"][data-val="marck"]{font-size:1.02rem}
+html[data-font="arial"]{--f-display:Arial,Helvetica,sans-serif;--f-body:Arial,Helvetica,sans-serif}
+[data-pref="font"][data-val="arial"]{font-family:Arial,Helvetica,sans-serif}
+.screen [data-pref="font"][data-val="arial"]{font-size:1.02rem}
+html[data-font="helvetica"]{--f-display:Helvetica,Arial,sans-serif;--f-body:Helvetica,Arial,sans-serif}
+[data-pref="font"][data-val="helvetica"]{font-family:Helvetica,Arial,sans-serif}
+.screen [data-pref="font"][data-val="helvetica"]{font-size:1.02rem}
+html[data-font="inter"]{--f-display:Inter,system-ui,sans-serif;--f-body:Inter,system-ui,sans-serif}
+[data-pref="font"][data-val="inter"]{font-family:Inter,system-ui,sans-serif}
+.screen [data-pref="font"][data-val="inter"]{font-size:1.02rem}
+html[data-font="roboto"]{--f-display:Roboto,Inter,system-ui,sans-serif;--f-body:Roboto,Inter,system-ui,sans-serif}
+[data-pref="font"][data-val="roboto"]{font-family:Roboto,Inter,system-ui,sans-serif}
+.screen [data-pref="font"][data-val="roboto"]{font-size:1.02rem}
+html[data-font="montserrat"]{--f-display:Montserrat,system-ui,sans-serif;--f-body:Montserrat,system-ui,sans-serif}
+[data-pref="font"][data-val="montserrat"]{font-family:Montserrat,system-ui,sans-serif}
+.screen [data-pref="font"][data-val="montserrat"]{font-size:1.02rem}
+html[data-font="opensans"]{--f-display:'Open Sans',system-ui,sans-serif;--f-body:'Open Sans',system-ui,sans-serif}
+[data-pref="font"][data-val="opensans"]{font-family:'Open Sans',system-ui,sans-serif}
+.screen [data-pref="font"][data-val="opensans"]{font-size:1.02rem}
+html[data-font="merriweather"]{--f-display:Merriweather,Georgia,serif;--f-body:Merriweather,Georgia,serif}
+[data-pref="font"][data-val="merriweather"]{font-family:Merriweather,Georgia,serif}
+.screen [data-pref="font"][data-val="merriweather"]{font-size:1.02rem}
+html[data-font="lora"]{--f-display:Lora,Georgia,serif;--f-body:Lora,Georgia,serif}
+[data-pref="font"][data-val="lora"]{font-family:Lora,Georgia,serif}
+.screen [data-pref="font"][data-val="lora"]{font-size:1.02rem}
+html[data-font="comfortaa"]{--f-display:Comfortaa,system-ui,sans-serif;--f-body:Comfortaa,system-ui,sans-serif}
+[data-pref="font"][data-val="comfortaa"]{font-family:Comfortaa,system-ui,sans-serif}
+.screen [data-pref="font"][data-val="comfortaa"]{font-size:1.02rem}
+html[data-font="comic"]{--f-display:'Comic Sans MS','Comic Sans',cursive;--f-body:'Comic Sans MS','Comic Sans',cursive}
+[data-pref="font"][data-val="comic"]{font-family:'Comic Sans MS','Comic Sans',cursive}
+.screen [data-pref="font"][data-val="comic"]{font-size:1.02rem}
+html[data-font="caveat"]{--f-display:Caveat,cursive;--f-body:Caveat,cursive}
+[data-pref="font"][data-val="caveat"]{font-family:Caveat,cursive}
+.screen [data-pref="font"][data-val="caveat"]{font-size:1.02rem}
+html[data-font="jetbrains"]{--f-display:'JetBrains Mono',ui-monospace,monospace;--f-body:'JetBrains Mono',ui-monospace,monospace}
+[data-pref="font"][data-val="jetbrains"]{font-family:'JetBrains Mono',ui-monospace,monospace}
+.screen [data-pref="font"][data-val="jetbrains"]{font-size:1.02rem}
+html[data-font="marck"]{--f-body:'PT Sans',system-ui,-apple-system,'Segoe UI',sans-serif}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -677,7 +737,7 @@ html[data-font="comic"]{--f-display:"Comic Sans MS","Comic Sans",cursive;--f-bod
         <section class="screen" id="scr-profile" aria-label="Профиль">
           <h2>Профиль</h2>
           <div class="card" style="margin-bottom:14px"><h3>Ваше имя и группа</h3><p class="small">Имя и группа нужны, чтобы учитель видел ваш прогресс.</p>
-        <div class="inrow"><input id="jname" maxlength="40" placeholder="Имя и фамилия" aria-label="Имя"><select id="jgroup" aria-label="Группа"><option value="">Группа</option><option>A3</option><option>A5</option><option>I3</option></select><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
+        <div class="jform"><input id="jname" maxlength="40" placeholder="Имя и фамилия" aria-label="Имя"><select id="jgroup" aria-label="Группа"><option value="">Выберите группу</option><option>A3</option><option>A5</option><option>I3</option></select><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
           <div id="jbody"></div>
         </section>
         <section class="screen" id="scr-board" aria-label="Рейтинг">
@@ -702,13 +762,19 @@ html[data-font="comic"]{--f-display:"Comic Sans MS","Comic Sans",cursive;--f-bod
             <input type="file" id="bgfile" accept="image/*" hidden>
             <p class="small" id="prefmsg" style="margin:8px 0 0"></p>
           </div>
-          <div class="card"><h3>Шрифт</h3>
+          <div class="card"><h3>Цветовая схема</h3>
+            <p class="small">Подбирает оттенки рамок, карточек и кнопок под выбранный цвет.</p>
             <div class="opts">
-              <button type="button" data-pref="font" data-val="marck">Marck Script</button>
-              <button type="button" data-pref="font" data-val="arial">Arial</button>
-              <button type="button" data-pref="font" data-val="roboto">Roboto / Inter</button>
-              <button type="button" data-pref="font" data-val="comic">Comic Sans</button>
+              <button type="button" data-pref="scheme" data-val="classic">Классика</button>
+              <button type="button" data-pref="scheme" data-val="lavender">Лаванда</button>
+              <button type="button" data-pref="scheme" data-val="ocean">Океан</button>
+              <button type="button" data-pref="scheme" data-val="sage">Шалфей</button>
+              <button type="button" data-pref="scheme" data-val="sunset">Закат</button>
+              <button type="button" data-pref="scheme" data-val="sunny">Солнце</button>
             </div>
+          </div>
+          <div class="card"><h3>Шрифт</h3>
+            <p class="fgroup">Современные гротески</p><div class="opts"><button type="button" data-pref="font" data-val="inter">Inter</button><button type="button" data-pref="font" data-val="roboto">Roboto</button><button type="button" data-pref="font" data-val="montserrat">Montserrat</button><button type="button" data-pref="font" data-val="opensans">Open Sans</button></div><p class="fgroup">Классические</p><div class="opts"><button type="button" data-pref="font" data-val="arial">Arial</button><button type="button" data-pref="font" data-val="helvetica">Helvetica</button></div><p class="fgroup">С засечками, для чтения</p><div class="opts"><button type="button" data-pref="font" data-val="merriweather">Merriweather</button><button type="button" data-pref="font" data-val="lora">Lora</button></div><p class="fgroup">Игровые и рукописные</p><div class="opts"><button type="button" data-pref="font" data-val="comfortaa">Comfortaa</button><button type="button" data-pref="font" data-val="comic">Comic Sans MS</button><button type="button" data-pref="font" data-val="caveat">Caveat</button><button type="button" data-pref="font" data-val="marck">Marck Script</button></div><p class="fgroup">Моноширинные</p><div class="opts"><button type="button" data-pref="font" data-val="jetbrains">JetBrains Mono</button></div>
           </div>
           <div class="card"><h3>Тема</h3>
             <div class="opts">
@@ -729,10 +795,6 @@ html[data-font="comic"]{--f-display:"Comic Sans MS","Comic Sans",cursive;--f-bod
     </section>
   </main>
 
-  <dialog id="howdlg" class="howdlg" aria-labelledby="hdtitle">
-    <div class="hd-head"><h3 id="hdtitle">Как вводить ответ</h3><button type="button" class="btn sm" data-act="closehow" aria-label="Закрыть">✕</button></div>
-    <div class="hd-body" id="howbody"></div>
-  </dialog>
 
   <footer>
     <p>Прогресс по всем темам хранится на этом устройстве, если браузер это позволяет.</p>
@@ -1878,7 +1940,7 @@ function init(){
     setInd(ORDER.indexOf(name),true);
     if(name==='practice') showProblem();
     if(name==='test') renderTest();
-    window.scrollTo(0,y||0);
+    if(name==='lecture') window.scrollTo({top:0,behavior:reduceMotion?'auto':'smooth'}); else window.scrollTo(0,y||0);
   }
 
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1920,7 +1982,7 @@ function init(){
       keysHtml(p.type)+
       '<div id="fb" class="fb" role="status" aria-live="polite"></div>'+
       '<div id="hintbox" class="hintbox" hidden></div>'+
-      '<div class="actions"><button class="btn sm" data-act="howto">Как вводить ответ</button><button class="btn" data-act="hint">Подсказка</button><button class="btn" data-act="reveal" id="revbtn">Показать ответ</button></div>'+
+      howBtn()+'<div class="actions"><button class="btn" data-act="hint">Подсказка</button><button class="btn" data-act="reveal" id="revbtn">Показать ответ</button></div>'+
       '<div class="nav"><button class="btn" data-act="prev">← Назад</button><button class="btn" data-act="next" id="nextbtn">Далее →</button></div>';
     if(st.st==='ok') setFb('ok','<span class="ic">✓</span>Решено.'+ansLine(p));
     else if(st.st==='rev') setFb('rev','Ответ был показан.'+ansLine(p));
@@ -1992,7 +2054,7 @@ function init(){
     T={qs:shuffle(qs),i:0,ans:[],res:[],done:false};
     renderTest();
   }
-  function howBtn(){ return '<button type="button" class="btn sm" data-act="howto">Как вводить ответ</button>'; }
+  function howBtn(){ return '<details class="howdet"><summary>Как вводить ответ</summary><div class="howdet-body">'+howContent()+'</div></details>'; }
   function howContent(){
     return '<ol class="howlist">'+
       '<li><b>Без лишних букв.</b> Не пишите «x =», вводите только числа или значения.</li>'+
@@ -2002,7 +2064,6 @@ function init(){
       '<li>Дробь через косую черту: <b>(x − 3)/(x − 2)</b>. Степень через <b>^</b>: <b>x^2</b>. Корень — кнопкой <b>√</b> под полем.</li>'+
       '</ol>';
   }
-  function openHow(){ var d=$('#howdlg'); if(!d) return; $('#howbody').innerHTML=howContent(); d.showModal(); }
   function unanswered(){ var n=0; T.qs.forEach(function(p,i){ if(!T.ans[i]) n++; }); return n; }
   function plateCls(i){ var a=T.ans[i]; return (i===T.i?'cur ':'')+(a?'ans':(a===''?'skip':'')); }
   function plateHtml(){
@@ -2024,6 +2085,7 @@ function init(){
     renderTest(); window.scrollTo(0,0);
   }
   function renderTest(){
+    document.body.classList.toggle('test-running', !!(T&&T.qs&&!T.done));
     var box=$('#tbox');
     if(!T){
       box.innerHTML='<div class="card"><h3>Контрольная работа</h3>'+
@@ -2773,8 +2835,6 @@ function init(){
       case 'prev': step(-1); break;
       case 'next': step(1); break;
       case 'tstart': startTest(); break;
-      case 'howto': openHow(); break;
-      case 'closehow': { var hd0=$('#howdlg'); if(hd0) hd0.close(); } break;
       case 'tfinish': if(T&&!T.done){ saveCur(); var u=unanswered(); if(!u||window.confirm('Без ответа: '+u+'. Всё равно сдать тест?')) testFinish(); } break;
       case 'reset':
         if(!resetArm){resetArm=true; t.textContent='Точно сбросить?'; setTimeout(function(){resetArm=false; t.textContent='Сбросить весь прогресс';},4000); break;}
@@ -3214,7 +3274,8 @@ function init(){
   }
   function goTab(name){
     if(G.fin) G.fin();
-    var from=curTab(); if(name===from) return;
+    var from=curTab();
+    if(name===from){ if(name==='lecture') window.scrollTo({top:0,behavior:reduceMotion?'auto':'smooth'}); return; }
     if(reduceMotion||!document.body.classList.contains('in-topic')){ showTab(name); return; }
     G.W=window.innerWidth;
     var dir=ORDER.indexOf(name)>ORDER.indexOf(from)?1:-1, p=pagePlace(name,dir);
@@ -3235,7 +3296,7 @@ function init(){
     main.addEventListener('touchstart',function(e){
       if(G.fin) G.fin();
       T=null;
-      if(!document.body.classList.contains('in-topic')||curTab()==='test'||e.touches.length!==1) return;
+      if(!document.body.classList.contains('in-topic')||(curTab()==='test'&&document.body.classList.contains('test-running'))||e.touches.length!==1) return;
       var x=e.touches[0].clientX; if(x<28||blocked(e.target)) return;
       T={x:x,y:e.touches[0].clientY,lx:x,lt:Date.now(),v:0,drag:false,dir:0,p:null,idx:ORDER.indexOf(curTab())};
     },{passive:true});
@@ -3271,13 +3332,25 @@ function init(){
     main.addEventListener('touchend',function(e){ end(e,false); },{passive:true});
     main.addEventListener('touchcancel',function(e){ end(e,true); },{passive:true});
   })();
-  /* ---------- Внешний вид: фон, шрифт, тема (хранится на этом устройстве) ---------- */
-  var PREF_KEY='uroki-prefs', PREF={bg:'plain',font:'marck',theme:'auto',photo:''};
+  /* ---------- Внешний вид: фон, шрифт, тема, цветовая схема (хранится на этом устройстве) ---------- */
+  var PREF_KEY='uroki-prefs', PREF={bg:'plain',font:'marck',theme:'auto',scheme:'classic',photo:''};
   try{ Object.assign(PREF, JSON.parse(localStorage.getItem(PREF_KEY))||{}); }catch(e){}
   if(PREF.font==='hand') PREF.font='marck'; if(PREF.font==='sans') PREF.font='roboto';
   if(PREF.theme==='dark') PREF.theme='navy';
-  if(['marck','arial','roboto','comic'].indexOf(PREF.font)<0) PREF.font='marck';
+  var FONTS=['marck','arial','helvetica','inter','roboto','montserrat','opensans','merriweather','lora','comfortaa','comic','caveat','jetbrains'];
+  var SCHEMES={lavender:{h:262,t:'analog'},ocean:{h:200,t:'analog'},sage:{h:150,t:'analog'},sunset:{h:18,t:'comp'},sunny:{h:42,t:'triad'}};
+  if(FONTS.indexOf(PREF.font)<0) PREF.font='marck';
   if(['auto','light','oled','gray','navy'].indexOf(PREF.theme)<0) PREF.theme='auto';
+  if(PREF.scheme!=='classic'&&!SCHEMES[PREF.scheme]) PREF.scheme='classic';
+  var SCHEME_KEYS=['--paper','--bg','--card','--line','--ruled','--grid','--ink','--ink-soft','--accent','--accent-wash','--on-accent','--ok'];
+  function hsl(h,s,l){ return 'hsl('+((((h%360)+360)%360)).toFixed(0)+' '+s+'% '+l+'%)'; }
+  /* цветовая схема: тон фона задаёт базовый оттенок H, рамки берут соседний (аналогичная),
+     противоположный (комплементарная, H+180) или третий в триаде (H+120). Насыщенность низкая, чтобы не спорить с текстом. */
+  function schemeVars(sc,dark){
+    var c=SCHEMES[sc], H=c.h, sat=c.t==='comp'?20:24, side=c.t==='comp'?H+180:(c.t==='triad'?H+120:H);
+    if(!dark) return {'--paper':hsl(H,sat,97),'--bg':hsl(H,sat,94),'--card':hsl(H,sat*.5,99),'--line':hsl(side,sat,82),'--ruled':hsl(side,40,62),'--grid':hsl(H,sat*.6,87),'--ink':hsl(H,30,14),'--ink-soft':hsl(H,14,40),'--accent':hsl(H,c.t==='comp'?55:50,42),'--accent-wash':hsl(H,45,92),'--on-accent':'#fff','--ok':c.t==='triad'?hsl(H+120,46,34):hsl(150,46,34)};
+    return {'--paper':hsl(H,sat*.9,9),'--bg':hsl(H,sat*.9,7),'--card':hsl(H,sat*.8,14),'--line':hsl(side,sat,24),'--ruled':hsl(side,40,40),'--grid':hsl(H,sat,18),'--ink':hsl(H,30,94),'--ink-soft':hsl(H,16,70),'--accent':hsl(H,70,74),'--accent-wash':hsl(H,35,24),'--on-accent':hsl(H,40,10),'--ok':c.t==='triad'?hsl(H+120,50,62):hsl(150,50,62)};
+  }
   function setPrefMsg(t){ var m=$('#prefmsg'); if(m) m.textContent=t; }
   function savePref(){
     try{ localStorage.setItem(PREF_KEY, JSON.stringify(PREF)); }
@@ -3286,8 +3359,10 @@ function init(){
   function applyPrefs(){
     var h=document.documentElement;
     var dark=PREF.theme==='oled'||PREF.theme==='gray'||PREF.theme==='navy'||(PREF.theme==='auto'&&!!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches));
-    h.dataset.bg=PREF.bg; h.dataset.font=PREF.font; h.dataset.mode=dark?'dark':'light';
+    h.dataset.bg=PREF.bg; h.dataset.font=PREF.font; h.dataset.mode=dark?'dark':'light'; h.dataset.scheme=PREF.scheme;
     if(PREF.theme==='auto') delete h.dataset.theme; else h.dataset.theme=PREF.theme;
+    if(PREF.scheme==='classic'){ SCHEME_KEYS.forEach(function(k){ h.style.removeProperty(k); }); }
+    else { var v=schemeVars(PREF.scheme,dark); Object.keys(v).forEach(function(k){ h.style.setProperty(k,v[k]); }); }
     h.style.setProperty('--photo', PREF.photo?'url("'+PREF.photo+'")':'none');
     $$('[data-pref]').forEach(function(b){ b.setAttribute('aria-pressed', PREF[b.dataset.pref]===b.dataset.val?'true':'false'); });
     $$('[data-replacephoto],[data-clearphoto]').forEach(function(b){ b.hidden=!PREF.photo; });
@@ -3317,18 +3392,36 @@ function init(){
     img.onerror=function(){ setPrefMsg('Не удалось открыть картинку.'); };
     img.src=url; this.value='';
   });
-  var hd=$('#howdlg');
-  if(hd) hd.addEventListener('click',function(e){ if(e.target===hd) hd.close(); });
 
-  /* ---------- Главная: карусель из четырёх экранов с иконками-вкладками ---------- */
-  var deck=$('#deck'), snav=document.querySelector('.screens-nav'), lastScreen=-1;
-  function curScreen(){ return Math.round(deck.scrollLeft/Math.max(1,deck.clientWidth)); }
-  function goScreen(i){ if(deck) deck.scrollTo({left:i*deck.clientWidth,behavior:'smooth'}); }
-  function onScreen(i){
+  /* ---------- Главная: карусель из четырёх экранов ---------- */
+  var deck=$('#deck'), snav=document.querySelector('.screens-nav'), curMark=-1, idleT=0, animId=0;
+  function shownIndex(){ return Math.round(deck.scrollLeft/Math.max(1,deck.clientWidth)); }
+  function setIndicator(f){ if(snav) snav.style.setProperty('--i', f); }
+  function markScreen(i){
     $$('.screens-nav button').forEach(function(b){ b.setAttribute('aria-current', +b.dataset.screen===i?'true':'false'); });
-    if(i===lastScreen) return; lastScreen=i;
+  }
+  /* тяжёлые загрузки (журнал, рейтинг) только когда экран уже на месте, а не на каждом кадре прокрутки */
+  function loadScreen(i){
+    if(i===curMark) return; curMark=i;
     if(i===1) renderJournal();
     if(i===2) lbLoad(false);
+  }
+  /* прыжок через экраны: своя анимация scrollLeft с аппаратным ускорением, без native smooth-скролла */
+  function goScreen(i){
+    if(!deck) return;
+    var id=++animId, from=deck.scrollLeft, W=Math.max(1,deck.clientWidth), to=Math.max(0,Math.min(3,i))*W;
+    var dist=Math.abs(to-from)/W, dur=reduceMotion?0:Math.min(460,200+dist*70), t0=performance.now();
+    deck.style.scrollSnapType='none';
+    markScreen(i);
+    function step(now){
+      if(id!==animId) return;
+      var k=dur?Math.min(1,(now-t0)/dur):1, e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+      deck.scrollLeft=from+(to-from)*e;
+      setIndicator(deck.scrollLeft/W);
+      if(k<1) requestAnimationFrame(step);
+      else { deck.style.scrollSnapType=''; loadScreen(i); }
+    }
+    requestAnimationFrame(step);
   }
   function initDeck(){
     if(!deck) return;
@@ -3336,13 +3429,13 @@ function init(){
     deck.addEventListener('scroll',function(){
       cancelAnimationFrame(raf);
       raf=requestAnimationFrame(function(){
-        var f=deck.scrollLeft/Math.max(1,deck.clientWidth);
-        if(snav) snav.style.setProperty('--i', f);
-        onScreen(Math.round(f));
+        var f=deck.scrollLeft/Math.max(1,deck.clientWidth), r=Math.round(f);
+        setIndicator(f); markScreen(r);
+        clearTimeout(idleT); idleT=setTimeout(function(){ loadScreen(r); },160);
       });
     },{passive:true});
-    if(snav) snav.style.setProperty('--i', curScreen());
-    onScreen(curScreen());
+    deck.addEventListener('touchstart',function(){ animId++; deck.style.scrollSnapType=''; },{passive:true});
+    setIndicator(shownIndex()); markScreen(shownIndex()); loadScreen(shownIndex());
   }
 
   initLab(); labInitAll(); labInitAll2(); labInitAll3(); renderHeader(); renderStatus(); renderAnswers(); initJournalUI(); initBoardUI(); applyPrefs(); initDeck(); route();
