@@ -85,7 +85,11 @@ h1::after{content:"";display:block;width:3.2em;height:3px;margin-top:6px;backgro
 }
 .tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:0;border-radius:12px;padding:7px 2px 6px;font-weight:700;font-size:.8rem;color:var(--ink-soft);cursor:pointer;font-family:inherit}
 .tabs button .ico{font-size:1.35rem;line-height:1.1}
-.tabs button[aria-selected="true"]{color:var(--accent);background:var(--line)}
+.tabs button{position:relative;z-index:1;transition:color .2s}
+.tabs button[aria-selected="true"]{color:var(--accent)}
+.tabs-ind{position:absolute;top:6px;bottom:calc(6px + env(safe-area-inset-bottom,0px));left:8px;width:calc((100% - 16px - 12px)/4);border-radius:12px;background:var(--line);transform:translateX(calc(var(--i,0)*(100% + 4px)));transition:transform .3s cubic-bezier(.22,.8,.3,1);pointer-events:none}
+.tabs.drag .tabs-ind{transition:none}
+main{position:relative;overflow-x:clip}
 .tabs button:hover{color:var(--ink)}
 body.in-topic main{padding-bottom:110px}
 
@@ -252,6 +256,7 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
   </header>
 
   <nav class="tabs" role="tablist" aria-label="Разделы урока">
+    <span class="tabs-ind" aria-hidden="true"></span>
     <button role="tab" id="t-lecture" data-tab="lecture" aria-selected="true" aria-controls="tab-lecture"><span class="ico" aria-hidden="true">📖</span>Лекция</button>
     <button role="tab" id="t-practice" data-tab="practice" aria-selected="false" aria-controls="tab-practice"><span class="ico" aria-hidden="true">✍️</span>Практика</button>
     <button role="tab" id="t-answers" data-tab="answers" aria-selected="false" aria-controls="tab-answers"><span class="ico" aria-hidden="true">✅</span>Ответы</button>
@@ -1720,12 +1725,15 @@ function init(){
   }
 
   /* вкладки */
-  function showTab(name){
+  var ORDER=['lecture','practice','answers','test'], noFocus=false;
+  function setInd(v,animate){ var t=$('.tabs'); if(!t) return; t.classList.toggle('drag',!animate); t.style.setProperty('--i',v); }
+  function showTab(name,y){
     $$('.tabs [data-tab]').forEach(function(b){var on=b.dataset.tab===name; b.setAttribute('aria-selected',on?'true':'false');});
-    ['lecture','practice','answers','test'].forEach(function(t){$('#tab-'+t).hidden=(t!==name);});
+    ORDER.forEach(function(t){$('#tab-'+t).hidden=(t!==name);});
+    setInd(ORDER.indexOf(name),true);
     if(name==='practice') showProblem();
     if(name==='test') renderTest();
-    window.scrollTo(0,0);
+    window.scrollTo(0,y||0);
   }
 
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1868,7 +1876,7 @@ function init(){
         keysHtml(p.type).replace(/data-ins/g,'data-tins')+
         '<p class="fmtnote">'+fmt(FMT[p.type])+'</p>'+
         '<div class="actions"><button class="btn" data-act="tskip">Пропустить</button></div></div>';
-      var inp=$('#tans'); if(inp) inp.focus();
+      var inp=$('#tans'); if(inp&&!noFocus) inp.focus();
       return;
     }
     var score=T.res.filter(Boolean).length;
@@ -2579,7 +2587,7 @@ function init(){
   document.addEventListener('click',function(e){
     var t=e.target.closest('[data-tab],[data-topic],[data-nav],[data-act],[data-ins],[data-tins],[data-n],[data-chip]');
     if(!t) return;
-    if(t.dataset.tab){showTab(t.dataset.tab); return;}
+    if(t.dataset.tab){goTab(t.dataset.tab); return;}
     if(t.dataset.topic){location.hash='#/t/'+t.dataset.topic; return;}
     if(t.dataset.nav){location.hash='#/'; return;}
     if(t.dataset.ins!==undefined){insertAt('ans',t.dataset.ins); return;}
@@ -2933,40 +2941,94 @@ function init(){
   }
   window.addEventListener('hashchange',route);
 
-  /* ---------- Свайп между разделами темы ---------- */
-  /* Не срабатывает у левого края (там системный «назад»), внутри лабораторий,
-     полей ввода, таблиц и широких формул с горизонтальной прокруткой. */
+  /* ---------- Листание разделов темы: страницы «склеены» и едут за пальцем ---------- */
+  var G={W:0,fin:null}, EASE='transform .3s cubic-bezier(.22,.8,.3,1)';
+  var reduceMotion=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var PROPS=['position','top','left','width','transform','transition','will-change'];
+  function curTab(){ var b=document.querySelector('.tabs [aria-selected="true"]'); return b?b.dataset.tab:'lecture'; }
+  function resetEl(el){ PROPS.forEach(function(p){ el.style.removeProperty(p); }); }
+  function pagePlace(nbName,dir){
+    var main=document.querySelector('main'), cur=$('#tab-'+curTab()), nb=$('#tab-'+nbName);
+    noFocus=true; if(nbName==='practice') showProblem(); if(nbName==='test') renderTest(); noFocus=false;
+    nb.hidden=false;
+    var mt=main.getBoundingClientRect().top+window.scrollY, top=Math.max(0,window.scrollY-mt);
+    nb.style.position='absolute'; nb.style.top=top+'px'; nb.style.left=cur.offsetLeft+'px'; nb.style.width=cur.offsetWidth+'px';
+    nb.style.willChange=cur.style.willChange='transform';
+    nb.style.transform='translateX('+(dir*G.W)+'px)';
+    return {cur:cur,nb:nb,mt:mt};
+  }
+  function unplace(p){ resetEl(p.nb); p.nb.hidden=true; }
+  function settle(p,commit,dir,toName){
+    var W=G.W, cur=p.cur, from=curTab(), done=false, tm;
+    cur.style.transition=EASE; cur.style.transform='translateX('+(commit?-dir*W:0)+'px)';
+    if(p.nb){ p.nb.style.transition=EASE; p.nb.style.transform='translateX('+(commit?0:dir*W)+'px)'; }
+    setInd(ORDER.indexOf(commit?toName:from),true);
+    function fin(){
+      if(done) return; done=true; clearTimeout(tm); G.fin=null;
+      var y=Math.min(window.scrollY,p.mt);
+      resetEl(cur); if(p.nb) resetEl(p.nb);
+      if(commit) showTab(toName,y); else if(p.nb) p.nb.hidden=true;
+    }
+    G.fin=fin; tm=setTimeout(fin,reduceMotion?0:340);
+  }
+  function goTab(name){
+    if(G.fin) G.fin();
+    var from=curTab(); if(name===from) return;
+    if(reduceMotion||!document.body.classList.contains('in-topic')){ showTab(name); return; }
+    G.W=window.innerWidth;
+    var dir=ORDER.indexOf(name)>ORDER.indexOf(from)?1:-1, p=pagePlace(name,dir);
+    p.cur.style.transform='translateX(0px)'; void p.nb.offsetWidth;
+    settle(p,true,dir,name);
+  }
   (function(){
-    var ORDER=['lecture','practice','answers','test'], main=document.querySelector('main');
-    var sx=0, sy=0, st=0, track=false;
-    function current(){ var b=document.querySelector('.tabs [aria-selected="true"]'); return b?b.dataset.tab:'lecture'; }
+    var main=document.querySelector('main'), T=null;
+    /* не срабатывает у левого края (системное «назад»), в лабораториях, полях ввода, таблицах и прокручиваемых формулах */
     function blocked(el){
       if(!el||!el.closest) return true;
       if(el.closest('.lab,[id^="lab-"],svg,input,textarea,select,button,table,pre')) return true;
       for(var n=el; n&&n!==main; n=n.parentElement){
-        if(n.scrollWidth>n.clientWidth+2){ var ov=getComputedStyle(n).overflowX; if(ov!=='visible') return true; }
+        if(n.scrollWidth>n.clientWidth+2 && getComputedStyle(n).overflowX!=='visible') return true;
       }
       return false;
     }
     main.addEventListener('touchstart',function(e){
-      track=false;
+      if(G.fin) G.fin();
+      T=null;
       if(!document.body.classList.contains('in-topic')||e.touches.length!==1) return;
-      var x=e.touches[0].clientX;
-      if(x<28) return;
-      if(blocked(e.target)) return;
-      sx=x; sy=e.touches[0].clientY; st=Date.now(); track=true;
+      var x=e.touches[0].clientX; if(x<28||blocked(e.target)) return;
+      T={x:x,y:e.touches[0].clientY,lx:x,lt:Date.now(),v:0,drag:false,dir:0,p:null,idx:ORDER.indexOf(curTab())};
     },{passive:true});
-    main.addEventListener('touchend',function(e){
-      if(!track) return; track=false;
-      var t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy;
-      if(Date.now()-st>700) return;
-      if(Math.abs(dx)<70||Math.abs(dx)<2*Math.abs(dy)) return;
-      var i=ORDER.indexOf(current()), j=i+(dx<0?1:-1);
-      if(j<0||j>=ORDER.length) return;
-      showTab(ORDER[j]);
-      window.scrollTo(0,0);
-    },{passive:true});
-    main.addEventListener('touchcancel',function(){ track=false; },{passive:true});
+    main.addEventListener('touchmove',function(e){
+      if(!T) return;
+      var tt=e.touches[0], dx=tt.clientX-T.x, dy=tt.clientY-T.y;
+      if(!T.drag){
+        if(Math.abs(dy)>10&&Math.abs(dy)>Math.abs(dx)){ T=null; return; }
+        if(Math.abs(dx)<10||Math.abs(dx)<Math.abs(dy)*1.2) return;
+        T.drag=true; G.W=window.innerWidth;
+      }
+      if(e.cancelable) e.preventDefault();
+      var want=dx<0?1:-1, ni=T.idx+want, cur=$('#tab-'+ORDER[T.idx]);
+      if(T.dir!==want){
+        if(T.p) unplace(T.p);
+        T.p=(ni>=0&&ni<ORDER.length)?pagePlace(ORDER[ni],want):null; T.dir=want;
+        cur.style.willChange='transform';
+      }
+      var d=T.p?dx:dx*0.25;                       /* у края — сопротивление */
+      cur.style.transform='translateX('+d+'px)';
+      if(T.p) T.p.nb.style.transform='translateX('+(want*G.W+d)+'px)';
+      setInd(T.idx-d/G.W,false);
+      var now=Date.now(), inst=(tt.clientX-T.lx)/Math.max(1,now-T.lt);
+      T.v=T.v*0.6+inst*0.4; T.lx=tt.clientX; T.lt=now;
+    },{passive:false});
+    function end(e,cancel){
+      var g=T; T=null; if(!g||!g.drag) return;
+      var dx=(e.changedTouches?e.changedTouches[0].clientX:g.lx)-g.x;
+      var commit=!cancel&&!!g.p&&g.dir*dx<0&&(Math.abs(dx)>G.W*0.28||(g.v*g.dir<-0.45&&Math.abs(dx)>24));
+      var cur=$('#tab-'+ORDER[g.idx]);
+      settle(g.p||{cur:cur,nb:null,mt:window.scrollY},commit,g.dir,commit?ORDER[g.idx+g.dir]:null);
+    }
+    main.addEventListener('touchend',function(e){ end(e,false); },{passive:true});
+    main.addEventListener('touchcancel',function(e){ end(e,true); },{passive:true});
   })();
   initLab(); labInitAll(); labInitAll2(); labInitAll3(); renderHeader(); renderStatus(); renderAnswers(); initJournalUI(); route();
   var first=P.filter(function(p){return (ST.p[p.n]||{}).st!=='ok';})[0];
