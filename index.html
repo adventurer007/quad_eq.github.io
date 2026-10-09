@@ -2832,7 +2832,7 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbwoNJayhES8fwgJb_uIIzsUwQpgUDK2pq-jfVhiuKcbzQKZ7Tunnk9iOMVbiwx9kTBKzg/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbxoIfe5RVp3hqrovOqk3kUrMVLmIWbLDPGEUTYfnDWf4TqQB2Galu7r_viud7cvKbziug/exec', SHEET_SECRET='matematika-2026';
   var lastSent='', syncT=null;
   function summary(){
     var out={};
@@ -2932,6 +2932,42 @@ function init(){
     else applyView('home');
   }
   window.addEventListener('hashchange',route);
+
+  /* ---------- Свайп между разделами темы ---------- */
+  /* Не срабатывает у левого края (там системный «назад»), внутри лабораторий,
+     полей ввода, таблиц и широких формул с горизонтальной прокруткой. */
+  (function(){
+    var ORDER=['lecture','practice','answers','test'], main=document.querySelector('main');
+    var sx=0, sy=0, st=0, track=false;
+    function current(){ var b=document.querySelector('.tabs [aria-selected="true"]'); return b?b.dataset.tab:'lecture'; }
+    function blocked(el){
+      if(!el||!el.closest) return true;
+      if(el.closest('.lab,[id^="lab-"],svg,input,textarea,select,button,table,pre')) return true;
+      for(var n=el; n&&n!==main; n=n.parentElement){
+        if(n.scrollWidth>n.clientWidth+2){ var ov=getComputedStyle(n).overflowX; if(ov!=='visible') return true; }
+      }
+      return false;
+    }
+    main.addEventListener('touchstart',function(e){
+      track=false;
+      if(!document.body.classList.contains('in-topic')||e.touches.length!==1) return;
+      var x=e.touches[0].clientX;
+      if(x<28) return;
+      if(blocked(e.target)) return;
+      sx=x; sy=e.touches[0].clientY; st=Date.now(); track=true;
+    },{passive:true});
+    main.addEventListener('touchend',function(e){
+      if(!track) return; track=false;
+      var t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy;
+      if(Date.now()-st>700) return;
+      if(Math.abs(dx)<70||Math.abs(dx)<2*Math.abs(dy)) return;
+      var i=ORDER.indexOf(current()), j=i+(dx<0?1:-1);
+      if(j<0||j>=ORDER.length) return;
+      showTab(ORDER[j]);
+      window.scrollTo(0,0);
+    },{passive:true});
+    main.addEventListener('touchcancel',function(){ track=false; },{passive:true});
+  })();
   initLab(); labInitAll(); labInitAll2(); labInitAll3(); renderHeader(); renderStatus(); renderAnswers(); initJournalUI(); route();
   var first=P.filter(function(p){return (ST.p[p.n]||{}).st!=='ok';})[0];
   cur=first?first.n:1;
