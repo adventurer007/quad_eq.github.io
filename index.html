@@ -1889,7 +1889,6 @@ function init(){
         keysHtml(p.type).replace(/data-ins/g,'data-tins')+
         '<p class="fmtnote">'+fmt(FMT[p.type])+'</p>'+
         '<div class="actions tnav"><button class="btn" data-act="tback"'+(T.i===0?' disabled':'')+'>← Назад</button>'+
-        '<button class="btn" data-act="tskip" title="Перейти к следующему вопросу без ответа">Пропустить</button>'+
         (last?'<button class="btn stop" data-act="tfinish">Сдать тест</button>':'<button class="btn primary" data-act="tnext">Далее →</button>')+'</div></div>';
       var inp=$('#tans'); if(inp&&!noFocus) inp.focus();
       return;
@@ -1919,14 +1918,6 @@ function init(){
   }
   function testNext(){ testGo(1); }  /* пустой ответ = пропуск, назад можно вернуться и ответить */
   function unanswered(){ var n=0; T.qs.forEach(function(p,i){ if(!T.ans[i]) n++; }); return n; }
-  function testSkip(){
-    if(!T||T.done) return;
-    saveCur(); if(!T.ans[T.i]) T.ans[T.i]='';
-    var n=T.qs.length, j=-1;
-    for(var k=1;k<n;k++){ var c=(T.i+k)%n; if(!T.ans[c]){ j=c; break; } }
-    if(j<0){ renderTest(); return; }          /* больше нет вопросов без ответа: остаёмся, сдаёт красная кнопка */
-    T.i=j; renderTest(); window.scrollTo(0,0);
-  }
   function testFinish(){
     if(!T||T.done) return;
     saveCur();
@@ -2635,7 +2626,6 @@ function init(){
       case 'tstart': startTest(); break;
       case 'tback': testGo(-1); break;
       case 'tnext': testNext(); break;
-      case 'tskip': testSkip(); break;
       case 'tfinish': testFinish(); break;
       case 'reset':
         if(!resetArm){resetArm=true; t.textContent='Точно сбросить?'; setTimeout(function(){resetArm=false; t.textContent='Сбросить весь прогресс';},4000); break;}
