@@ -267,7 +267,6 @@ h1::after{display:none}
 html[data-bg] .sheet{background-image:none;background-color:var(--paper)}
 html[data-bg="grid"] .sheet{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
 html[data-bg="dots"] .sheet{background-image:radial-gradient(var(--grid) 1.3px,transparent 1.3px);background-size:22px 22px}
-html[data-bg="cream"]{--bg:#EFE6D2;--paper:#FBF6EA;--card:#FFFDF7}
 html[data-bg="photo"] .sheet{background-image:var(--photo);background-size:cover;background-position:center}
 /* карусель на главной */
 .screens-nav{display:flex;justify-content:center;gap:8px;margin:4px 0 14px}
@@ -305,9 +304,8 @@ html[data-bg="photo"] .sheet{background-image:var(--photo);background-size:cover
 /* ===== раунд 3: иконки-вкладки, тёмные темы, шрифты, линейка, диалог ===== */
 :root{--ruled:rgba(50,85,175,.34)}
 :root[data-theme="oled"]{--bg:#000;--paper:#000;--card:#0C0C0F;--grid:rgba(255,255,255,.07);--ruled:rgba(255,255,255,.16);--line:#26262C;--ink:#F2F2F5;--ink-soft:#A3A3AD;--accent:#8AA8FF;--on-accent:#000;--accent-wash:#1A2238;--red:#FF7B76;--ok:#5CCB93;--on-ok:#000;--warn:#E3B45A;color-scheme:dark}
-:root[data-theme="gray"]{--bg:#1B1C20;--paper:#23252B;--card:#2C2F37;--grid:rgba(255,255,255,.06);--ruled:rgba(255,255,255,.17);--line:#3B404B;--ink:#EDEEF2;--ink-soft:#A8AEBC;--accent:#9DB4FF;--on-accent:#111;--accent-wash:#303851;--red:#FF8A84;--ok:#6BD6A0;--on-ok:#111;--warn:#E8BE6C;color-scheme:dark}
-:root[data-theme="navy"]{--bg:#0F172A;--paper:#111B30;--card:#1E293B;--grid:rgba(148,163,184,.07);--ruled:rgba(148,163,184,.2);--line:#334155;--ink:#E2E8F0;--ink-soft:#94A3B8;--accent:#A5B4FC;--on-accent:#1E1B4B;--accent-wash:#2B3459;--red:#FCA5A5;--ok:#6EE7B7;--on-ok:#0F172A;--warn:#FCD34D;color-scheme:dark}
-html[data-mode="dark"][data-bg="cream"]{--bg:#1C1913;--paper:#2A251C;--card:#342E23}
+:root[data-theme="gray"]{--bg:#181818;--paper:#1E1E1E;--card:#2A2A2A;--grid:rgba(255,255,255,.05);--ruled:rgba(255,255,255,.1);--line:#3A3A3A;--ink:#ECECEC;--ink-soft:#A0A0A0;--accent:#D6D6D6;--on-accent:#161616;--accent-wash:#363636;--red:#FF8A84;--ok:#8FD9AE;--on-ok:#161616;--warn:#E8BE6C;color-scheme:dark}
+:root[data-theme="navy"]{--bg:#0B132B;--paper:#0D1733;--card:#131E3A;--grid:rgba(148,163,184,.06);--ruled:rgba(148,163,184,.14);--line:#1F2D4D;--ink:#E2E8F0;--ink-soft:#94A3B8;--accent:#A5B4FC;--on-accent:#1E1B4B;--accent-wash:#243056;--red:#FCA5A5;--ok:#6EE7B7;--on-ok:#0B132B;--warn:#FCD34D;color-scheme:dark}
 .screens-nav{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:0 0 14px;padding:4px;background:var(--card);border-radius:18px;box-shadow:0 1px 3px rgba(20,30,60,.08)}
 .sn-ind{position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/4);border-radius:14px;background:var(--accent-wash);transform:translateX(calc(var(--i,0)*100%));transition:transform .3s cubic-bezier(.22,.8,.3,1);pointer-events:none}
 .screens-nav button{position:relative;z-index:1;width:auto;height:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px 6px;background:none;border:0;border-radius:14px;font:inherit;font-size:.78rem;font-weight:700;color:var(--ink-soft);cursor:pointer}
@@ -349,8 +347,8 @@ html[data-mode="dark"][data-bg="cream"]{--bg:#1C1913;--paper:#2A251C;--card:#342
 :root{--accent-2:var(--red)}
 .sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px;background:linear-gradient(135deg,var(--c1) 50%,var(--c2) 50%);box-shadow:0 0 0 1px rgba(0,0,0,.12)}
 .opts button[data-pref="scheme"]{display:inline-flex;align-items:center}
-.opts button[aria-pressed="true"]{border-color:var(--accent-2)}
-.btn.primary{border-color:var(--accent-2)}
+.opts button[aria-pressed="true"]{border-color:var(--accent)}
+html:not([data-scheme="classic"]) .opts button[aria-pressed="true"]{border-color:var(--accent-2)}
 html[data-font="inter"]{--f-display:Inter,system-ui,sans-serif;--f-body:Inter,system-ui,sans-serif}
 [data-pref="font"][data-val="inter"]{font-family:Inter,system-ui,sans-serif}
 html[data-font="montserrat"]{--f-display:Montserrat,system-ui,sans-serif;--f-body:Montserrat,system-ui,sans-serif}
@@ -722,7 +720,6 @@ html[data-font="jetbrains"]{--f-display:'JetBrains Mono',ui-monospace,monospace;
           <div class="card"><h3>Фон</h3>
             <div class="opts">
               <button type="button" data-pref="bg" data-val="plain">Светлый</button>
-              <button type="button" data-pref="bg" data-val="cream">Кремовый</button>
               <button type="button" data-pref="bg" data-val="grid">Клетка</button>
               <button type="button" data-pref="bg" data-val="dots">Точки</button>
               <button type="button" data-pref="bg" data-val="photo">Своё фото</button>
@@ -735,9 +732,9 @@ html[data-font="jetbrains"]{--f-display:'JetBrains Mono',ui-monospace,monospace;
             <p class="small" id="prefmsg" style="margin:8px 0 0"></p>
           </div>
           <div class="card"><h3>Цветовая схема</h3>
-            <p class="small">Каждая схема задаёт пару цветов: основной и акцентный. Они касаются рамок, кнопок и иконок, фон остаётся нейтральным.</p>
+            <p class="small">Пара цветов: основной и акцентный. Они касаются рамок, кнопок и иконок. Кремовая схема также задаёт цвет бумаги.</p>
             <div class="opts">
-              <button type="button" data-pref="scheme" data-val="classic"><i class="sw" style="--c1:var(--accent);--c2:var(--red)" aria-hidden="true"></i>Стандартная</button><button type="button" data-pref="scheme" data-val="ocean"><i class="sw" style="--c1:#0E6B8A;--c2:#2BA5C4" aria-hidden="true"></i>Океан</button><button type="button" data-pref="scheme" data-val="sage"><i class="sw" style="--c1:#5E7050;--c2:#87A96B" aria-hidden="true"></i>Шалфей</button><button type="button" data-pref="scheme" data-val="sunset"><i class="sw" style="--c1:#C2410C;--c2:#F97316" aria-hidden="true"></i>Закат</button><button type="button" data-pref="scheme" data-val="sunny"><i class="sw" style="--c1:#B45309;--c2:#F59E0B" aria-hidden="true"></i>Солнце</button>
+              <button type="button" data-pref="scheme" data-val="classic"><i class="sw" style="--c1:#2F5BD3;--c2:#E0534F" aria-hidden="true"></i>Стандартная</button><button type="button" data-pref="scheme" data-val="lavender"><i class="sw" style="--c1:#9333EA;--c2:#C084FC" aria-hidden="true"></i>Лаванда</button><button type="button" data-pref="scheme" data-val="ocean"><i class="sw" style="--c1:#0E6B8A;--c2:#2BA5C4" aria-hidden="true"></i>Океан</button><button type="button" data-pref="scheme" data-val="sage"><i class="sw" style="--c1:#5E7050;--c2:#87A96B" aria-hidden="true"></i>Шалфей</button><button type="button" data-pref="scheme" data-val="sunset"><i class="sw" style="--c1:#C2410C;--c2:#F97316" aria-hidden="true"></i>Закат</button><button type="button" data-pref="scheme" data-val="sunny"><i class="sw" style="--c1:#B45309;--c2:#FFB60A" aria-hidden="true"></i>Солнце</button><button type="button" data-pref="scheme" data-val="cream"><i class="sw" style="--c1:#8B5E34;--c2:#D4A373" aria-hidden="true"></i>Кремовая</button><button type="button" data-pref="scheme" data-val="emerald"><i class="sw" style="--c1:#047857;--c2:#34D399" aria-hidden="true"></i>Изумруд</button><button type="button" data-pref="scheme" data-val="rose"><i class="sw" style="--c1:#BE3455;--c2:#FF7F6B" aria-hidden="true"></i>Коралл</button><button type="button" data-pref="scheme" data-val="nordic"><i class="sw" style="--c1:#334155;--c2:#7DA3C7" aria-hidden="true"></i>Скандинавия</button><button type="button" data-pref="scheme" data-val="mocha"><i class="sw" style="--c1:#7C4A2D;--c2:#C8A27A" aria-hidden="true"></i>Мокко</button>
             </div>
           </div>
           <div class="card"><h3>Шрифт</h3>
@@ -3049,7 +3046,7 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbxqlI8LhLHpdoFTmCutz9WJBJH0-PWmUjveajgl583n7xuSNmsMRxQbx43Wtm92QEdYtw/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbxoIfe5RVp3hqrovOqk3kUrMVLmIWbLDPGEUTYfnDWf4TqQB2Galu7r_viud7cvKbziug/exec', SHEET_SECRET='matematika-2026';
   var lastSent='', syncT=null;
   function summary(){
     var out={};
@@ -3318,24 +3315,34 @@ function init(){
   var FONTS=['inter','montserrat','comfortaa','lora','caveat','jetbrains'];
   /* пара цветов на схему: [основной, акцентный, фон плашек, рамки, текст на кнопке] для светлой и тёмной темы */
   var SCHEMES={
+    lavender:{light:['#9333EA','#C084FC','#F3E8FF','#E9D5FF','#FFFFFF'], dark:['#C084FC','#A855F7','#2E1F45','#4B2F6B','#1A0B2E']},
     ocean:{light:['#0E6B8A','#2BA5C4','#DFF4F9','#A9DCE8','#FFFFFF'], dark:['#7DD3E8','#2BA5C4','#0F2F3D','#1E4A5C','#06202A']},
     sage:{light:['#5E7050','#87A96B','#E8EFE0','#C5D1B5','#FFFFFF'], dark:['#A8C48C','#87A96B','#26301F','#3E4D33','#141B0E']},
     sunset:{light:['#C2410C','#F97316','#FFEDD5','#FDBA74','#FFFFFF'], dark:['#FDBA74','#F97316','#3A2112','#5A3418','#1F0E04']},
-    sunny:{light:['#B45309','#F59E0B','#FEF3C7','#FCD34D','#FFFFFF'], dark:['#FCD34D','#F59E0B','#3A2C0C','#5A4410','#1F1604']}
+    sunny:{light:['#B45309','#FFB60A','#FFF4D6','#FFE199','#FFFFFF'], dark:['#FCD34D','#FFB60A','#3A2C0C','#5A4410','#1F1604']},
+    /* кремовая: задаёт бумагу и текст только для светлой темы; в тёмной меняются лишь акценты */
+    cream:{light:['#8B5E34','#D4A373','#F3E6D3','#E8D9C2','#FFFFFF'], dark:['#E0B98A','#C08A55','#3A2E22','#4A3B2C','#1F1710'],
+           surface:{'--bg':'#FDFBF7','--paper':'#FAF6EE','--card':'#FFFDF8','--ink':'#3D2E1F','--ink-soft':'#7A6A58'}},
+    emerald:{light:['#047857','#34D399','#D1FAE5','#A7F3D0','#FFFFFF'], dark:['#6EE7B7','#34D399','#0F2E24','#14513F','#04160F']},
+    rose:{light:['#BE3455','#FF7F6B','#FFE4E1','#FFC4BC','#FFFFFF'], dark:['#FDA4AF','#FF7F6B','#3A1A21','#5A2A33','#2A0A10']},
+    nordic:{light:['#334155','#7DA3C7','#E6EEF5','#C3D3E2','#FFFFFF'], dark:['#CBD5E1','#7DA3C7','#1E2A38','#34465C','#0F172A']},
+    mocha:{light:['#7C4A2D','#C8A27A','#F3E9DC','#E2CDB0','#FFFFFF'], dark:['#E4C29A','#C8A27A','#3A2B1E','#5A4330','#22170E']}
   };
   /* миграция старых значений: линейка и Marck Script убраны, «Лаванда» стала стандартной */
   if(FONTS.indexOf(PREF.font)<0) PREF.font='inter';
-  if(['plain','cream','grid','dots','photo'].indexOf(PREF.bg)<0) PREF.bg='plain';
+  if(PREF.bg==='cream'){ PREF.bg='plain'; PREF.scheme='cream'; }
+  if(['plain','grid','dots','photo'].indexOf(PREF.bg)<0) PREF.bg='plain';
   if(PREF.theme==='dark') PREF.theme='navy';
   if(['auto','light','oled','gray','navy'].indexOf(PREF.theme)<0) PREF.theme='auto';
   if(PREF.scheme!=='classic'&&!SCHEMES[PREF.scheme]) PREF.scheme='classic';
-  var SCHEME_KEYS=['--accent','--accent-2','--accent-wash','--line','--on-accent'];
+  var SCHEME_KEYS=['--accent','--accent-2','--accent-wash','--line','--on-accent','--paper','--bg','--card','--ink','--ink-soft'];
   function applyScheme(h,dark){
     SCHEME_KEYS.forEach(function(k){ h.style.removeProperty(k); });
     if(PREF.scheme==='classic'||!SCHEMES[PREF.scheme]) return;
-    var c=SCHEMES[PREF.scheme][dark?'dark':'light'];
+    var sc=SCHEMES[PREF.scheme], c=sc[dark?'dark':'light'];
     h.style.setProperty('--accent',c[0]); h.style.setProperty('--accent-2',c[1]);
     h.style.setProperty('--accent-wash',c[2]); h.style.setProperty('--line',c[3]); h.style.setProperty('--on-accent',c[4]);
+    if(sc.surface&&!dark) Object.keys(sc.surface).forEach(function(k){ h.style.setProperty(k,sc.surface[k]); });
   }
   function setPrefMsg(t){ var m=$('#prefmsg'); if(m) m.textContent=t; }
   function savePref(){
