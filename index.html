@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Уроки по уравнениям</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Comfortaa:wght@400..700&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Marck+Script&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400..700&family=Open+Sans:wght@400..700&family=PT+Sans:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Roboto:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Comfortaa:wght@400..700&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@400..700&family=PT+Sans:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
 :root{
   /* Страница школьной тетради в клетку с красными полями. Сверху шапка с прогрессом, ниже четыре вкладки. Красная ручка учителя: поля, оценка, ошибки. */
@@ -22,7 +22,7 @@
   --ok:#1B7A4B;
   --on-ok:#FFFFFF;
   --warn:#9A6A12;
-  --f-display:'Marck Script','Segoe Script','Bradley Hand',cursive;
+  --f-display:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;
   --f-body:'PT Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --f-math:'PT Serif',Georgia,'Times New Roman',serif;
 }
@@ -266,11 +266,9 @@ h1::after{display:none}
 .screen>h2{margin-top:6px}
 html[data-bg] .sheet{background-image:none;background-color:var(--paper)}
 html[data-bg="grid"] .sheet{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
-html[data-bg="lined"] .sheet{background-image:repeating-linear-gradient(to bottom,transparent 0 31px,var(--grid) 31px 32px)}
 html[data-bg="dots"] .sheet{background-image:radial-gradient(var(--grid) 1.3px,transparent 1.3px);background-size:22px 22px}
 html[data-bg="cream"]{--bg:#EFE6D2;--paper:#FBF6EA;--card:#FFFDF7}
 html[data-bg="photo"] .sheet{background-image:var(--photo);background-size:cover;background-position:center}
-html[data-font="sans"]{--f-display:system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif}
 /* карусель на главной */
 .screens-nav{display:flex;justify-content:center;gap:8px;margin:4px 0 14px}
 .screens-nav button{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer;transition:width .2s,background .2s}
@@ -310,10 +308,6 @@ html[data-font="sans"]{--f-display:system-ui,-apple-system,"Segoe UI",Roboto,Int
 :root[data-theme="gray"]{--bg:#1B1C20;--paper:#23252B;--card:#2C2F37;--grid:rgba(255,255,255,.06);--ruled:rgba(255,255,255,.17);--line:#3B404B;--ink:#EDEEF2;--ink-soft:#A8AEBC;--accent:#9DB4FF;--on-accent:#111;--accent-wash:#303851;--red:#FF8A84;--ok:#6BD6A0;--on-ok:#111;--warn:#E8BE6C;color-scheme:dark}
 :root[data-theme="navy"]{--bg:#0F172A;--paper:#111B30;--card:#1E293B;--grid:rgba(148,163,184,.07);--ruled:rgba(148,163,184,.2);--line:#334155;--ink:#E2E8F0;--ink-soft:#94A3B8;--accent:#A5B4FC;--on-accent:#1E1B4B;--accent-wash:#2B3459;--red:#FCA5A5;--ok:#6EE7B7;--on-ok:#0F172A;--warn:#FCD34D;color-scheme:dark}
 html[data-mode="dark"][data-bg="cream"]{--bg:#1C1913;--paper:#2A251C;--card:#342E23}
-html[data-bg="lined"] .sheet{background-image:repeating-linear-gradient(to bottom,transparent 0 31px,var(--ruled) 31px 32px)}
-html[data-font="arial"]{--f-display:Arial,Helvetica,sans-serif;--f-body:Arial,Helvetica,sans-serif}
-html[data-font="roboto"]{--f-display:Roboto,Inter,system-ui,sans-serif;--f-body:Roboto,Inter,system-ui,sans-serif}
-html[data-font="comic"]{--f-display:"Comic Sans MS","Comic Sans",cursive;--f-body:"Comic Sans MS","Comic Sans",cursive}
 .screens-nav{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:0 0 14px;padding:4px;background:var(--card);border-radius:18px;box-shadow:0 1px 3px rgba(20,30,60,.08)}
 .sn-ind{position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/4);border-radius:14px;background:var(--accent-wash);transform:translateX(calc(var(--i,0)*100%));transition:transform .3s cubic-bezier(.22,.8,.3,1);pointer-events:none}
 .screens-nav button{position:relative;z-index:1;width:auto;height:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px 6px;background:none;border:0;border-radius:14px;font:inherit;font-size:.78rem;font-weight:700;color:var(--ink-soft);cursor:pointer}
@@ -350,46 +344,25 @@ html[data-font="comic"]{--f-display:"Comic Sans MS","Comic Sans",cursive;--f-bod
 .howdet[open] .howdet-body{animation:hd-in .28s ease both}
 .howdet-body{padding:4px 2px 8px;font-size:.95rem}
 @keyframes hd-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-html[data-font="marck"]{--f-display:'Marck Script','Segoe Script',cursive;--f-body:'Marck Script','Segoe Script',cursive}
-[data-pref="font"][data-val="marck"]{font-family:'Marck Script','Segoe Script',cursive}
-.screen [data-pref="font"][data-val="marck"]{font-size:1.02rem}
-html[data-font="arial"]{--f-display:Arial,Helvetica,sans-serif;--f-body:Arial,Helvetica,sans-serif}
-[data-pref="font"][data-val="arial"]{font-family:Arial,Helvetica,sans-serif}
-.screen [data-pref="font"][data-val="arial"]{font-size:1.02rem}
-html[data-font="helvetica"]{--f-display:Helvetica,Arial,sans-serif;--f-body:Helvetica,Arial,sans-serif}
-[data-pref="font"][data-val="helvetica"]{font-family:Helvetica,Arial,sans-serif}
-.screen [data-pref="font"][data-val="helvetica"]{font-size:1.02rem}
+
+/* ===== раунд 5: пары цветов, шрифты, без линейки ===== */
+:root{--accent-2:var(--red)}
+.sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px;background:linear-gradient(135deg,var(--c1) 50%,var(--c2) 50%);box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.opts button[data-pref="scheme"]{display:inline-flex;align-items:center}
+.opts button[aria-pressed="true"]{border-color:var(--accent-2)}
+.btn.primary{border-color:var(--accent-2)}
 html[data-font="inter"]{--f-display:Inter,system-ui,sans-serif;--f-body:Inter,system-ui,sans-serif}
 [data-pref="font"][data-val="inter"]{font-family:Inter,system-ui,sans-serif}
-.screen [data-pref="font"][data-val="inter"]{font-size:1.02rem}
-html[data-font="roboto"]{--f-display:Roboto,Inter,system-ui,sans-serif;--f-body:Roboto,Inter,system-ui,sans-serif}
-[data-pref="font"][data-val="roboto"]{font-family:Roboto,Inter,system-ui,sans-serif}
-.screen [data-pref="font"][data-val="roboto"]{font-size:1.02rem}
 html[data-font="montserrat"]{--f-display:Montserrat,system-ui,sans-serif;--f-body:Montserrat,system-ui,sans-serif}
 [data-pref="font"][data-val="montserrat"]{font-family:Montserrat,system-ui,sans-serif}
-.screen [data-pref="font"][data-val="montserrat"]{font-size:1.02rem}
-html[data-font="opensans"]{--f-display:'Open Sans',system-ui,sans-serif;--f-body:'Open Sans',system-ui,sans-serif}
-[data-pref="font"][data-val="opensans"]{font-family:'Open Sans',system-ui,sans-serif}
-.screen [data-pref="font"][data-val="opensans"]{font-size:1.02rem}
-html[data-font="merriweather"]{--f-display:Merriweather,Georgia,serif;--f-body:Merriweather,Georgia,serif}
-[data-pref="font"][data-val="merriweather"]{font-family:Merriweather,Georgia,serif}
-.screen [data-pref="font"][data-val="merriweather"]{font-size:1.02rem}
-html[data-font="lora"]{--f-display:Lora,Georgia,serif;--f-body:Lora,Georgia,serif}
-[data-pref="font"][data-val="lora"]{font-family:Lora,Georgia,serif}
-.screen [data-pref="font"][data-val="lora"]{font-size:1.02rem}
 html[data-font="comfortaa"]{--f-display:Comfortaa,system-ui,sans-serif;--f-body:Comfortaa,system-ui,sans-serif}
 [data-pref="font"][data-val="comfortaa"]{font-family:Comfortaa,system-ui,sans-serif}
-.screen [data-pref="font"][data-val="comfortaa"]{font-size:1.02rem}
-html[data-font="comic"]{--f-display:'Comic Sans MS','Comic Sans',cursive;--f-body:'Comic Sans MS','Comic Sans',cursive}
-[data-pref="font"][data-val="comic"]{font-family:'Comic Sans MS','Comic Sans',cursive}
-.screen [data-pref="font"][data-val="comic"]{font-size:1.02rem}
+html[data-font="lora"]{--f-display:Lora,Georgia,serif;--f-body:Lora,Georgia,serif}
+[data-pref="font"][data-val="lora"]{font-family:Lora,Georgia,serif}
 html[data-font="caveat"]{--f-display:Caveat,cursive;--f-body:Caveat,cursive}
 [data-pref="font"][data-val="caveat"]{font-family:Caveat,cursive}
-.screen [data-pref="font"][data-val="caveat"]{font-size:1.02rem}
 html[data-font="jetbrains"]{--f-display:'JetBrains Mono',ui-monospace,monospace;--f-body:'JetBrains Mono',ui-monospace,monospace}
 [data-pref="font"][data-val="jetbrains"]{font-family:'JetBrains Mono',ui-monospace,monospace}
-.screen [data-pref="font"][data-val="jetbrains"]{font-size:1.02rem}
-html[data-font="marck"]{--f-body:'PT Sans',system-ui,-apple-system,'Segoe UI',sans-serif}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -750,7 +723,6 @@ html[data-font="marck"]{--f-body:'PT Sans',system-ui,-apple-system,'Segoe UI',sa
             <div class="opts">
               <button type="button" data-pref="bg" data-val="plain">Светлый</button>
               <button type="button" data-pref="bg" data-val="cream">Кремовый</button>
-              <button type="button" data-pref="bg" data-val="lined">Линейка</button>
               <button type="button" data-pref="bg" data-val="grid">Клетка</button>
               <button type="button" data-pref="bg" data-val="dots">Точки</button>
               <button type="button" data-pref="bg" data-val="photo">Своё фото</button>
@@ -763,18 +735,17 @@ html[data-font="marck"]{--f-body:'PT Sans',system-ui,-apple-system,'Segoe UI',sa
             <p class="small" id="prefmsg" style="margin:8px 0 0"></p>
           </div>
           <div class="card"><h3>Цветовая схема</h3>
-            <p class="small">Подбирает оттенки рамок, карточек и кнопок под выбранный цвет.</p>
+            <p class="small">Каждая схема задаёт пару цветов: основной и акцентный. Они касаются рамок, кнопок и иконок, фон остаётся нейтральным.</p>
             <div class="opts">
-              <button type="button" data-pref="scheme" data-val="classic">Классика</button>
-              <button type="button" data-pref="scheme" data-val="lavender">Лаванда</button>
-              <button type="button" data-pref="scheme" data-val="ocean">Океан</button>
-              <button type="button" data-pref="scheme" data-val="sage">Шалфей</button>
-              <button type="button" data-pref="scheme" data-val="sunset">Закат</button>
-              <button type="button" data-pref="scheme" data-val="sunny">Солнце</button>
+              <button type="button" data-pref="scheme" data-val="classic"><i class="sw" style="--c1:var(--accent);--c2:var(--red)" aria-hidden="true"></i>Стандартная</button><button type="button" data-pref="scheme" data-val="ocean"><i class="sw" style="--c1:#0E6B8A;--c2:#2BA5C4" aria-hidden="true"></i>Океан</button><button type="button" data-pref="scheme" data-val="sage"><i class="sw" style="--c1:#5E7050;--c2:#87A96B" aria-hidden="true"></i>Шалфей</button><button type="button" data-pref="scheme" data-val="sunset"><i class="sw" style="--c1:#C2410C;--c2:#F97316" aria-hidden="true"></i>Закат</button><button type="button" data-pref="scheme" data-val="sunny"><i class="sw" style="--c1:#B45309;--c2:#F59E0B" aria-hidden="true"></i>Солнце</button>
             </div>
           </div>
           <div class="card"><h3>Шрифт</h3>
-            <p class="fgroup">Современные гротески</p><div class="opts"><button type="button" data-pref="font" data-val="inter">Inter</button><button type="button" data-pref="font" data-val="roboto">Roboto</button><button type="button" data-pref="font" data-val="montserrat">Montserrat</button><button type="button" data-pref="font" data-val="opensans">Open Sans</button></div><p class="fgroup">Классические</p><div class="opts"><button type="button" data-pref="font" data-val="arial">Arial</button><button type="button" data-pref="font" data-val="helvetica">Helvetica</button></div><p class="fgroup">С засечками, для чтения</p><div class="opts"><button type="button" data-pref="font" data-val="merriweather">Merriweather</button><button type="button" data-pref="font" data-val="lora">Lora</button></div><p class="fgroup">Игровые и рукописные</p><div class="opts"><button type="button" data-pref="font" data-val="comfortaa">Comfortaa</button><button type="button" data-pref="font" data-val="comic">Comic Sans MS</button><button type="button" data-pref="font" data-val="caveat">Caveat</button><button type="button" data-pref="font" data-val="marck">Marck Script</button></div><p class="fgroup">Моноширинные</p><div class="opts"><button type="button" data-pref="font" data-val="jetbrains">JetBrains Mono</button></div>
+            <p class="fgroup">Гротески</p><div class="opts"><button type="button" data-pref="font" data-val="inter">Inter</button><button type="button" data-pref="font" data-val="montserrat">Montserrat</button></div>
+            <p class="fgroup">Округлый</p><div class="opts"><button type="button" data-pref="font" data-val="comfortaa">Comfortaa</button></div>
+            <p class="fgroup">С засечками, для чтения</p><div class="opts"><button type="button" data-pref="font" data-val="lora">Lora</button></div>
+            <p class="fgroup">Рукописный</p><div class="opts"><button type="button" data-pref="font" data-val="caveat">Caveat</button></div>
+            <p class="fgroup">Моноширинный</p><div class="opts"><button type="button" data-pref="font" data-val="jetbrains">JetBrains Mono</button></div>
           </div>
           <div class="card"><h3>Тема</h3>
             <div class="opts">
@@ -2082,7 +2053,9 @@ function init(){
     if(!T||T.done) return;
     saveCur();
     T.i=Math.max(0,Math.min(T.qs.length-1,i));
-    renderTest(); window.scrollTo(0,0);
+    renderTest();
+    /* при открытой клавиатуре не прокручиваем страницу: это тоже даёт скачок */
+    if(document.activeElement!==$('#tans')) window.scrollTo(0,0);
   }
   function renderTest(){
     document.body.classList.toggle('test-running', !!(T&&T.qs&&!T.done));
@@ -2096,23 +2069,30 @@ function init(){
       return;
     }
     if(!T.done){
-      var p=T.qs[T.i], n=T.qs.length;
-      box.innerHTML='<div class="card">'+
-        '<div class="ph"><span class="pn">Вопрос '+(T.i+1)+' из '+n+'</span><span>без ответа: '+unanswered()+'</span></div>'+
-        plateHtml()+
-        stmt(p)+
-        '<div class="inrow"><input id="tans" type="text" value="'+esc(T.ans[T.i]||'')+'" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваш ответ" placeholder="Ваш ответ"></div>'+
-        keysHtml(p.type).replace(/data-ins/g,'data-tins')+
-        howBtn()+
-        '<div class="actions tnav"><button class="btn stop" data-act="tfinish">Сдать тест</button></div></div>';
-      var inp=$('#tans');
-      if(inp){
-        inp.addEventListener('input',function(){ T.ans[T.i]=inp.value.trim(); paintPlate(); });
-        inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); if(T.i<n-1) jumpQ(T.i+1); } });
-        if(!noFocus) inp.focus();
+      var p=T.qs[T.i], n=T.qs.length, card=box.querySelector('#qcard');
+      /* карточка создаётся один раз и дальше только обновляется: поле ввода не пересоздаётся,
+         поэтому открытая клавиатура не закрывается и не открывается заново; фокус здесь не ставится */
+      if(!card){
+        box.innerHTML='<div class="card" id="qcard"><div class="ph q-head"></div><div class="q-plate"></div><div class="q-stmt"></div>'+
+          '<div class="inrow"><input id="tans" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваш ответ" placeholder="Ваш ответ"></div>'+
+          '<div class="q-keys"></div>'+
+          '<div class="q-foot">'+howBtn()+'<div class="actions tnav"><button class="btn stop" data-act="tfinish">Сдать тест</button></div></div></div>';
+        card=box.querySelector('#qcard');
+        var inp0=$('#tans');
+        inp0.addEventListener('input',function(){ T.ans[T.i]=inp0.value.trim(); paintPlate(); });
+        inp0.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); if(T.i<T.qs.length-1) jumpQ(T.i+1); } });
+        /* нажатия на номера и символы не отнимают фокус у поля: клавиатура не мигает */
+        var keepFocus=function(e){ if(e.target.closest&&e.target.closest('.plate button,.keys button')) e.preventDefault(); };
+        card.addEventListener('pointerdown',keepFocus);
+        card.addEventListener('mousedown',keepFocus);
+        box.onclick=function(){ setTimeout(function(){ saveCur(); paintPlate(); },0); };
       }
-      /* кнопки символов меняют поле без события input: обновляем номера после их нажатия */
-      box.onclick=function(){ setTimeout(function(){ saveCur(); paintPlate(); },0); };
+      card.querySelector('.q-head').innerHTML='<span class="pn">Вопрос '+(T.i+1)+' из '+n+'</span><span>без ответа: '+unanswered()+'</span>';
+      card.querySelector('.q-plate').innerHTML=plateHtml();
+      card.querySelector('.q-stmt').innerHTML=stmt(p);
+      var inp=$('#tans'), v=T.ans[T.i]||'';
+      if(inp.value!==v) inp.value=v;
+      if(card.dataset.kt!==p.type){ card.querySelector('.q-keys').innerHTML=keysHtml(p.type).replace(/data-ins/g,'data-tins'); card.dataset.kt=p.type; }
       return;
     }
     var score=T.res.filter(Boolean).length, total=T.qs.length;
@@ -3333,23 +3313,29 @@ function init(){
     main.addEventListener('touchcancel',function(e){ end(e,true); },{passive:true});
   })();
   /* ---------- Внешний вид: фон, шрифт, тема, цветовая схема (хранится на этом устройстве) ---------- */
-  var PREF_KEY='uroki-prefs', PREF={bg:'plain',font:'marck',theme:'auto',scheme:'classic',photo:''};
+  var PREF_KEY='uroki-prefs', PREF={bg:'plain',font:'inter',theme:'auto',scheme:'classic',photo:''};
   try{ Object.assign(PREF, JSON.parse(localStorage.getItem(PREF_KEY))||{}); }catch(e){}
-  if(PREF.font==='hand') PREF.font='marck'; if(PREF.font==='sans') PREF.font='roboto';
+  var FONTS=['inter','montserrat','comfortaa','lora','caveat','jetbrains'];
+  /* пара цветов на схему: [основной, акцентный, фон плашек, рамки, текст на кнопке] для светлой и тёмной темы */
+  var SCHEMES={
+    ocean:{light:['#0E6B8A','#2BA5C4','#DFF4F9','#A9DCE8','#FFFFFF'], dark:['#7DD3E8','#2BA5C4','#0F2F3D','#1E4A5C','#06202A']},
+    sage:{light:['#5E7050','#87A96B','#E8EFE0','#C5D1B5','#FFFFFF'], dark:['#A8C48C','#87A96B','#26301F','#3E4D33','#141B0E']},
+    sunset:{light:['#C2410C','#F97316','#FFEDD5','#FDBA74','#FFFFFF'], dark:['#FDBA74','#F97316','#3A2112','#5A3418','#1F0E04']},
+    sunny:{light:['#B45309','#F59E0B','#FEF3C7','#FCD34D','#FFFFFF'], dark:['#FCD34D','#F59E0B','#3A2C0C','#5A4410','#1F1604']}
+  };
+  /* миграция старых значений: линейка и Marck Script убраны, «Лаванда» стала стандартной */
+  if(FONTS.indexOf(PREF.font)<0) PREF.font='inter';
+  if(['plain','cream','grid','dots','photo'].indexOf(PREF.bg)<0) PREF.bg='plain';
   if(PREF.theme==='dark') PREF.theme='navy';
-  var FONTS=['marck','arial','helvetica','inter','roboto','montserrat','opensans','merriweather','lora','comfortaa','comic','caveat','jetbrains'];
-  var SCHEMES={lavender:{h:262,t:'analog'},ocean:{h:200,t:'analog'},sage:{h:150,t:'analog'},sunset:{h:18,t:'comp'},sunny:{h:42,t:'triad'}};
-  if(FONTS.indexOf(PREF.font)<0) PREF.font='marck';
   if(['auto','light','oled','gray','navy'].indexOf(PREF.theme)<0) PREF.theme='auto';
   if(PREF.scheme!=='classic'&&!SCHEMES[PREF.scheme]) PREF.scheme='classic';
-  var SCHEME_KEYS=['--paper','--bg','--card','--line','--ruled','--grid','--ink','--ink-soft','--accent','--accent-wash','--on-accent','--ok'];
-  function hsl(h,s,l){ return 'hsl('+((((h%360)+360)%360)).toFixed(0)+' '+s+'% '+l+'%)'; }
-  /* цветовая схема: тон фона задаёт базовый оттенок H, рамки берут соседний (аналогичная),
-     противоположный (комплементарная, H+180) или третий в триаде (H+120). Насыщенность низкая, чтобы не спорить с текстом. */
-  function schemeVars(sc,dark){
-    var c=SCHEMES[sc], H=c.h, sat=c.t==='comp'?20:24, side=c.t==='comp'?H+180:(c.t==='triad'?H+120:H);
-    if(!dark) return {'--paper':hsl(H,sat,97),'--bg':hsl(H,sat,94),'--card':hsl(H,sat*.5,99),'--line':hsl(side,sat,82),'--ruled':hsl(side,40,62),'--grid':hsl(H,sat*.6,87),'--ink':hsl(H,30,14),'--ink-soft':hsl(H,14,40),'--accent':hsl(H,c.t==='comp'?55:50,42),'--accent-wash':hsl(H,45,92),'--on-accent':'#fff','--ok':c.t==='triad'?hsl(H+120,46,34):hsl(150,46,34)};
-    return {'--paper':hsl(H,sat*.9,9),'--bg':hsl(H,sat*.9,7),'--card':hsl(H,sat*.8,14),'--line':hsl(side,sat,24),'--ruled':hsl(side,40,40),'--grid':hsl(H,sat,18),'--ink':hsl(H,30,94),'--ink-soft':hsl(H,16,70),'--accent':hsl(H,70,74),'--accent-wash':hsl(H,35,24),'--on-accent':hsl(H,40,10),'--ok':c.t==='triad'?hsl(H+120,50,62):hsl(150,50,62)};
+  var SCHEME_KEYS=['--accent','--accent-2','--accent-wash','--line','--on-accent'];
+  function applyScheme(h,dark){
+    SCHEME_KEYS.forEach(function(k){ h.style.removeProperty(k); });
+    if(PREF.scheme==='classic'||!SCHEMES[PREF.scheme]) return;
+    var c=SCHEMES[PREF.scheme][dark?'dark':'light'];
+    h.style.setProperty('--accent',c[0]); h.style.setProperty('--accent-2',c[1]);
+    h.style.setProperty('--accent-wash',c[2]); h.style.setProperty('--line',c[3]); h.style.setProperty('--on-accent',c[4]);
   }
   function setPrefMsg(t){ var m=$('#prefmsg'); if(m) m.textContent=t; }
   function savePref(){
@@ -3361,8 +3347,7 @@ function init(){
     var dark=PREF.theme==='oled'||PREF.theme==='gray'||PREF.theme==='navy'||(PREF.theme==='auto'&&!!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches));
     h.dataset.bg=PREF.bg; h.dataset.font=PREF.font; h.dataset.mode=dark?'dark':'light'; h.dataset.scheme=PREF.scheme;
     if(PREF.theme==='auto') delete h.dataset.theme; else h.dataset.theme=PREF.theme;
-    if(PREF.scheme==='classic'){ SCHEME_KEYS.forEach(function(k){ h.style.removeProperty(k); }); }
-    else { var v=schemeVars(PREF.scheme,dark); Object.keys(v).forEach(function(k){ h.style.setProperty(k,v[k]); }); }
+    applyScheme(h,dark);
     h.style.setProperty('--photo', PREF.photo?'url("'+PREF.photo+'")':'none');
     $$('[data-pref]').forEach(function(b){ b.setAttribute('aria-pressed', PREF[b.dataset.pref]===b.dataset.val?'true':'false'); });
     $$('[data-replacephoto],[data-clearphoto]').forEach(function(b){ b.hidden=!PREF.photo; });
