@@ -255,6 +255,55 @@ details.blk summary{padding:12px 0;font-weight:700;cursor:pointer}
 footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}
 footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
 
+
+/* ===== обновлённый вид ===== */
+.card{border-radius:18px;border-color:transparent;box-shadow:0 1px 3px rgba(20,30,60,.08)}
+.btn,.chip,.keys button,.inrow input,.tbtn,.dot,.opts button,.plate button{border-radius:14px}
+.tbtn{border-color:transparent;box-shadow:0 1px 3px rgba(20,30,60,.08)}
+.dot{border-radius:12px}
+h1::after{display:none}
+.sheet::before{display:none}
+.card+.card{margin-top:12px}
+.screen>h2{margin-top:6px}
+html[data-bg] .sheet{background-image:none;background-color:var(--paper)}
+html[data-bg="grid"] .sheet{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+html[data-bg="lined"] .sheet{background-image:repeating-linear-gradient(to bottom,transparent 0 31px,var(--grid) 31px 32px)}
+html[data-bg="dots"] .sheet{background-image:radial-gradient(var(--grid) 1.3px,transparent 1.3px);background-size:22px 22px}
+html[data-bg="cream"]{--bg:#EFE6D2;--paper:#FBF6EA;--card:#FFFDF7}
+html[data-bg="photo"] .sheet{background-image:var(--photo);background-size:cover;background-position:center}
+html[data-font="sans"]{--f-display:system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif}
+/* карусель на главной */
+.screens-nav{display:flex;justify-content:center;gap:8px;margin:4px 0 14px}
+.screens-nav button{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer;transition:width .2s,background .2s}
+.screens-nav button[aria-current="true"]{width:26px;border-radius:6px;background:var(--accent)}
+.deck{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.deck::-webkit-scrollbar{display:none}
+.screen{flex:0 0 100%;min-width:0;scroll-snap-align:start;padding:0 2px 24px}
+/* профиль */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.stat{background:var(--card);border-radius:18px;padding:14px;box-shadow:0 1px 3px rgba(20,30,60,.08)}
+.stat b{display:block;font-size:1.45rem;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat span{font-size:.85rem;color:var(--ink-soft)}
+.bytopic summary{cursor:pointer;font-weight:700}
+/* настройки */
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{min-height:40px;padding:6px 14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;cursor:pointer}
+.opts button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--accent)}
+/* тест */
+.tnav{justify-content:stretch}
+.tnav .stop{flex:1}
+.plate{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:4px 0 14px}
+.plate button{min-height:44px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:1rem;cursor:pointer;font-variant-numeric:tabular-nums}
+.plate button.ans{background:var(--accent-wash);border-color:var(--accent);color:var(--accent)}
+.plate button.skip{border-style:dashed;color:var(--ink-soft)}
+.plate button.cur{outline:2.5px solid var(--accent);outline-offset:2px}
+.howto{margin:12px 0;font-size:.95rem}
+.howto summary{cursor:pointer;font-weight:700;color:var(--accent)}
+.howto ul{margin:8px 0 0;padding-left:20px}
+.howto li{margin:4px 0}
+.big-score{flex:none;width:92px;height:92px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:2.8rem;font-weight:800;font-variant-numeric:tabular-nums}
+.res-top{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -263,7 +312,6 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
     <button class="btn" id="backbtn" data-nav="home" hidden>← Все темы</button>
     <p class="eyebrow" id="eyebrow">Тема 8 · Алгебра</p>
     <h1 id="h1">Квадратные уравнения</h1>
-    <div class="topics" id="topics" role="group" aria-label="Выбор темы"></div>
   </header>
 
   <nav class="tabs" role="tablist" aria-label="Разделы урока">
@@ -573,7 +621,6 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
     <!-- ПРАКТИКА -->
     <section id="tab-practice" role="tabpanel" aria-labelledby="t-practice" hidden>
       <h2>Практика</h2>
-      <div class="chips" id="chips" role="group" aria-label="Блок задач"></div>
       <div class="card" id="pcard"></div>
       <p class="map-h">Карта задач</p>
       <div class="dots" id="dots"></div>
@@ -589,11 +636,56 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
 
     <!-- ТЕСТ -->
     <section id="home-journal" hidden>
-      <h2>Журнал</h2>
-      <div class="card" style="margin-bottom:14px"><h3>Ваше имя и группа</h3><p class="small">Имя и группа нужны, чтобы учитель видел ваш прогресс.</p>
+      <nav class="screens-nav" aria-label="Экраны">
+        <button type="button" data-screen="0" aria-label="Темы" aria-current="true"></button>
+        <button type="button" data-screen="1" aria-label="Профиль" aria-current="false"></button>
+        <button type="button" data-screen="2" aria-label="Рейтинг" aria-current="false"></button>
+        <button type="button" data-screen="3" aria-label="Настройки" aria-current="false"></button>
+      </nav>
+      <div class="deck" id="deck">
+        <section class="screen" id="scr-topics" aria-label="Темы">
+          <h2>Темы</h2>
+          <div class="topics" id="topics" role="group" aria-label="Выбор темы"></div>
+        </section>
+        <section class="screen" id="scr-profile" aria-label="Профиль">
+          <h2>Профиль</h2>
+          <div class="card" style="margin-bottom:14px"><h3>Ваше имя и группа</h3><p class="small">Имя и группа нужны, чтобы учитель видел ваш прогресс.</p>
         <div class="inrow"><input id="jname" maxlength="40" placeholder="Имя и фамилия" aria-label="Имя"><select id="jgroup" aria-label="Группа"><option value="">Группа</option><option>A3</option><option>A5</option><option>I3</option></select><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
-      <div id="jbody"></div>
-      <div id="lboard"></div>
+          <div id="jbody"></div>
+        </section>
+        <section class="screen" id="scr-board" aria-label="Рейтинг">
+          <h2>Рейтинг</h2>
+          <div id="lboard"></div>
+        </section>
+        <section class="screen" id="scr-settings" aria-label="Настройки">
+          <h2>Настройки</h2>
+          <div class="card"><h3>Фон</h3>
+            <div class="opts">
+              <button type="button" data-pref="bg" data-val="plain">Светлый</button>
+              <button type="button" data-pref="bg" data-val="cream">Кремовый</button>
+              <button type="button" data-pref="bg" data-val="lined">Линейка</button>
+              <button type="button" data-pref="bg" data-val="grid">Клетка</button>
+              <button type="button" data-pref="bg" data-val="dots">Точки</button>
+              <button type="button" data-pref="bg" data-val="photo">Своё фото</button>
+            </div>
+            <input type="file" id="bgfile" accept="image/*" hidden>
+            <p class="small" id="prefmsg" style="margin:8px 0 0"></p>
+          </div>
+          <div class="card"><h3>Шрифт</h3>
+            <div class="opts">
+              <button type="button" data-pref="font" data-val="hand">Рукописный</button>
+              <button type="button" data-pref="font" data-val="sans">Обычный</button>
+            </div>
+          </div>
+          <div class="card"><h3>Тема</h3>
+            <div class="opts">
+              <button type="button" data-pref="theme" data-val="auto">Как в системе</button>
+              <button type="button" data-pref="theme" data-val="light">Светлая</button>
+              <button type="button" data-pref="theme" data-val="dark">Тёмная</button>
+            </div>
+          </div>
+        </section>
+      </div>
     </section>
 
     <section id="tab-test" role="tabpanel" aria-labelledby="t-test" hidden>
@@ -1766,15 +1858,7 @@ function init(){
 
   /* практика */
   function inFilter(p){return filter==='all'||p.b===filter;}
-  function renderChips(){
-    var html='', all=P.filter(function(p){return (ST.p[p.n]||{}).st==='ok';}).length;
-    html+='<button class="chip" data-chip="all" aria-pressed="'+(filter==='all')+'">Все · '+all+'/'+P.length+'</button>';
-    blocksOf().forEach(function(b){
-      var list=P.filter(function(p){return p.b===b;}), d=list.filter(function(p){return (ST.p[p.n]||{}).st==='ok';}).length;
-      html+='<button class="chip" data-chip="'+b+'" aria-pressed="'+(filter===b)+'" title="'+esc(BL[b])+'">Блок '+b+' · '+d+'/'+list.length+'</button>';
-    });
-    $('#chips').innerHTML=html;
-  }
+  function renderChips(){}
   function renderDots(){
     $('#dots').innerHTML=P.filter(inFilter).map(function(p){
       var st=(ST.p[p.n]||{}).st||'';
@@ -1788,7 +1872,7 @@ function init(){
     var p=P[cur-1], st=ST.p[cur]||{};
     revealArm=false;
     $('#pcard').innerHTML=
-      '<div class="ph"><span class="pn">Задача '+p.n+'</span><span>Блок '+p.b+' · '+esc(BL[p.b])+'</span></div>'+
+      '<div class="ph"><span class="pn">Задача '+p.n+'</span></div>'+
       stmt(p)+
       '<div class="inrow"><input id="ans" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваш ответ" placeholder="Ваш ответ"><button class="btn primary" data-act="check">Проверить</button></div>'+
       keysHtml(p.type)+
@@ -1867,57 +1951,80 @@ function init(){
     T={qs:shuffle(qs),i:0,ans:[],res:[],done:false};
     renderTest();
   }
-  function seg(){
-    var h='<div class="seg" aria-hidden="true">';
-    for(var i=0;i<T.qs.length;i++){ var a=T.ans[i], c=i===T.i?'now':(a?'done':(a===''?'skip':'')); h+='<span class="'+c+'"></span>'; }
-    return h+'</div>';
+  function howtoHtml(open){
+    return '<details class="howto"'+(open?' open':'')+'><summary>Как вводить ответ</summary><ul>'+
+      '<li>Дробь пишите через косую черту: <b>3/4</b>, <b>(x − 3)/(x − 2)</b>.</li>'+
+      '<li>Скобки ставьте явно, например <b>(x − 1)(5x − 2)</b>.</li>'+
+      '<li>Степень пишите через <b>^</b>: <b>x^2</b>. Корень вставляется кнопкой <b>√</b> под полем.</li>'+
+      '<li>Несколько корней разделяйте <b>;</b>: <b>1; 5</b>. Пара корней с ±: <b>±2</b>.</li>'+
+      '<li>Если корней нет, напишите <b>нет</b>.</li>'+
+      '<li>Кнопки под полем вставляют символ в место курсора.</li>'+
+      '<li>Ответ сохраняется сам. Переходите по номерам вверху и меняйте ответы до сдачи.</li></ul></details>';
+  }
+  function unanswered(){ var n=0; T.qs.forEach(function(p,i){ if(!T.ans[i]) n++; }); return n; }
+  function plateCls(i){ var a=T.ans[i]; return (i===T.i?'cur ':'')+(a?'ans':(a===''?'skip':'')); }
+  function plateHtml(){
+    return '<div class="plate" role="group" aria-label="Номера вопросов">'+T.qs.map(function(q,i){
+      return '<button type="button" data-q="'+i+'" class="'+plateCls(i)+'"'+(i===T.i?' aria-current="true"':'')+' aria-label="Вопрос '+(i+1)+'">'+(i+1)+'</button>';
+    }).join('')+'</div>';
+  }
+  function paintPlate(){
+    $$('#tbox .plate button').forEach(function(b){
+      var i=+b.dataset.q; b.className=plateCls(i);
+      if(i===T.i) b.setAttribute('aria-current','true'); else b.removeAttribute('aria-current');
+    });
+  }
+  function saveCur(){ var inp=$('#tans'); if(inp&&T&&!T.done){ T.ans[T.i]=inp.value.trim(); } }
+  function jumpQ(i){
+    if(!T||T.done) return;
+    saveCur();
+    T.i=Math.max(0,Math.min(T.qs.length-1,i));
+    renderTest(); window.scrollTo(0,0);
   }
   function renderTest(){
     var box=$('#tbox');
     if(!T){
       box.innerHTML='<div class="card"><h3>Контрольная работа</h3>'+
-        '<p>10 задач из банка: '+testDesc()+' Подсказок нет, результат появится в конце. Каждый новый тест собирается заново.</p>'+
+        '<p>10 задач из банка: '+testDesc()+' Подсказок нет. Результат появится в конце.</p>'+
+        howtoHtml(true)+
         '<p class="small">'+(ST.tests?'Лучший результат: '+ST.bestTest+' из 10. Пройдено раз: '+ST.tests+'.':'Вы ещё не проходили тест.')+'</p>'+
         '<button class="btn primary" data-act="tstart">Начать тест</button></div>';
       return;
     }
     if(!T.done){
-      var p=T.qs[T.i], last=T.i===T.qs.length-1;
-      box.innerHTML='<div class="card">'+seg()+
-        '<div class="ph"><span class="pn">Вопрос '+(T.i+1)+' из '+T.qs.length+'</span> <span class="small">· без ответа: '+unanswered()+'</span></div>'+stmt(p)+
+      var p=T.qs[T.i], n=T.qs.length;
+      box.innerHTML='<div class="card">'+
+        '<div class="ph"><span class="pn">Вопрос '+(T.i+1)+' из '+n+'</span><span>без ответа: '+unanswered()+'</span></div>'+
+        plateHtml()+
+        stmt(p)+
         '<div class="inrow"><input id="tans" type="text" value="'+esc(T.ans[T.i]||'')+'" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваш ответ" placeholder="Ваш ответ"></div>'+
         keysHtml(p.type).replace(/data-ins/g,'data-tins')+
         '<p class="fmtnote">'+fmt(FMT[p.type])+'</p>'+
-        '<div class="actions tnav"><button class="btn" data-act="tback"'+(T.i===0?' disabled':'')+'>← Назад</button>'+
-        (last?'<button class="btn stop" data-act="tfinish">Сдать тест</button>':'<button class="btn primary" data-act="tnext">Далее →</button>')+'</div></div>';
-      var inp=$('#tans'); if(inp&&!noFocus) inp.focus();
+        howtoHtml(false)+
+        '<div class="actions tnav"><button class="btn stop" data-act="tfinish">Сдать тест</button></div></div>';
+      var inp=$('#tans');
+      if(inp){
+        inp.addEventListener('input',function(){ T.ans[T.i]=inp.value.trim(); paintPlate(); });
+        inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); if(T.i<n-1) jumpQ(T.i+1); } });
+        if(!noFocus) inp.focus();
+      }
+      /* кнопки символов меняют поле без события input: обновляем номера после их нажатия */
+      box.onclick=function(){ setTimeout(function(){ saveCur(); paintPlate(); },0); };
       return;
     }
-    var score=T.res.filter(Boolean).length;
-    var mk=score>=9?['5','Отлично']:score>=7?['4','Хорошо']:score>=5?['3','Удовлетворительно']:['2','Нужно повторить'];
-    var weak={}; T.qs.forEach(function(p,i){if(!T.res[i]) weak[p.b]=1;});
-    var wk=Object.keys(weak).sort();
-    var h='<div class="card"><div class="res-top"><div class="mark" aria-label="Оценка '+mk[0]+'">'+mk[0]+'</div><div><h3>'+mk[1]+'</h3><p style="margin:0">Верно: <b>'+score+'</b> из '+T.qs.length+'</p>'+
-      '<p class="small" style="margin:4px 0 0">'+(wk.length?'Повторите: '+wk.map(function(b){return 'блок '+b+' ('+esc(BL[b])+')';}).join(', ')+'.':'Ошибок нет.')+'</p></div></div>'+
+    var score=T.res.filter(Boolean).length, total=T.qs.length;
+    var h='<div class="card"><div class="res-top"><div class="big-score" aria-label="Верно '+score+' из '+total+'">'+score+'</div>'+
+      '<div><h3>Результат</h3><p class="small" style="margin:0">верно из '+total+'</p></div></div>'+
       '<div class="rv">';
     T.qs.forEach(function(q,i){
       var ok=T.res[i];
       h+='<div class="rv-i '+(ok?'ok':'no')+'"><span class="s" aria-label="'+(ok?'верно':'неверно')+'">'+(ok?'✓':'✗')+'</span><div>'+
-        '<div class="meta">Задача '+q.n+' · блок '+q.b+'</div>'+(q.lead?'<div class="meta">'+fmt(q.lead)+'</div>':'')+'<p class="expr">'+fmt(q.e)+'</p>'+
+        '<div class="meta">Вопрос '+(i+1)+'</div>'+(q.lead?'<div class="meta">'+fmt(q.lead)+'</div>':'')+'<p class="expr">'+fmt(q.e)+'</p>'+
         '<div class="meta">Ваш ответ: '+(T.ans[i]?esc(T.ans[i]):'—')+(ok?'':' · правильный: <span class="m">'+fmt(q.ans)+'</span>')+'</div></div></div>';
     });
     h+='</div><div class="actions"><button class="btn primary" data-act="tstart">Пройти ещё раз</button><button class="btn" data-tab="practice">К практике</button></div></div>';
     box.innerHTML=h;
   }
-  function saveCur(){ var inp=$('#tans'); if(inp&&T&&!T.done) T.ans[T.i]=inp.value.trim(); }
-  function testGo(d){
-    if(!T||T.done) return;
-    saveCur();
-    T.i=Math.max(0,Math.min(T.qs.length-1,T.i+d));
-    renderTest(); window.scrollTo(0,0);
-  }
-  function testNext(){ testGo(1); }  /* пустой ответ = пропуск, назад можно вернуться и ответить */
-  function unanswered(){ var n=0; T.qs.forEach(function(p,i){ if(!T.ans[i]) n++; }); return n; }
   function testFinish(){
     if(!T||T.done) return;
     saveCur();
@@ -2604,9 +2711,11 @@ function init(){
 
   /* события */
   document.addEventListener('click',function(e){
-    var t=e.target.closest('[data-tab],[data-topic],[data-nav],[data-act],[data-ins],[data-tins],[data-n],[data-chip]');
+    var t=e.target.closest('[data-tab],[data-topic],[data-nav],[data-act],[data-ins],[data-tins],[data-n],[data-chip],[data-q],[data-screen]');
     if(!t) return;
     if(t.dataset.tab){goTab(t.dataset.tab); return;}
+    if(t.dataset.q!==undefined){ jumpQ(+t.dataset.q); return; }
+    if(t.dataset.screen!==undefined){ goScreen(+t.dataset.screen); return; }
     if(t.dataset.topic){location.hash='#/t/'+t.dataset.topic; return;}
     if(t.dataset.nav){location.hash='#/'; return;}
     if(t.dataset.ins!==undefined){insertAt('ans',t.dataset.ins); return;}
@@ -2624,9 +2733,7 @@ function init(){
       case 'prev': step(-1); break;
       case 'next': step(1); break;
       case 'tstart': startTest(); break;
-      case 'tback': testGo(-1); break;
-      case 'tnext': testNext(); break;
-      case 'tfinish': testFinish(); break;
+      case 'tfinish': if(T&&!T.done){ saveCur(); var u=unanswered(); if(!u||window.confirm('Без ответа: '+u+'. Всё равно сдать тест?')) testFinish(); } break;
       case 'reset':
         if(!resetArm){resetArm=true; t.textContent='Точно сбросить?'; setTimeout(function(){resetArm=false; t.textContent='Сбросить весь прогресс';},4000); break;}
         resetArm=false; t.textContent='Сбросить весь прогресс';
@@ -2638,7 +2745,7 @@ function init(){
   document.addEventListener('keydown',function(e){
     if(e.key!=='Enter') return;
     if(e.target&&e.target.id==='ans'){e.preventDefault(); doCheck();}
-    else if(e.target&&e.target.id==='tans'){ e.preventDefault(); if(T&&T.i===T.qs.length-1) testFinish(); else testNext(); }
+    else if(e.target&&e.target.id==='tans'){ }
   });
 
   /* старт */
@@ -2860,7 +2967,7 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbxqlI8LhLHpdoFTmCutz9WJBJH0-PWmUjveajgl583n7xuSNmsMRxQbx43Wtm92QEdYtw/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbxoIfe5RVp3hqrovOqk3kUrMVLmIWbLDPGEUTYfnDWf4TqQB2Galu7r_viud7cvKbziug/exec', SHEET_SECRET='matematika-2026';
   var lastSent='', syncT=null;
   function summary(){
     var out={};
@@ -2912,16 +3019,34 @@ function init(){
       '<div class="xpbar" role="progressbar" aria-label="Прогресс до следующего ранга" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'"><div class="xpfill" style="width:'+pct+'%"></div></div>'+
       '<p class="next">'+(nx?'До ранга «'+esc(rankLabel(ri+1,S.name))+'»: '+(nx[0]-xp)+' XP':'Высший ранг достигнут')+'</p></div>';
   }
+  function stat(v,l){ return '<div class="stat"><b>'+v+'</b><span>'+l+'</span></div>'; }
+  function statsHtml(){
+    var solved=0, total=0, ok=0, rev=0, bad=0, bestT=0;
+    TOPICS.forEach(function(t){
+      total+=TP[t].length;
+      var x=S.topics[t]; if(!x) return;
+      solved+=solvedIn(t); bestT=Math.max(bestT,x.bestTest||0);
+      TP[t].forEach(function(p){ var st=(x.p||{})[p.n]||{}; if(st.st==='ok') ok++; else if(st.st==='rev') rev++; else if(st.st==='bad') bad++; });
+    });
+    var acc=(ok+rev+bad)?Math.round(ok/(ok+rev+bad)*100)+'%':'—';
+    var pct=total?Math.round(solved/total*100):0;
+    return '<div class="stats-grid">'+
+      stat(solved+' из '+total,'задач решено')+
+      stat(acc,'точность: без показа ответа')+
+      stat(pct+'%','общий прогресс')+
+      stat(bestT?bestT+' из 10':'—','лучший тест')+
+    '</div>';
+  }
   function renderJournal(){
     var b=$('#jbody'); if(!b) return;
-    if(!SHEET_URL){ b.innerHTML=rankCard()+'<div class="card"><p class="small">Журнал пока не подключён к таблице. Прогресс сохраняется на этом устройстве.</p></div>'; return; }
+    var head=rankCard()+statsHtml();
+    if(!SHEET_URL){ b.innerHTML=head+'<div class="card"><p class="small">Журнал пока не подключён к таблице. Прогресс сохраняется на этом устройстве.</p></div>'; return; }
     var own=summary(), tests=testSummary(), line='';
     TOPICS.forEach(function(t){
       if(own[t]) line+='<li>Тема '+t+': решено '+own[t].ok+' из '+own[t].n+(own[t].bad?', ошибок '+own[t].bad:'')+'</li>';
       if(tests[t]) line+='<li>Тест, тема '+t+': лучший '+tests[t].best+' из 10 (попыток: '+tests[t].runs+')</li>';
     });
-    b.innerHTML=rankCard()+'<div class="card"><p>Учитель видит ваш прогресс, когда указаны имя и группа.</p>'+
-      (line?'<ul class="plain">'+line+'</ul>':'<p class="small">Пока нет решённых задач.</p>')+'</div>';
+    b.innerHTML=head+(line?'<details class="card bytopic"><summary>По темам</summary><ul class="plain">'+line+'</ul></details>':'');
   }
   /* ---------- Лидерборд (читает общую таблицу через Apps Script) ---------- */
   var LB={rows:null,t:0,err:'',loading:false,scope:'group'};
@@ -3068,7 +3193,7 @@ function init(){
     main.addEventListener('touchstart',function(e){
       if(G.fin) G.fin();
       T=null;
-      if(!document.body.classList.contains('in-topic')||e.touches.length!==1) return;
+      if(!document.body.classList.contains('in-topic')||curTab()==='test'||e.touches.length!==1) return;
       var x=e.touches[0].clientX; if(x<28||blocked(e.target)) return;
       T={x:x,y:e.touches[0].clientY,lx:x,lt:Date.now(),v:0,drag:false,dir:0,p:null,idx:ORDER.indexOf(curTab())};
     },{passive:true});
@@ -3104,7 +3229,62 @@ function init(){
     main.addEventListener('touchend',function(e){ end(e,false); },{passive:true});
     main.addEventListener('touchcancel',function(e){ end(e,true); },{passive:true});
   })();
-  initLab(); labInitAll(); labInitAll2(); labInitAll3(); renderHeader(); renderStatus(); renderAnswers(); initJournalUI(); initBoardUI(); route();
+  /* ---------- Внешний вид: фон, шрифт, тема (хранится на этом устройстве) ---------- */
+  var PREF_KEY='uroki-prefs', PREF={bg:'plain',font:'hand',theme:'auto',photo:''};
+  try{ Object.assign(PREF, JSON.parse(localStorage.getItem(PREF_KEY))||{}); }catch(e){}
+  function setPrefMsg(t){ var m=$('#prefmsg'); if(m) m.textContent=t; }
+  function savePref(){
+    try{ localStorage.setItem(PREF_KEY, JSON.stringify(PREF)); }
+    catch(e){ setPrefMsg('Не удалось сохранить: в браузере нет места. Попробуйте фото поменьше.'); }
+  }
+  function applyPrefs(){
+    var h=document.documentElement;
+    h.dataset.bg=PREF.bg; h.dataset.font=PREF.font;
+    if(PREF.theme==='auto') delete h.dataset.theme; else h.dataset.theme=PREF.theme;
+    h.style.setProperty('--photo', PREF.photo?'url("'+PREF.photo+'")':'none');
+    $$('[data-pref]').forEach(function(b){ b.setAttribute('aria-pressed', PREF[b.dataset.pref]===b.dataset.val?'true':'false'); });
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-pref]'); if(!b) return;
+    var k=b.dataset.pref, v=b.dataset.val;
+    if(k==='bg'&&v==='photo'&&!PREF.photo){ var f=$('#bgfile'); if(f) f.click(); return; }
+    PREF[k]=v; savePref(); applyPrefs(); setPrefMsg('');
+  });
+  var bgf=$('#bgfile');
+  if(bgf) bgf.addEventListener('change',function(){
+    var f=this.files&&this.files[0]; if(!f) return;
+    setPrefMsg('Загружаю…');
+    var url=URL.createObjectURL(f), img=new Image();
+    img.onload=function(){
+      var k=Math.min(1,1280/Math.max(img.width,img.height)), c=document.createElement('canvas');
+      c.width=Math.round(img.width*k); c.height=Math.round(img.height*k);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);
+      PREF.photo=c.toDataURL('image/jpeg',0.82); PREF.bg='photo';
+      savePref(); applyPrefs(); setPrefMsg('Фон установлен.');
+    };
+    img.onerror=function(){ setPrefMsg('Не удалось открыть картинку.'); };
+    img.src=url; this.value='';
+  });
+
+  /* ---------- Главная: карусель из четырёх экранов ---------- */
+  var deck=$('#deck'), lastScreen=-1;
+  function curScreen(){ return Math.round(deck.scrollLeft/Math.max(1,deck.clientWidth)); }
+  function goScreen(i){ if(deck) deck.scrollTo({left:i*deck.clientWidth,behavior:'smooth'}); }
+  function onScreen(i){
+    $$('.screens-nav button').forEach(function(b){ b.setAttribute('aria-current', +b.dataset.screen===i?'true':'false'); });
+    if(i===lastScreen) return; lastScreen=i;
+    if(i===1) renderJournal();
+    if(i===2) lbLoad(false);
+  }
+  function initDeck(){
+    if(!deck) return;
+    var raf=0;
+    deck.addEventListener('scroll',function(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(function(){ onScreen(curScreen()); }); },{passive:true});
+    onScreen(0);
+  }
+
+  initLab(); labInitAll(); labInitAll2(); labInitAll3(); renderHeader(); renderStatus(); renderAnswers(); initJournalUI(); initBoardUI(); applyPrefs(); initDeck(); route();
   var first=P.filter(function(p){return (ST.p[p.n]||{}).st!=='ok';})[0];
   cur=first?first.n:1;
   showProblem(); renderTest();
