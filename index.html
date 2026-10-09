@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}</style>
 <title>Уроки по уравнениям</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marck+Script&family=PT+Sans:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
@@ -303,6 +302,33 @@ html[data-font="sans"]{--f-display:system-ui,-apple-system,"Segoe UI",Roboto,Int
 .howto li{margin:4px 0}
 .big-score{flex:none;width:92px;height:92px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:2.8rem;font-weight:800;font-variant-numeric:tabular-nums}
 .res-top{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+
+
+/* ===== раунд 3: иконки-вкладки, тёмные темы, шрифты, линейка, диалог ===== */
+:root{--ruled:rgba(50,85,175,.34)}
+:root[data-theme="oled"]{--bg:#000;--paper:#000;--card:#0C0C0F;--grid:rgba(255,255,255,.07);--ruled:rgba(255,255,255,.16);--line:#26262C;--ink:#F2F2F5;--ink-soft:#A3A3AD;--accent:#8AA8FF;--on-accent:#000;--accent-wash:#1A2238;--red:#FF7B76;--ok:#5CCB93;--on-ok:#000;--warn:#E3B45A;color-scheme:dark}
+:root[data-theme="gray"]{--bg:#1B1C20;--paper:#23252B;--card:#2C2F37;--grid:rgba(255,255,255,.06);--ruled:rgba(255,255,255,.17);--line:#3B404B;--ink:#EDEEF2;--ink-soft:#A8AEBC;--accent:#9DB4FF;--on-accent:#111;--accent-wash:#303851;--red:#FF8A84;--ok:#6BD6A0;--on-ok:#111;--warn:#E8BE6C;color-scheme:dark}
+:root[data-theme="navy"]{--bg:#0D1526;--paper:#121D33;--card:#1A2841;--grid:rgba(120,160,255,.08);--ruled:rgba(130,170,255,.22);--line:#2B3D60;--ink:#E4EBFA;--ink-soft:#9AAAC8;--accent:#7FA6FF;--on-accent:#0A1020;--accent-wash:#23365C;--red:#FF8A84;--ok:#6BD6A0;--on-ok:#0A1020;--warn:#E8BE6C;color-scheme:dark}
+html[data-mode="dark"][data-bg="cream"]{--bg:#1C1913;--paper:#2A251C;--card:#342E23}
+html[data-bg="lined"] .sheet{background-image:repeating-linear-gradient(to bottom,transparent 0 31px,var(--ruled) 31px 32px)}
+html[data-font="arial"]{--f-display:Arial,Helvetica,sans-serif;--f-body:Arial,Helvetica,sans-serif}
+html[data-font="roboto"]{--f-display:Roboto,Inter,system-ui,sans-serif;--f-body:Roboto,Inter,system-ui,sans-serif}
+html[data-font="comic"]{--f-display:"Comic Sans MS","Comic Sans",cursive;--f-body:"Comic Sans MS","Comic Sans",cursive}
+.screens-nav{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:0 0 14px;padding:4px;background:var(--card);border-radius:18px;box-shadow:0 1px 3px rgba(20,30,60,.08)}
+.sn-ind{position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/4);border-radius:14px;background:var(--accent-wash);transform:translateX(calc(var(--i,0)*100%));transition:transform .3s cubic-bezier(.22,.8,.3,1);pointer-events:none}
+.screens-nav button{position:relative;z-index:1;width:auto;height:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px 6px;background:none;border:0;border-radius:14px;font:inherit;font-size:.78rem;font-weight:700;color:var(--ink-soft);cursor:pointer}
+.screens-nav button[aria-current="true"]{background:none;width:auto;border-radius:14px;color:var(--accent)}
+.sn-ico{font-size:1.3rem;line-height:1.1}
+.btn.sm{min-height:34px;padding:4px 12px;font-size:.9rem}
+.howdlg{border:0;border-radius:18px;padding:0;width:min(92vw,440px);max-height:86vh;background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.howdlg::backdrop{background:rgba(10,14,24,.45)}
+.hd-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px 0}
+.hd-head h3{margin:0}
+.hd-body{padding:8px 18px 18px;font-size:.95rem}
+.howlist{margin:0;padding-left:20px}
+.howlist li{margin:8px 0}
+.big-score{display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;width:132px;height:132px;margin:6px auto 14px;border-radius:50%;background:var(--accent-wash);color:var(--accent);font-size:2.6rem;font-weight:800;box-shadow:0 6px 20px rgba(60,90,170,.18)}
+.big-score small{font-size:.95rem;font-weight:700;margin-top:4px;opacity:.9}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -622,7 +648,7 @@ html[data-font="sans"]{--f-display:system-ui,-apple-system,"Segoe UI",Roboto,Int
     <section id="tab-practice" role="tabpanel" aria-labelledby="t-practice" hidden>
       <h2>Практика</h2>
       <div class="card" id="pcard"></div>
-      <p class="map-h">Карта задач</p>
+      <p class="map-h" id="maph"></p>
       <div class="dots" id="dots"></div>
       <div class="legend"><span class="l-ok">решена</span><span class="l-rev">показан ответ</span><span class="l-bad">были ошибки</span></div>
     </section>
@@ -637,10 +663,11 @@ html[data-font="sans"]{--f-display:system-ui,-apple-system,"Segoe UI",Roboto,Int
     <!-- ТЕСТ -->
     <section id="home-journal" hidden>
       <nav class="screens-nav" aria-label="Экраны">
-        <button type="button" data-screen="0" aria-label="Темы" aria-current="true"></button>
-        <button type="button" data-screen="1" aria-label="Профиль" aria-current="false"></button>
-        <button type="button" data-screen="2" aria-label="Рейтинг" aria-current="false"></button>
-        <button type="button" data-screen="3" aria-label="Настройки" aria-current="false"></button>
+        <span class="sn-ind" aria-hidden="true"></span>
+        <button type="button" data-screen="0" aria-label="Темы" aria-current="true"><span class="sn-ico" aria-hidden="true">📚</span><span>Темы</span></button>
+        <button type="button" data-screen="1" aria-label="Профиль" aria-current="false"><span class="sn-ico" aria-hidden="true">👤</span><span>Профиль</span></button>
+        <button type="button" data-screen="2" aria-label="Рейтинг" aria-current="false"><span class="sn-ico" aria-hidden="true">🏆</span><span>Рейтинг</span></button>
+        <button type="button" data-screen="3" aria-label="Настройки" aria-current="false"><span class="sn-ico" aria-hidden="true">⚙️</span><span>Настройки</span></button>
       </nav>
       <div class="deck" id="deck">
         <section class="screen" id="scr-topics" aria-label="Темы">
@@ -668,20 +695,28 @@ html[data-font="sans"]{--f-display:system-ui,-apple-system,"Segoe UI",Roboto,Int
               <button type="button" data-pref="bg" data-val="dots">Точки</button>
               <button type="button" data-pref="bg" data-val="photo">Своё фото</button>
             </div>
+            <div class="opts" style="margin-top:8px">
+              <button type="button" data-replacephoto hidden>Заменить фото</button>
+              <button type="button" data-clearphoto hidden>Убрать фото</button>
+            </div>
             <input type="file" id="bgfile" accept="image/*" hidden>
             <p class="small" id="prefmsg" style="margin:8px 0 0"></p>
           </div>
           <div class="card"><h3>Шрифт</h3>
             <div class="opts">
-              <button type="button" data-pref="font" data-val="hand">Рукописный</button>
-              <button type="button" data-pref="font" data-val="sans">Обычный</button>
+              <button type="button" data-pref="font" data-val="marck">Marck Script</button>
+              <button type="button" data-pref="font" data-val="arial">Arial</button>
+              <button type="button" data-pref="font" data-val="roboto">Roboto / Inter</button>
+              <button type="button" data-pref="font" data-val="comic">Comic Sans</button>
             </div>
           </div>
           <div class="card"><h3>Тема</h3>
             <div class="opts">
               <button type="button" data-pref="theme" data-val="auto">Как в системе</button>
               <button type="button" data-pref="theme" data-val="light">Светлая</button>
-              <button type="button" data-pref="theme" data-val="dark">Тёмная</button>
+              <button type="button" data-pref="theme" data-val="oled">Чёрная (OLED)</button>
+              <button type="button" data-pref="theme" data-val="gray">Тёмно-серая</button>
+              <button type="button" data-pref="theme" data-val="navy">Тёмно-синяя</button>
             </div>
           </div>
         </section>
@@ -693,6 +728,11 @@ html[data-font="sans"]{--f-display:system-ui,-apple-system,"Segoe UI",Roboto,Int
       <div id="tbox"></div>
     </section>
   </main>
+
+  <dialog id="howdlg" class="howdlg" aria-labelledby="hdtitle">
+    <div class="hd-head"><h3 id="hdtitle">Как вводить ответ</h3><button type="button" class="btn sm" data-act="closehow" aria-label="Закрыть">✕</button></div>
+    <div class="hd-body" id="howbody"></div>
+  </dialog>
 
   <footer>
     <p>Прогресс по всем темам хранится на этом устройстве, если браузер это позволяет.</p>
@@ -821,7 +861,7 @@ var BAD_READ='Не удалось прочитать ответ. Проверь�
 function chkRoots(p,raw){
   var exp=dedupe(p.key.map(ev));
   var n=norm(raw);
-  if(/нет|∅|пуст|no ?root|none/.test(n)){
+  if(/нет|∅|пуст|без ?корней|no ?root|none/.test(n)){
     return exp.length===0?{ok:true}:{ok:false,msg:'У этого уравнения есть корни.'};
   }
   var items=expandPM(splitItems(raw)), vals=[];
@@ -862,7 +902,7 @@ function parseSet(raw){
     if(op==='>') return {ok:true,ivs:[[v,Infinity,false,false]]};
     return {ok:true,ivs:[[v,Infinity,true,false]]};
   }
-  var parts=s.split(/∪|или/), ivs=[];
+  var parts=s.split(/∪|(?<![A-Za-z])U(?![A-Za-z])|или/), ivs=[];
   for(var i=0;i<parts.length;i++){
     var p=parts[i];
     if(!p) return {ok:false};
@@ -1860,6 +1900,8 @@ function init(){
   function inFilter(p){return filter==='all'||p.b===filter;}
   function renderChips(){}
   function renderDots(){
+    var solvedN=P.filter(function(p){return (ST.p[p.n]||{}).st==='ok';}).length, mh=$('#maph');
+    if(mh) mh.textContent='Всего задач: '+P.length+' · решено '+solvedN;
     $('#dots').innerHTML=P.filter(inFilter).map(function(p){
       var st=(ST.p[p.n]||{}).st||'';
       var lbl='Задача '+p.n+(st==='ok'?', решена':st==='rev'?', показан ответ':st==='bad'?', были ошибки':'');
@@ -1876,10 +1918,9 @@ function init(){
       stmt(p)+
       '<div class="inrow"><input id="ans" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваш ответ" placeholder="Ваш ответ"><button class="btn primary" data-act="check">Проверить</button></div>'+
       keysHtml(p.type)+
-      '<p class="fmtnote">'+fmt(FMT[p.type])+'</p>'+
       '<div id="fb" class="fb" role="status" aria-live="polite"></div>'+
       '<div id="hintbox" class="hintbox" hidden></div>'+
-      '<div class="actions"><button class="btn" data-act="hint">Подсказка</button><button class="btn" data-act="reveal" id="revbtn">Показать ответ</button></div>'+
+      '<div class="actions"><button class="btn sm" data-act="howto">Как вводить ответ</button><button class="btn" data-act="hint">Подсказка</button><button class="btn" data-act="reveal" id="revbtn">Показать ответ</button></div>'+
       '<div class="nav"><button class="btn" data-act="prev">← Назад</button><button class="btn" data-act="next" id="nextbtn">Далее →</button></div>';
     if(st.st==='ok') setFb('ok','<span class="ic">✓</span>Решено.'+ansLine(p));
     else if(st.st==='rev') setFb('rev','Ответ был показан.'+ansLine(p));
@@ -1951,16 +1992,17 @@ function init(){
     T={qs:shuffle(qs),i:0,ans:[],res:[],done:false};
     renderTest();
   }
-  function howtoHtml(open){
-    return '<details class="howto"'+(open?' open':'')+'><summary>Как вводить ответ</summary><ul>'+
-      '<li>Дробь пишите через косую черту: <b>3/4</b>, <b>(x − 3)/(x − 2)</b>.</li>'+
-      '<li>Скобки ставьте явно, например <b>(x − 1)(5x − 2)</b>.</li>'+
-      '<li>Степень пишите через <b>^</b>: <b>x^2</b>. Корень вставляется кнопкой <b>√</b> под полем.</li>'+
-      '<li>Несколько корней разделяйте <b>;</b>: <b>1; 5</b>. Пара корней с ±: <b>±2</b>.</li>'+
-      '<li>Если корней нет, напишите <b>нет</b>.</li>'+
-      '<li>Кнопки под полем вставляют символ в место курсора.</li>'+
-      '<li>Ответ сохраняется сам. Переходите по номерам вверху и меняйте ответы до сдачи.</li></ul></details>';
+  function howBtn(){ return '<button type="button" class="btn sm" data-act="howto">Как вводить ответ</button>'; }
+  function howContent(){
+    return '<ol class="howlist">'+
+      '<li><b>Без лишних букв.</b> Не пишите «x =», вводите только числа или значения.</li>'+
+      '<li><b>Несколько корней</b> разделяйте <b>;</b>: <b>1; 5</b>. Пару корней можно записать через <b>±</b>: <b>±2</b>.</li>'+
+      '<li><b>Нет решений:</b> «нет корней», «корней нет», «без корней» или просто «нет».</li>'+
+      '<li><b>Интервалы</b> пишите круглыми <b>( )</b> или квадратными <b>[ ]</b> скобками: <b>(−∞; 5]</b>. Объединение — буквой <b>U</b>: <b>(−∞; 2) U (5; +∞)</b>.</li>'+
+      '<li>Дробь через косую черту: <b>(x − 3)/(x − 2)</b>. Степень через <b>^</b>: <b>x^2</b>. Корень — кнопкой <b>√</b> под полем.</li>'+
+      '</ol>';
   }
+  function openHow(){ var d=$('#howdlg'); if(!d) return; $('#howbody').innerHTML=howContent(); d.showModal(); }
   function unanswered(){ var n=0; T.qs.forEach(function(p,i){ if(!T.ans[i]) n++; }); return n; }
   function plateCls(i){ var a=T.ans[i]; return (i===T.i?'cur ':'')+(a?'ans':(a===''?'skip':'')); }
   function plateHtml(){
@@ -1986,7 +2028,7 @@ function init(){
     if(!T){
       box.innerHTML='<div class="card"><h3>Контрольная работа</h3>'+
         '<p>10 задач из банка: '+testDesc()+' Подсказок нет. Результат появится в конце.</p>'+
-        howtoHtml(true)+
+        howBtn()+
         '<p class="small">'+(ST.tests?'Лучший результат: '+ST.bestTest+' из 10. Пройдено раз: '+ST.tests+'.':'Вы ещё не проходили тест.')+'</p>'+
         '<button class="btn primary" data-act="tstart">Начать тест</button></div>';
       return;
@@ -1999,8 +2041,7 @@ function init(){
         stmt(p)+
         '<div class="inrow"><input id="tans" type="text" value="'+esc(T.ans[T.i]||'')+'" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваш ответ" placeholder="Ваш ответ"></div>'+
         keysHtml(p.type).replace(/data-ins/g,'data-tins')+
-        '<p class="fmtnote">'+fmt(FMT[p.type])+'</p>'+
-        howtoHtml(false)+
+        howBtn()+
         '<div class="actions tnav"><button class="btn stop" data-act="tfinish">Сдать тест</button></div></div>';
       var inp=$('#tans');
       if(inp){
@@ -2013,8 +2054,7 @@ function init(){
       return;
     }
     var score=T.res.filter(Boolean).length, total=T.qs.length;
-    var h='<div class="card"><div class="res-top"><div class="big-score" aria-label="Верно '+score+' из '+total+'">'+score+'</div>'+
-      '<div><h3>Результат</h3><p class="small" style="margin:0">верно из '+total+'</p></div></div>'+
+    var h='<div class="card"><div class="res-top"><div class="big-score" aria-label="'+score+' из '+total+'">'+score+'<small>/ '+total+'</small></div></div>'+
       '<div class="rv">';
     T.qs.forEach(function(q,i){
       var ok=T.res[i];
@@ -2733,6 +2773,8 @@ function init(){
       case 'prev': step(-1); break;
       case 'next': step(1); break;
       case 'tstart': startTest(); break;
+      case 'howto': openHow(); break;
+      case 'closehow': { var hd0=$('#howdlg'); if(hd0) hd0.close(); } break;
       case 'tfinish': if(T&&!T.done){ saveCur(); var u=unanswered(); if(!u||window.confirm('Без ответа: '+u+'. Всё равно сдать тест?')) testFinish(); } break;
       case 'reset':
         if(!resetArm){resetArm=true; t.textContent='Точно сбросить?'; setTimeout(function(){resetArm=false; t.textContent='Сбросить весь прогресс';},4000); break;}
@@ -2967,7 +3009,7 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbxoIfe5RVp3hqrovOqk3kUrMVLmIWbLDPGEUTYfnDWf4TqQB2Galu7r_viud7cvKbziug/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbxqlI8LhLHpdoFTmCutz9WJBJH0-PWmUjveajgl583n7xuSNmsMRxQbx43Wtm92QEdYtw/exec', SHEET_SECRET='matematika-2026';
   var lastSent='', syncT=null;
   function summary(){
     var out={};
@@ -3125,8 +3167,8 @@ function init(){
     $('.tabs').hidden=home;
     if(home){
       ['lecture','practice','answers','test'].forEach(function(t){ $('#tab-'+t).hidden=true; });
-      $('#eyebrow').textContent='Уроки';
-      $('#h1').textContent='Уроки по уравнениям';
+      $('#eyebrow').textContent='';
+      $('#h1').textContent='Выберите тему';
       renderTopics(); renderJournal(); lbLoad(false);
     } else {
       showTab('lecture');
@@ -3230,8 +3272,12 @@ function init(){
     main.addEventListener('touchcancel',function(e){ end(e,true); },{passive:true});
   })();
   /* ---------- Внешний вид: фон, шрифт, тема (хранится на этом устройстве) ---------- */
-  var PREF_KEY='uroki-prefs', PREF={bg:'plain',font:'hand',theme:'auto',photo:''};
+  var PREF_KEY='uroki-prefs', PREF={bg:'plain',font:'marck',theme:'auto',photo:''};
   try{ Object.assign(PREF, JSON.parse(localStorage.getItem(PREF_KEY))||{}); }catch(e){}
+  if(PREF.font==='hand') PREF.font='marck'; if(PREF.font==='sans') PREF.font='roboto';
+  if(PREF.theme==='dark') PREF.theme='navy';
+  if(['marck','arial','roboto','comic'].indexOf(PREF.font)<0) PREF.font='marck';
+  if(['auto','light','oled','gray','navy'].indexOf(PREF.theme)<0) PREF.theme='auto';
   function setPrefMsg(t){ var m=$('#prefmsg'); if(m) m.textContent=t; }
   function savePref(){
     try{ localStorage.setItem(PREF_KEY, JSON.stringify(PREF)); }
@@ -3239,13 +3285,18 @@ function init(){
   }
   function applyPrefs(){
     var h=document.documentElement;
-    h.dataset.bg=PREF.bg; h.dataset.font=PREF.font;
+    var dark=PREF.theme==='oled'||PREF.theme==='gray'||PREF.theme==='navy'||(PREF.theme==='auto'&&!!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches));
+    h.dataset.bg=PREF.bg; h.dataset.font=PREF.font; h.dataset.mode=dark?'dark':'light';
     if(PREF.theme==='auto') delete h.dataset.theme; else h.dataset.theme=PREF.theme;
     h.style.setProperty('--photo', PREF.photo?'url("'+PREF.photo+'")':'none');
     $$('[data-pref]').forEach(function(b){ b.setAttribute('aria-pressed', PREF[b.dataset.pref]===b.dataset.val?'true':'false'); });
+    $$('[data-replacephoto],[data-clearphoto]').forEach(function(b){ b.hidden=!PREF.photo; });
   }
   document.addEventListener('click',function(e){
-    var b=e.target.closest&&e.target.closest('[data-pref]'); if(!b) return;
+    if(!e.target.closest) return;
+    if(e.target.closest('[data-clearphoto]')){ PREF.photo=''; if(PREF.bg==='photo') PREF.bg='plain'; savePref(); applyPrefs(); setPrefMsg('Фото убрано.'); return; }
+    if(e.target.closest('[data-replacephoto]')){ var f0=$('#bgfile'); if(f0) f0.click(); return; }
+    var b=e.target.closest('[data-pref]'); if(!b) return;
     var k=b.dataset.pref, v=b.dataset.val;
     if(k==='bg'&&v==='photo'&&!PREF.photo){ var f=$('#bgfile'); if(f) f.click(); return; }
     PREF[k]=v; savePref(); applyPrefs(); setPrefMsg('');
@@ -3266,9 +3317,11 @@ function init(){
     img.onerror=function(){ setPrefMsg('Не удалось открыть картинку.'); };
     img.src=url; this.value='';
   });
+  var hd=$('#howdlg');
+  if(hd) hd.addEventListener('click',function(e){ if(e.target===hd) hd.close(); });
 
-  /* ---------- Главная: карусель из четырёх экранов ---------- */
-  var deck=$('#deck'), lastScreen=-1;
+  /* ---------- Главная: карусель из четырёх экранов с иконками-вкладками ---------- */
+  var deck=$('#deck'), snav=document.querySelector('.screens-nav'), lastScreen=-1;
   function curScreen(){ return Math.round(deck.scrollLeft/Math.max(1,deck.clientWidth)); }
   function goScreen(i){ if(deck) deck.scrollTo({left:i*deck.clientWidth,behavior:'smooth'}); }
   function onScreen(i){
@@ -3280,8 +3333,16 @@ function init(){
   function initDeck(){
     if(!deck) return;
     var raf=0;
-    deck.addEventListener('scroll',function(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(function(){ onScreen(curScreen()); }); },{passive:true});
-    onScreen(0);
+    deck.addEventListener('scroll',function(){
+      cancelAnimationFrame(raf);
+      raf=requestAnimationFrame(function(){
+        var f=deck.scrollLeft/Math.max(1,deck.clientWidth);
+        if(snav) snav.style.setProperty('--i', f);
+        onScreen(Math.round(f));
+      });
+    },{passive:true});
+    if(snav) snav.style.setProperty('--i', curScreen());
+    onScreen(curScreen());
   }
 
   initLab(); labInitAll(); labInitAll2(); labInitAll3(); renderHeader(); renderStatus(); renderAnswers(); initJournalUI(); initBoardUI(); applyPrefs(); initDeck(); route();
@@ -3292,5 +3353,4 @@ function init(){
 if(typeof document!=='undefined') init();
 })();
 </script>
-</body>
-</html>
+
