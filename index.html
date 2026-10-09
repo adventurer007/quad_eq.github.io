@@ -87,6 +87,14 @@ h1::after{content:"";display:block;width:3.2em;height:3px;margin-top:6px;backgro
 .tabs button .ico{font-size:1.35rem;line-height:1.1}
 .tabs button{position:relative;z-index:1;transition:color .2s}
 .tabs button[aria-selected="true"]{color:var(--accent)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
+.lb{list-style:none;margin:8px 0 0;padding:0}
+.lb li{display:grid;grid-template-columns:2.3em minmax(0,1fr) auto;gap:0 8px;align-items:center;padding:8px 6px;border-bottom:1px solid var(--line)}
+.lb li.me{background:var(--line);border-radius:8px;font-weight:700}
+.lb li.gap{display:block;text-align:center;color:var(--ink-soft);border-bottom:0;padding:2px}
+.lb .pl{font-size:1.15rem;text-align:center}
+.lb .sub{display:block;font-size:.8rem;font-weight:400;color:var(--ink-soft)}
+.lb .pts{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-weight:400}
 .tabs-ind{position:absolute;top:6px;bottom:calc(6px + env(safe-area-inset-bottom,0px));left:8px;width:calc((100% - 16px - 12px)/4);border-radius:12px;background:var(--line);transform:translateX(calc(var(--i,0)*(100% + 4px)));transition:transform .3s cubic-bezier(.22,.8,.3,1);pointer-events:none}
 .tabs.drag .tabs-ind{transition:none}
 main{position:relative;overflow-x:clip}
@@ -582,6 +590,7 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
       <div class="card" style="margin-bottom:14px"><h3>Ваше имя и группа</h3><p class="small">Имя и группа нужны, чтобы учитель видел ваш прогресс.</p>
         <div class="inrow"><input id="jname" maxlength="40" placeholder="Имя и фамилия" aria-label="Имя"><select id="jgroup" aria-label="Группа"><option value="">Группа</option><option>A3</option><option>A5</option><option>I3</option></select><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
       <div id="jbody"></div>
+      <div id="lboard"></div>
     </section>
 
     <section id="tab-test" role="tabpanel" aria-labelledby="t-test" hidden>
@@ -1698,12 +1707,13 @@ function init(){
   $$('[data-m]').forEach(function(el){el.innerHTML=fmt(el.textContent);});
 
   /* статус */
-  var RANKS=[[0,'Бронза'],[80,'Серебро'],[200,'Золото'],[400,'Платина'],[700,'Алмаз'],[1100,'Рубин'],[1600,'Изумруд'],[2200,'Легенда']];
+  var RANKS=[[0,'НПС'],[80,'Стрем'],[200,'Ларпер'],[400,'Милый Ублюдок'],[700,'Оптимус Прайм'],[1100,'Мега Правитель Планеты 777'],[1600,''],[2200,'Самый Грязный Заяц']];  /* '' = ранг «своё имя»: показывается ник ученика */
   function xpTotal(){var t=0; TOPICS.forEach(function(id){var s=S.topics[id]; if(!s) return; for(var k in (s.p||{})) t+=s.p[k].xp||0; t+=(s.bestTest||0)*10;}); return t;}
   function solvedIn(id){var c=0, s=S.topics[id]; if(!s||!s.p) return 0; for(var k in s.p) if(s.p[k].st==='ok') c++; return c;}
   function solvedCount(){return solvedIn(TOPIC);}
   function leagueIndex(xp){ var ri=0; RANKS.forEach(function(r,i){ if(xp>=r[0]) ri=i; }); return ri; }
-  function leagueOf(xp){ return RANKS[leagueIndex(xp)][1]; }
+  function rankLabel(i,nick){ return RANKS[i][1]||nick||'Ты сам'; }
+  function leagueOf(xp){ return RANKS[leagueIndex(xp)][1]||'Своё имя'; }
   function renderStatus(){ renderJournal(); }
   function renderTopics(){
     $('#topics').innerHTML=TOPICS.map(function(id){
@@ -2840,7 +2850,7 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbz6A62KMTGAdApTyoqeI1GfXawPifw4qg1dQdOYWSNa_0qH-MQT2eWe_ns0zTnd-MlVKQ/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbxqlI8LhLHpdoFTmCutz9WJBJH0-PWmUjveajgl583n7xuSNmsMRxQbx43Wtm92QEdYtw/exec', SHEET_SECRET='matematika-2026';
   var lastSent='', syncT=null;
   function summary(){
     var out={};
@@ -2881,14 +2891,16 @@ function init(){
     lastSent=key;
     fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),keepalive:true})
       .then(function(r){ return r.json(); })
-      .then(function(d){ if(d.status!=='success') throw new Error(d.message||'ошибка'); setMsg('Прогресс отправлен учителю.'); })
+      .then(function(d){ if(d.status!=='success') throw new Error(d.message||'ошибка'); setMsg('Прогресс отправлен учителю.'); LB.t=0; if(!$('#home-journal').hidden) lbLoad(true); })
       .catch(function(err){ lastSent=''; setMsg('Не отправлено: '+err.message); });
   }
   function rankCard(){
     var xp=xpTotal(), ri=leagueIndex(xp), nx=RANKS[ri+1], pct=nx?(xp-RANKS[ri][0])/(nx[0]-RANKS[ri][0])*100:100;
-    return '<div class="card" style="margin-bottom:14px"><span class="lbl">Ваша лига</span><span class="rank">'+RANKS[ri][1]+'</span>'+
-      '<div class="xpbar" role="progressbar" aria-label="Прогресс до следующей лиги" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'"><div class="xpfill" style="width:'+pct+'%"></div></div>'+
-      '<p class="next">'+(nx?'До лиги «'+nx[1]+'»: '+(nx[0]-xp)+' XP':'Высшая лига достигнута')+'</p></div>';
+    var self=RANKS[ri][1]==='';
+    return '<div class="card" style="margin-bottom:14px"><span class="lbl">Ваш ранг</span><span class="rank">'+esc(rankLabel(ri,S.name))+'</span>'+
+      (self?'<p class="next"><b>Превзойди себя и перейди на следующий ранг!</b></p>':'')+
+      '<div class="xpbar" role="progressbar" aria-label="Прогресс до следующего ранга" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'"><div class="xpfill" style="width:'+pct+'%"></div></div>'+
+      '<p class="next">'+(nx?'До ранга «'+esc(rankLabel(ri+1,S.name))+'»: '+(nx[0]-xp)+' XP':'Высший ранг достигнут')+'</p></div>';
   }
   function renderJournal(){
     var b=$('#jbody'); if(!b) return;
@@ -2901,6 +2913,57 @@ function init(){
     b.innerHTML=rankCard()+'<div class="card"><p>Учитель видит ваш прогресс, когда указаны имя и группа.</p>'+
       (line?'<ul class="plain">'+line+'</ul>':'<p class="small">Пока нет решённых задач.</p>')+'</div>';
   }
+  /* ---------- Лидерборд (читает общую таблицу через Apps Script) ---------- */
+  var LB={rows:null,t:0,err:'',loading:false,scope:'group'};
+  function lbLoad(force){
+    if(!SHEET_URL||LB.loading) return;
+    if(!force&&LB.rows&&Date.now()-LB.t<60000){ renderBoard(); return; }
+    LB.loading=true; renderBoard();
+    fetch(SHEET_URL+'?secret='+encodeURIComponent(SHEET_SECRET))
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(d.status!=='success') throw new Error(d.message||'ошибка'); LB.rows=d.rows||[]; LB.t=Date.now(); LB.err=''; })
+      .catch(function(e){ LB.err=e.message||'нет связи'; })
+      .then(function(){ LB.loading=false; renderBoard(); });
+  }
+  function renderBoard(){
+    var box=$('#lboard'); if(!box||!SHEET_URL) return;
+    var scope=(LB.scope==='group'&&S.group)?'group':'all', me=S.uid?S.uid.slice(0,8):'';
+    var head='<div class="card"><h3>Лидерборд</h3><div class="seg">'+
+      '<button class="btn'+(scope==='group'?' primary':'')+'" data-lb="group"'+(S.group?'':' disabled')+'>Моя группа</button>'+
+      '<button class="btn'+(scope==='all'?' primary':'')+'" data-lb="all">Все</button>'+
+      '<button class="btn" data-lb="refresh" aria-label="Обновить">↻</button></div>';
+    var body='';
+    if(LB.loading&&!LB.rows) body='<p class="small">Загружаю…</p>';
+    else if(LB.err&&!LB.rows) body='<p class="small">Не удалось загрузить: '+esc(LB.err)+'</p>';
+    else{
+      var rows=(LB.rows||[]).filter(function(r){ return scope==='all'||r.g===S.group; })
+        .sort(function(a,b){ return b.x-a.x||(a.n<b.n?-1:1); });
+      if(!rows.length) body='<p class="small">Пока пусто. Укажите имя и группу и решите задачу — вы появитесь в списке.</p>';
+      else{
+        var items=rows.map(function(r,i){ return {r:r,place:i+1}; });
+        var shown=items.slice(0,10), mine=items.filter(function(it){ return me&&it.r.k===me; })[0];
+        if(mine&&mine.place>10) shown=shown.concat([null,mine]);
+        body='<ol class="lb">'+shown.map(function(it){
+          if(!it) return '<li class="gap" aria-hidden="true">…</li>';
+          var r=it.r, ri=leagueIndex(r.x), medal=['🥇','🥈','🥉'][it.place-1]||it.place;
+          return '<li'+(me&&r.k===me?' class="me"':'')+'><span class="pl">'+medal+'</span><span>'+esc(r.n)+
+            '<span class="sub">'+esc(rankLabel(ri,r.n))+(scope==='all'?' · '+esc(r.g):'')+'</span></span><span class="pts">'+r.x+' XP</span></li>';
+        }).join('')+'</ol>';
+      }
+      if(LB.err) body+='<p class="small">Не удалось обновить: '+esc(LB.err)+'</p>';
+    }
+    box.innerHTML=head+body+'</div>';
+  }
+  function initBoardUI(){
+    var box=$('#lboard'); if(!box) return;
+    box.addEventListener('click',function(e){
+      var b=e.target.closest('[data-lb]'); if(!b||b.disabled) return;
+      if(b.dataset.lb==='refresh'){ lbLoad(true); return; }
+      LB.scope=b.dataset.lb; renderBoard();
+    });
+    renderBoard();
+  }
+
   function initJournalUI(){
     var inp=$('#jname'), sel=$('#jgroup'); if(!inp||!sel) return;
     inp.value=S.name||''; sel.value=S.group||'';
@@ -2910,6 +2973,7 @@ function init(){
       if(!g){ setMsg('Выберите группу.'); return; }
       S.name=n; S.group=g; ensureUid(); save(); lastSent='';
       setMsg('Сохранено. Группа: '+g+'.');
+      renderJournal(); renderBoard();
       syncNow();
     };
     window.addEventListener('pagehide',syncNow);
@@ -2928,7 +2992,7 @@ function init(){
       ['lecture','practice','answers','test'].forEach(function(t){ $('#tab-'+t).hidden=true; });
       $('#eyebrow').textContent='Уроки';
       $('#h1').textContent='Уроки по уравнениям';
-      renderTopics(); renderJournal();
+      renderTopics(); renderJournal(); lbLoad(false);
     } else {
       showTab('lecture');
     }
@@ -3030,7 +3094,7 @@ function init(){
     main.addEventListener('touchend',function(e){ end(e,false); },{passive:true});
     main.addEventListener('touchcancel',function(e){ end(e,true); },{passive:true});
   })();
-  initLab(); labInitAll(); labInitAll2(); labInitAll3(); renderHeader(); renderStatus(); renderAnswers(); initJournalUI(); route();
+  initLab(); labInitAll(); labInitAll2(); labInitAll3(); renderHeader(); renderStatus(); renderAnswers(); initJournalUI(); initBoardUI(); route();
   var first=P.filter(function(p){return (ST.p[p.n]||{}).st!=='ok';})[0];
   cur=first?first.n:1;
   showProblem(); renderTest();
