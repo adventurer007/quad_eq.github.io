@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}</style>
 <title>Уроки по уравнениям</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marck+Script&family=PT+Sans:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
@@ -44,6 +44,7 @@
 
 *,*::before,*::after{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+[hidden]{display:none!important}
 button,input{font:inherit;color:inherit}
 :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px}
 
@@ -75,15 +76,18 @@ h1::after{content:"";display:block;width:3.2em;height:3px;margin-top:6px;backgro
 .xpfill{height:100%;width:0;background:var(--accent);transition:width .4s ease}
 .next{margin:6px 0 0;font-size:.85rem;color:var(--ink-soft)}
 
-/* вкладки */
+/* нижняя панель разделов (как в соцсетях) */
 .tabs{
-  position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
   display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;
-  margin-block:18px 22px;padding-block:8px 0;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));
+  background:var(--card);border-top:1px solid var(--line);box-shadow:0 -6px 18px rgba(0,0,0,.14);
 }
-.tabs button{background:transparent;border:0;border-bottom:3px solid transparent;padding:10px 2px 9px;font-weight:700;font-size:1rem;color:var(--ink-soft);cursor:pointer}
-.tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:0;border-radius:12px;padding:7px 2px 6px;font-weight:700;font-size:.8rem;color:var(--ink-soft);cursor:pointer;font-family:inherit}
+.tabs button .ico{font-size:1.35rem;line-height:1.1}
+.tabs button[aria-selected="true"]{color:var(--accent);background:var(--line)}
 .tabs button:hover{color:var(--ink)}
+body.in-topic main{padding-bottom:110px}
 
 h2{font-family:var(--f-display);font-weight:400;font-size:1.9rem;line-height:1.2;margin:34px 0 10px;color:var(--accent);text-wrap:balance}
 h2:first-child{margin-top:0}
@@ -245,14 +249,13 @@ footer p{margin:0;font-size:.85rem;color:var(--ink-soft)}
     <p class="eyebrow" id="eyebrow">Тема 8 · Алгебра</p>
     <h1 id="h1">Квадратные уравнения</h1>
     <div class="topics" id="topics" role="group" aria-label="Выбор темы"></div>
-    <div class="status" id="status"></div>
   </header>
 
   <nav class="tabs" role="tablist" aria-label="Разделы урока">
-    <button role="tab" id="t-lecture" data-tab="lecture" aria-selected="true" aria-controls="tab-lecture">Лекция</button>
-    <button role="tab" id="t-practice" data-tab="practice" aria-selected="false" aria-controls="tab-practice">Практика</button>
-    <button role="tab" id="t-answers" data-tab="answers" aria-selected="false" aria-controls="tab-answers">Ответы</button>
-    <button role="tab" id="t-test" data-tab="test" aria-selected="false" aria-controls="tab-test">Тест</button>
+    <button role="tab" id="t-lecture" data-tab="lecture" aria-selected="true" aria-controls="tab-lecture"><span class="ico" aria-hidden="true">📖</span>Лекция</button>
+    <button role="tab" id="t-practice" data-tab="practice" aria-selected="false" aria-controls="tab-practice"><span class="ico" aria-hidden="true">✍️</span>Практика</button>
+    <button role="tab" id="t-answers" data-tab="answers" aria-selected="false" aria-controls="tab-answers"><span class="ico" aria-hidden="true">✅</span>Ответы</button>
+    <button role="tab" id="t-test" data-tab="test" aria-selected="false" aria-controls="tab-test"><span class="ico" aria-hidden="true">📝</span>Тест</button>
   </nav>
 
   <main>
@@ -1690,22 +1693,13 @@ function init(){
   $$('[data-m]').forEach(function(el){el.innerHTML=fmt(el.textContent);});
 
   /* статус */
-  var RANKS=[[0,'Переменная'],[80,'Коэффициент'],[200,'Дискриминант'],[400,'Корень'],[700,'Теорема Виета'],[1100,'Замена переменной'],[1600,'ОДЗ'],[2200,'Мастер уравнений']];
+  var RANKS=[[0,'Бронза'],[80,'Серебро'],[200,'Золото'],[400,'Платина'],[700,'Алмаз'],[1100,'Рубин'],[1600,'Изумруд'],[2200,'Легенда']];
   function xpTotal(){var t=0; TOPICS.forEach(function(id){var s=S.topics[id]; if(!s) return; for(var k in (s.p||{})) t+=s.p[k].xp||0; t+=(s.bestTest||0)*10;}); return t;}
   function solvedIn(id){var c=0, s=S.topics[id]; if(!s||!s.p) return 0; for(var k in s.p) if(s.p[k].st==='ok') c++; return c;}
   function solvedCount(){return solvedIn(TOPIC);}
-  function renderStatus(){
-    var xp=xpTotal(), ri=0;
-    RANKS.forEach(function(r,i){if(xp>=r[0]) ri=i;});
-    var nx=RANKS[ri+1], pct=nx?(xp-RANKS[ri][0])/(nx[0]-RANKS[ri][0])*100:100;
-    $('#status').innerHTML=
-      '<div class="rank-row"><div><span class="lbl">Звание</span><span class="rank">'+RANKS[ri][1]+'</span></div>'+
-      '<div class="stats"><span><b>'+xp+'</b> XP</span><span><b>'+solvedCount()+'</b> из '+P.length+' решено</span><span>серия <b>'+streak+'</b></span></div></div>'+
-      '<div class="xpbar" role="progressbar" aria-label="Прогресс до следующего звания" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'"><div class="xpfill"></div></div>'+
-      '<p class="next">'+(nx?'До звания «'+nx[1]+'»: '+(nx[0]-xp)+' XP':'Высшее звание достигнуто')+'</p>';
-    $('.xpfill').style.width=pct+'%';
-    renderTopics();
-  }
+  function leagueIndex(xp){ var ri=0; RANKS.forEach(function(r,i){ if(xp>=r[0]) ri=i; }); return ri; }
+  function leagueOf(xp){ return RANKS[leagueIndex(xp)][1]; }
+  function renderStatus(){ renderJournal(); }
   function renderTopics(){
     $('#topics').innerHTML=TOPICS.map(function(id){
       return '<button class="tbtn" type="button" data-topic="'+id+'" aria-pressed="'+(id===TOPIC)+'"><span class="tn">'+(LBL[id]||id)+'</span><span class="tp">'+solvedIn(id)+'/'+TP[id].length+'</span><span class="tt">'+esc(TS[id])+'</span></button>';
@@ -2838,7 +2832,7 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbzpuUIaENMOq1vs32Eg0cAyFbifWX1ThXKaI5JfjFxkAeFJ9QLxqW-Ib12sJ0Wmcp9lBg/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbwoNJayhES8fwgJb_uIIzsUwQpgUDK2pq-jfVhiuKcbzQKZ7Tunnk9iOMVbiwx9kTBKzg/exec', SHEET_SECRET='matematika-2026';
   var lastSent='', syncT=null;
   function summary(){
     var out={};
@@ -2864,7 +2858,7 @@ function init(){
   function payload(){
     var ua=navigator.userAgent;
     return {
-      secret:SHEET_SECRET, id:ensureUid(), name:S.name, group:S.group, xp:xpTotal(),
+      secret:SHEET_SECRET, id:ensureUid(), name:S.name, group:S.group, xp:xpTotal(), rank:leagueOf(xpTotal()),
       device:/tablet|ipad/i.test(ua)?'Планшет':(/mobi|android|iphone/i.test(ua)?'Телефон':'Компьютер'),
       updated:new Date().toLocaleString('ru-RU'),
       topics:summary(), tests:testSummary()
@@ -2882,15 +2876,21 @@ function init(){
       .then(function(d){ if(d.status!=='success') throw new Error(d.message||'ошибка'); setMsg('Прогресс отправлен учителю.'); })
       .catch(function(err){ lastSent=''; setMsg('Не отправлено: '+err.message); });
   }
+  function rankCard(){
+    var xp=xpTotal(), ri=leagueIndex(xp), nx=RANKS[ri+1], pct=nx?(xp-RANKS[ri][0])/(nx[0]-RANKS[ri][0])*100:100;
+    return '<div class="card" style="margin-bottom:14px"><span class="lbl">Ваша лига</span><span class="rank">'+RANKS[ri][1]+'</span>'+
+      '<div class="xpbar" role="progressbar" aria-label="Прогресс до следующей лиги" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'"><div class="xpfill" style="width:'+pct+'%"></div></div>'+
+      '<p class="next">'+(nx?'До лиги «'+nx[1]+'»: '+(nx[0]-xp)+' XP':'Высшая лига достигнута')+'</p></div>';
+  }
   function renderJournal(){
     var b=$('#jbody'); if(!b) return;
-    if(!SHEET_URL){ b.innerHTML='<div class="card"><p class="small">Журнал пока не подключён к таблице. Прогресс сохраняется на этом устройстве.</p></div>'; return; }
+    if(!SHEET_URL){ b.innerHTML=rankCard()+'<div class="card"><p class="small">Журнал пока не подключён к таблице. Прогресс сохраняется на этом устройстве.</p></div>'; return; }
     var own=summary(), tests=testSummary(), line='';
     TOPICS.forEach(function(t){
       if(own[t]) line+='<li>Тема '+t+': решено '+own[t].ok+' из '+own[t].n+(own[t].bad?', ошибок '+own[t].bad:'')+'</li>';
       if(tests[t]) line+='<li>Тест, тема '+t+': лучший '+tests[t].best+' из 10 (попыток: '+tests[t].runs+')</li>';
     });
-    b.innerHTML='<div class="card"><p>Учитель видит ваш прогресс, когда указаны имя и группа.</p>'+
+    b.innerHTML=rankCard()+'<div class="card"><p>Учитель видит ваш прогресс, когда указаны имя и группа.</p>'+
       (line?'<ul class="plain">'+line+'</ul>':'<p class="small">Пока нет решённых задач.</p>')+'</div>';
   }
   function initJournalUI(){
@@ -2913,7 +2913,7 @@ function init(){
     var home=v==='home';
     $('#home-journal').hidden=!home;
     $('#topics').hidden=!home;
-    $('#status').hidden=home;
+    document.body.classList.toggle('in-topic',!home);
     $('#backbtn').hidden=home;
     $('.tabs').hidden=home;
     if(home){
