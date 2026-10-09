@@ -100,6 +100,8 @@ h1::after{content:"";display:block;width:3.2em;height:3px;margin-top:6px;backgro
 main{position:relative;overflow-x:clip}
 .tabs button:hover{color:var(--ink)}
 body.in-topic main{padding-bottom:110px}
+.btn.stop{background:#c0392b;border-color:#c0392b;color:#fff}
+.tnav{justify-content:space-between;flex-wrap:wrap}
 
 h2{font-family:var(--f-display);font-weight:400;font-size:1.9rem;line-height:1.2;margin:34px 0 10px;color:var(--accent);text-wrap:balance}
 h2:first-child{margin-top:0}
@@ -1861,12 +1863,12 @@ function init(){
   function startTest(){
     var bl=blocksOf(), m=bl.length, base=Math.floor(10/m), rem=10-base*m, qs=[];
     bl.forEach(function(b,i){var k=base+(i<rem?1:0); qs=qs.concat(shuffle(P.filter(function(p){return p.b===b;})).slice(0,k));});
-    T={qs:shuffle(qs),i:0,ans:[],res:[]};
+    T={qs:shuffle(qs),i:0,ans:[],res:[],done:false};
     renderTest();
   }
   function seg(){
     var h='<div class="seg" aria-hidden="true">';
-    for(var i=0;i<T.qs.length;i++) h+='<span class="'+(i<T.i?'done':i===T.i?'now':'')+'"></span>';
+    for(var i=0;i<T.qs.length;i++) h+='<span class="'+(T.ans[i]!==undefined?'done':i===T.i?'now':'')+'"></span>';
     return h+'</div>';
   }
   function renderTest(){
@@ -1878,14 +1880,16 @@ function init(){
         '<button class="btn primary" data-act="tstart">Начать тест</button></div>';
       return;
     }
-    if(T.i<T.qs.length){
-      var p=T.qs[T.i];
+    if(!T.done){
+      var p=T.qs[T.i], last=T.i===T.qs.length-1;
       box.innerHTML='<div class="card">'+seg()+
         '<div class="ph"><span class="pn">Вопрос '+(T.i+1)+' из '+T.qs.length+'</span></div>'+stmt(p)+
-        '<div class="inrow"><input id="tans" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваш ответ" placeholder="Ваш ответ"><button class="btn primary" data-act="tsubmit">Ответить</button></div>'+
+        '<div class="inrow"><input id="tans" type="text" value="'+esc(T.ans[T.i]||'')+'" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваш ответ" placeholder="Ваш ответ"></div>'+
         keysHtml(p.type).replace(/data-ins/g,'data-tins')+
         '<p class="fmtnote">'+fmt(FMT[p.type])+'</p>'+
-        '<div class="actions"><button class="btn" data-act="tskip">Пропустить</button></div></div>';
+        '<div class="actions tnav"><button class="btn" data-act="tback"'+(T.i===0?' disabled':'')+'>← Назад</button>'+
+        '<button class="btn" data-act="tskip">Пропустить</button>'+
+        (last?'<button class="btn stop" data-act="tfinish">Сдать тест</button>':'<button class="btn primary" data-act="tnext">Далее →</button>')+'</div></div>';
       var inp=$('#tans'); if(inp&&!noFocus) inp.focus();
       return;
     }
@@ -1905,18 +1909,27 @@ function init(){
     h+='</div><div class="actions"><button class="btn primary" data-act="tstart">Пройти ещё раз</button><button class="btn" data-tab="practice">К практике</button></div></div>';
     box.innerHTML=h;
   }
-  function testAnswer(skip){
-    if(!T||T.i>=T.qs.length) return;
-    var inp=$('#tans'), raw=skip?'':(inp?inp.value.trim():'');
-    if(!skip&&!raw){inp&&inp.focus(); return;}
-    var p=T.qs[T.i];
-    T.ans.push(raw); T.res.push(raw?check(p,raw).ok:false); T.i++;
-    if(T.i>=T.qs.length){
-      var sc=T.res.filter(Boolean).length;
-      ST.tests=(ST.tests||0)+1; if(sc>(ST.bestTest||0)) ST.bestTest=sc;
-      save(); renderStatus();
-    }
-    renderTest();
+  function saveCur(){ var inp=$('#tans'); if(inp&&T&&!T.done) T.ans[T.i]=inp.value.trim(); }
+  function testGo(d){
+    if(!T||T.done) return;
+    saveCur();
+    T.i=Math.max(0,Math.min(T.qs.length-1,T.i+d));
+    renderTest(); window.scrollTo(0,0);
+  }
+  function testNext(){ testGo(1); }  /* пустой ответ = пропуск, назад можно вернуться и ответить */
+  function testSkip(){
+    if(!T||T.done) return;
+    T.ans[T.i]='';
+    if(T.i<T.qs.length-1) testGo(1); else renderTest();  /* на последнем вопросе завершает только красная кнопка */
+  }
+  function testFinish(){
+    if(!T||T.done) return;
+    saveCur();
+    T.res=T.qs.map(function(p,i){ return T.ans[i]?check(p,T.ans[i]).ok:false; });
+    T.done=true;
+    var sc=T.res.filter(Boolean).length;
+    ST.tests=(ST.tests||0)+1; if(sc>(ST.bestTest||0)) ST.bestTest=sc;
+    save(); renderStatus(); renderTest();
     window.scrollTo(0,0);
   }
 
@@ -2615,8 +2628,10 @@ function init(){
       case 'prev': step(-1); break;
       case 'next': step(1); break;
       case 'tstart': startTest(); break;
-      case 'tsubmit': testAnswer(false); break;
-      case 'tskip': testAnswer(true); break;
+      case 'tback': testGo(-1); break;
+      case 'tnext': testNext(); break;
+      case 'tskip': testSkip(); break;
+      case 'tfinish': testFinish(); break;
       case 'reset':
         if(!resetArm){resetArm=true; t.textContent='Точно сбросить?'; setTimeout(function(){resetArm=false; t.textContent='Сбросить весь прогресс';},4000); break;}
         resetArm=false; t.textContent='Сбросить весь прогресс';
@@ -2628,7 +2643,7 @@ function init(){
   document.addEventListener('keydown',function(e){
     if(e.key!=='Enter') return;
     if(e.target&&e.target.id==='ans'){e.preventDefault(); doCheck();}
-    else if(e.target&&e.target.id==='tans'){e.preventDefault(); testAnswer(false);}
+    else if(e.target&&e.target.id==='tans'){ e.preventDefault(); if(T&&T.i===T.qs.length-1) testFinish(); else testNext(); }
   });
 
   /* старт */
@@ -2850,7 +2865,7 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbxqlI8LhLHpdoFTmCutz9WJBJH0-PWmUjveajgl583n7xuSNmsMRxQbx43Wtm92QEdYtw/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbxoIfe5RVp3hqrovOqk3kUrMVLmIWbLDPGEUTYfnDWf4TqQB2Galu7r_viud7cvKbziug/exec', SHEET_SECRET='matematika-2026';
   var lastSent='', syncT=null;
   function summary(){
     var out={};
