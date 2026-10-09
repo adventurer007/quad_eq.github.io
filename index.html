@@ -87,7 +87,7 @@ h1::after{content:"";display:block;width:3.2em;height:3px;margin-top:6px;backgro
 .tabs button .ico{font-size:1.35rem;line-height:1.1}
 .tabs button{position:relative;z-index:1;transition:color .2s}
 .tabs button[aria-selected="true"]{color:var(--accent)}
-.seg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
+.lbtabs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
 .lb{list-style:none;margin:8px 0 0;padding:0}
 .lb li{display:grid;grid-template-columns:2.3em minmax(0,1fr) auto;gap:0 8px;align-items:center;padding:8px 6px;border-bottom:1px solid var(--line)}
 .lb li.me{background:var(--line);border-radius:8px;font-weight:700}
@@ -240,7 +240,8 @@ details.blk summary{padding:12px 0;font-weight:700;cursor:pointer}
 .seg{display:flex;gap:4px;margin:0 0 12px}
 .seg span{flex:1;height:6px;background:var(--line);border-radius:3px}
 .seg span.done{background:var(--accent)}
-.seg span.now{background:var(--ink-soft)}
+.seg span.now{background:var(--ink-soft);box-shadow:0 0 0 2px var(--accent)}
+.seg span.skip{background:repeating-linear-gradient(90deg,var(--line) 0 4px,transparent 4px 7px)}
 .res-top{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;margin-bottom:14px}
 .mark{flex:none;width:5.6rem;height:5.6rem;display:grid;place-items:center;border:3px solid var(--red);border-radius:50%;font-family:var(--f-display);font-size:4.2rem;line-height:1;color:var(--red);transform:rotate(-7deg)}
 .rv{display:grid;gap:0;margin:10px 0 14px;border-top:1px solid var(--line)}
@@ -1868,7 +1869,7 @@ function init(){
   }
   function seg(){
     var h='<div class="seg" aria-hidden="true">';
-    for(var i=0;i<T.qs.length;i++) h+='<span class="'+(T.ans[i]!==undefined?'done':i===T.i?'now':'')+'"></span>';
+    for(var i=0;i<T.qs.length;i++){ var a=T.ans[i], c=i===T.i?'now':(a?'done':(a===''?'skip':'')); h+='<span class="'+c+'"></span>'; }
     return h+'</div>';
   }
   function renderTest(){
@@ -1883,12 +1884,12 @@ function init(){
     if(!T.done){
       var p=T.qs[T.i], last=T.i===T.qs.length-1;
       box.innerHTML='<div class="card">'+seg()+
-        '<div class="ph"><span class="pn">Вопрос '+(T.i+1)+' из '+T.qs.length+'</span></div>'+stmt(p)+
+        '<div class="ph"><span class="pn">Вопрос '+(T.i+1)+' из '+T.qs.length+'</span> <span class="small">· без ответа: '+unanswered()+'</span></div>'+stmt(p)+
         '<div class="inrow"><input id="tans" type="text" value="'+esc(T.ans[T.i]||'')+'" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваш ответ" placeholder="Ваш ответ"></div>'+
         keysHtml(p.type).replace(/data-ins/g,'data-tins')+
         '<p class="fmtnote">'+fmt(FMT[p.type])+'</p>'+
         '<div class="actions tnav"><button class="btn" data-act="tback"'+(T.i===0?' disabled':'')+'>← Назад</button>'+
-        '<button class="btn" data-act="tskip">Пропустить</button>'+
+        '<button class="btn" data-act="tskip" title="Перейти к следующему вопросу без ответа">Пропустить</button>'+
         (last?'<button class="btn stop" data-act="tfinish">Сдать тест</button>':'<button class="btn primary" data-act="tnext">Далее →</button>')+'</div></div>';
       var inp=$('#tans'); if(inp&&!noFocus) inp.focus();
       return;
@@ -1917,10 +1918,14 @@ function init(){
     renderTest(); window.scrollTo(0,0);
   }
   function testNext(){ testGo(1); }  /* пустой ответ = пропуск, назад можно вернуться и ответить */
+  function unanswered(){ var n=0; T.qs.forEach(function(p,i){ if(!T.ans[i]) n++; }); return n; }
   function testSkip(){
     if(!T||T.done) return;
-    T.ans[T.i]='';
-    if(T.i<T.qs.length-1) testGo(1); else renderTest();  /* на последнем вопросе завершает только красная кнопка */
+    saveCur(); if(!T.ans[T.i]) T.ans[T.i]='';
+    var n=T.qs.length, j=-1;
+    for(var k=1;k<n;k++){ var c=(T.i+k)%n; if(!T.ans[c]){ j=c; break; } }
+    if(j<0){ renderTest(); return; }          /* больше нет вопросов без ответа: остаёмся, сдаёт красная кнопка */
+    T.i=j; renderTest(); window.scrollTo(0,0);
   }
   function testFinish(){
     if(!T||T.done) return;
@@ -2943,7 +2948,7 @@ function init(){
   function renderBoard(){
     var box=$('#lboard'); if(!box||!SHEET_URL) return;
     var scope=(LB.scope==='group'&&S.group)?'group':'all', me=S.uid?S.uid.slice(0,8):'';
-    var head='<div class="card"><h3>Лидерборд</h3><div class="seg">'+
+    var head='<div class="card"><h3>Лидерборд</h3><div class="lbtabs">'+
       '<button class="btn'+(scope==='group'?' primary':'')+'" data-lb="group"'+(S.group?'':' disabled')+'>Моя группа</button>'+
       '<button class="btn'+(scope==='all'?' primary':'')+'" data-lb="all">Все</button>'+
       '<button class="btn" data-lb="refresh" aria-label="Обновить">↻</button></div>';
