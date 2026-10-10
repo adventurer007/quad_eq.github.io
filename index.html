@@ -708,7 +708,7 @@ html[data-font="jetbrains"]{--f-display:'JetBrains Mono',ui-monospace,monospace;
         <section class="screen" id="scr-profile" aria-label="Профиль">
           <h2>Профиль</h2>
           <div class="card" style="margin-bottom:14px"><h3>Ваше имя и группа</h3><p class="small">Имя и группа нужны, чтобы учитель видел ваш прогресс.</p>
-        <div class="jform"><input id="jcode" maxlength="12" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="Код от учителя" aria-label="Код от учителя"><input id="jname" maxlength="40" placeholder="Фамилия и имя" aria-label="Имя"><select id="jgroup" aria-label="Группа"><option value="">Выберите группу</option><option>A3</option><option>A5</option><option>I3</option></select><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
+        <div class="jform"><input id="jcode" maxlength="12" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="Код от учителя" aria-label="Код от учителя"><input id="jname" maxlength="40" placeholder="Имя и фамилия" aria-label="Имя"><select id="jgroup" aria-label="Группа"><option value="">Выберите группу</option><option>A3</option><option>A5</option><option>I3</option></select><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
           <div id="jbody"></div>
         </section>
         <section class="screen" id="scr-board" aria-label="Рейтинг">
@@ -1849,7 +1849,7 @@ function init(){
   var S={topics:{},last:8,bestStreak:0};
   try{
     var raw=localStorage.getItem(LS);
-    if(raw){var o=JSON.parse(raw); if(o&&typeof o==='object'){ if(o.topics&&typeof o.topics==='object') S.topics=o.topics; if(o.last) S.last=o.last; if(o.bestStreak) S.bestStreak=o.bestStreak; if(typeof o.name==='string') S.name=o.name; if(typeof o.uid==='string') S.uid=o.uid; if(typeof o.group==='string') S.group=o.group; }}
+    if(raw){var o=JSON.parse(raw); if(o&&typeof o==='object'){ if(o.topics&&typeof o.topics==='object') S.topics=o.topics; if(o.last) S.last=o.last; if(o.bestStreak) S.bestStreak=o.bestStreak; if(typeof o.name==='string') S.name=o.name; if(typeof o.uid==='string') S.uid=o.uid; if(typeof o.group==='string') S.group=o.group; if(typeof o.code==='string') S.code=o.code; }}
     else{var oldr=localStorage.getItem(LS_OLD); if(oldr){var oo=JSON.parse(oldr); if(oo&&oo.p) S.topics[8]={p:oo.p,bestTest:oo.bestTest||0,tests:oo.tests||0};}}
   }catch(e){}
   function save(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){} syncSoon();}
@@ -3047,7 +3047,10 @@ function init(){
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
   var SHEET_URL='https://script.google.com/macros/s/AKfycby1UvYSfPpAg_TWFIHkHtIY2I0lYlGGlb4zIjDEH3oYoM9AfX7bZrpQ4f2XEvJtodSj3w/exec';
-  var lastSent='', syncT=null;
+  var SENT_KEY='uroki-sent', syncT=null;
+  /* последняя отправленная сводка хранится в браузере, чтобы после перезагрузки не слать то же самое */
+  var lastSent=(function(){ try{ return localStorage.getItem(SENT_KEY)||''; }catch(e){ return ''; } })();
+  function rememberSent(k){ lastSent=k; try{ localStorage.setItem(SENT_KEY,k); }catch(e){} }
   function summary(){
     var out={};
     TOPICS.forEach(function(t){
@@ -3084,7 +3087,7 @@ function init(){
     var body=payload();
     var key=JSON.stringify([body.name,body.group,body.xp,body.topics,body.tests]);
     if(key===lastSent) return;
-    lastSent=key;
+    rememberSent(key);
     fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),keepalive:true})
       .then(function(r){ return r.json(); })
       .then(function(d){
@@ -3094,7 +3097,7 @@ function init(){
         }
         setMsg('Прогресс отправлен учителю.'); LB.t=0; if(!$('#home-journal').hidden) lbLoad(true);
       })
-      .catch(function(err){ lastSent=''; setMsg('Не отправлено: '+err.message); });
+      .catch(function(err){ rememberSent(''); setMsg('Не отправлено: '+err.message); });
   }
   function rankCard(){
     var xp=xpTotal(), ri=leagueIndex(xp), nx=RANKS[ri+1], pct=nx?(xp-RANKS[ri][0])/(nx[0]-RANKS[ri][0])*100:100;
@@ -3202,12 +3205,14 @@ function init(){
       if(!g){ setMsg('Выберите группу.'); return; }
       if(c) S.code=c;
       showCodeField();
-      S.name=n; S.group=g; ensureUid(); save(); lastSent='';
+      S.name=n; S.group=g; ensureUid(); save(); rememberSent('');
       setMsg('Сохранено. Группа: '+g+'.');
       renderJournal(); renderBoard();
       syncNow();
     };
     window.addEventListener('pagehide',syncNow);
+    /* при сворачивании вкладки или приложения (телефон) отправляем сразу, не дожидаясь паузы */
+    document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') syncNow(); });
     renderJournal();
   }
 
