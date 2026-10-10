@@ -708,7 +708,7 @@ html[data-font="jetbrains"]{--f-display:'JetBrains Mono',ui-monospace,monospace;
         <section class="screen" id="scr-profile" aria-label="Профиль">
           <h2>Профиль</h2>
           <div class="card" style="margin-bottom:14px"><h3>Ваше имя и группа</h3><p class="small">Имя и группа нужны, чтобы учитель видел ваш прогресс.</p>
-        <div class="jform"><input id="jname" maxlength="40" placeholder="Фамилия и имя" aria-label="Имя"><select id="jgroup" aria-label="Группа"><option value="">Выберите группу</option><option>A3</option><option>A5</option><option>I3</option></select><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
+        <div class="jform"><input id="jcode" maxlength="12" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="Код от учителя" aria-label="Код от учителя"><input id="jname" maxlength="40" placeholder="Имя и фамилия" aria-label="Имя"><select id="jgroup" aria-label="Группа"><option value="">Выберите группу</option><option>A3</option><option>A5</option><option>I3</option></select><button class="btn primary" id="jsave">Сохранить</button></div><div class="fb" id="jmsg"></div></div>
           <div id="jbody"></div>
         </section>
         <section class="screen" id="scr-board" aria-label="Рейтинг">
@@ -3046,7 +3046,7 @@ function init(){
   }
 
   /* ---------- Журнал прогресса (Google Таблица через Apps Script) ---------- */
-  var SHEET_URL='https://script.google.com/macros/s/AKfycbxqcSd2aXG7vzOCA9_Ru6tLxJUMFrL_GudhwM0IgLzgKRxHy3JyhoqXsnWvDARhybCjDA/exec', SHEET_SECRET='matematika-2026';
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbyStpS_mBQaKHAWkvqEuPOxChD_pZymg2OJYZ7I_Sg6A_FeWMAGjLV9przRijw-H6iUoQ/exec';
   var lastSent='', syncT=null;
   function summary(){
     var out={};
@@ -3068,11 +3068,11 @@ function init(){
     return S.uid;
   }
   function setMsg(t){ var m=$('#jmsg'); if(m) m.textContent=t; }
-  function canSend(){ return !!(SHEET_URL&&S.name&&S.group); }
+  function canSend(){ return !!(SHEET_URL&&S.name&&S.group&&S.code); }
   function payload(){
     var ua=navigator.userAgent;
     return {
-      secret:SHEET_SECRET, id:ensureUid(), name:S.name, group:S.group, xp:xpTotal(), rank:leagueOf(xpTotal()),
+      code:S.code||'', id:ensureUid(), name:S.name, group:S.group, xp:xpTotal(), rank:leagueOf(xpTotal()),
       device:/tablet|ipad/i.test(ua)?'Планшет':(/mobi|android|iphone/i.test(ua)?'Телефон':'Компьютер'),
       updated:new Date().toLocaleString('ru-RU'),
       topics:summary(), tests:testSummary()
@@ -3087,7 +3087,13 @@ function init(){
     lastSent=key;
     fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),keepalive:true})
       .then(function(r){ return r.json(); })
-      .then(function(d){ if(d.status!=='success') throw new Error(d.message||'ошибка'); setMsg('Прогресс отправлен учителю.'); LB.t=0; if(!$('#home-journal').hidden) lbLoad(true); })
+      .then(function(d){
+        if(d.status!=='success'){
+          if(d.reason==='code'){ S.code=''; try{ localStorage.setItem(LS,JSON.stringify(S)); }catch(e){} showCodeField(); }
+          throw new Error(d.message||'ошибка');
+        }
+        setMsg('Прогресс отправлен учителю.'); LB.t=0; if(!$('#home-journal').hidden) lbLoad(true);
+      })
       .catch(function(err){ lastSent=''; setMsg('Не отправлено: '+err.message); });
   }
   function rankCard(){
@@ -3133,7 +3139,7 @@ function init(){
     if(!SHEET_URL||LB.loading) return;
     if(!force&&LB.rows&&Date.now()-LB.t<60000){ renderBoard(); return; }
     LB.loading=true; renderBoard();
-    fetch(SHEET_URL+'?secret='+encodeURIComponent(SHEET_SECRET))
+    fetch(SHEET_URL)
       .then(function(r){ return r.json(); })
       .then(function(d){ if(d.status!=='success') throw new Error(d.message||'ошибка'); LB.rows=d.rows||[]; LB.t=Date.now(); LB.err=''; })
       .catch(function(e){ LB.err=e.message||'нет связи'; })
@@ -3178,13 +3184,24 @@ function init(){
     renderBoard();
   }
 
+  /* код вводится один раз; потом поле скрыто, а при отказе сервера (код сброшен) открывается снова */
+  function showCodeField(){
+    var cin=$('#jcode'); if(!cin) return;
+    cin.hidden=!!S.code;
+    cin.placeholder=S.code?'':'Код от учителя';
+  }
   function initJournalUI(){
     var inp=$('#jname'), sel=$('#jgroup'); if(!inp||!sel) return;
     inp.value=S.name||''; sel.value=S.group||'';
+    showCodeField();
     $('#jsave').onclick=function(){
+      var cin=$('#jcode'), c=cin?cin.value.trim().toUpperCase():'';
       var n=inp.value.trim().slice(0,40), g=sel.value;
+      if(!S.code&&!c){ setMsg('Введите код от учителя.'); return; }
       if(!n){ setMsg('Укажите имя.'); return; }
       if(!g){ setMsg('Выберите группу.'); return; }
+      if(c) S.code=c;
+      showCodeField();
       S.name=n; S.group=g; ensureUid(); save(); lastSent='';
       setMsg('Сохранено. Группа: '+g+'.');
       renderJournal(); renderBoard();
